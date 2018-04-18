@@ -63,7 +63,7 @@ Module ConstraintAutomata.
       timeStamp : nat -> QArith_base.Q (* nat -> real *);
       (* We need to assure that timeStamp is always crescent:                                        *)
       portCond : forall n:nat, Qle (timeStamp n) (timeStamp (S n)) 
-      (* True não pode ser fornecido assim (nem se colocar um \/ True no fim). A solução pode ser pa-*)
+      (* True não pode ser fornecido assim (por conta do tipo de portCond. A solução pode ser pa-    *)
       (* ssar o tipo de portCond para Prop. Porém o usuário vai poder provar qualquer coisa se isso  *)
       (* for feito.                                                                                  *)
 
@@ -136,8 +136,6 @@ Module ConstraintAutomata.
 
 
     (*acima de 70000 explode o coq *)
-    (*TODO é necessário verificar se teta.time(k) é maior que teta.time(k-1) p/ k = 1,2,... ? *)
-    (*!!!! *)
     Definition tetaTime (k:nat) := Eval vm_compute in returnSmallerNumber (9999#1) (mapAp k (setTimeStream)).
 
 
@@ -166,7 +164,7 @@ Module ConstraintAutomata.
       | 0 => if timeStamp a(0) =? tetaTime(k) then 0 else default
       | S n => if timeStamp a(S n) =? tetaTime(k) then S n else timeStampIndex(k) (n) (a) (default)
       end.
-    (* Therefore it is possible to define tetaN: *)
+    (* Therefore it is possible to define tetaN: l has the same meaning as in timeStampEqThetaTime  *)
     Fixpoint tetaN (k:nat) (l:nat) (s:set port) : set name := 
       match s with
       | a::t => match hasData a(k) with
@@ -188,13 +186,13 @@ Module ConstraintAutomata.
     (* the two following function implements tetaDelta.                                               *)
     (* TODO definir uma função igual a timeStampEqThetaTime que retorna o indice li tal que           *)
     (* timeStamp a(S n) =? tetaTime(k)  FEITO: timeStampIndex                                         *)
-    (* do jeito que tá portsWithData tá bugado. *)
-    Fixpoint portsWithData (k:nat) (l:nat) (s:set port) (default:nat) : set((name * option data) * QArith_base.Q) :=
+   
+    Fixpoint portsWithData (k:nat) (l:nat) (s:set port) (default:nat) : set((name * option data) (* * QArith_base.Q *) ) :=
       match s with
       | [] => []
       | a::t => match hasData(a) (k) with
                 | true => if (timeStampEqThetaTime k l a) then
-                           ((id a) , (dataAssignment a(timeStampIndex(k) (l) (a) (default))), (timeStamp a(k))) 
+                           ((id a) , (dataAssignment a(timeStampIndex(k) (l) (a) (default))) (* ,(timeStamp a(k)) *)) 
                            :: portsWithData k l t default
                          else portsWithData k l t default
                 | false => portsWithData k l t default
@@ -211,8 +209,8 @@ Module ConstraintAutomata.
     (* de ter que ficar abrindo o escopo para type e Q_scope alternativamente (espero que apenas *)
     (* em tempo de implementação                                                                 *)
 
-    (* Isso pode ser útil no futuro                                                          *)
-    (* Given a port name and a set of ports retrieves a port with the ssame port name given. *)
+    (* Isso pode ser útil no futuro                                                              *)
+    (* Given a port name and a set of ports retrieves a port with the same port name given.      *)
     Fixpoint retrievePort (na:name) (s: set port) : option port :=
       match s with
       | [] => None
@@ -245,7 +243,26 @@ Module ConstraintAutomata.
       | [] => true
       | a::t => if (portInSet (a) (ConstraintAutomata.N ca)) then TDSForAllPorts t ca else false
       end.
-    (* TODO derivative, essa eu to quebrado.                                                            *)
+
+    (* TODO: formalizar a comparação de uma data constraint com o conteúdo de uma porta. ver anotações  *)
+    (* no paper do artigo físico.                                                                       *)
+    (* Antes de definir a função abaixo (guardConditionIsMet), a ideia que tive é de "booleanizar" o    *)
+    (* theta.N (Retorno de tetaDelta                                                                    *)
+    
+    (* In order to trigger the transition, it is needed first to verify if the data in the ports at     *)
+    (* theta.time(k) (given by theta.delta(k)) satisfies the condition in g (guard condition).          *)
+    (* ideia: "booleanizar" o resultado da função tetaDelta (os dados e a porta) e comparar com a condi *)
+    (* ção dada pela data constraint.                                                                   *)
+    (* Definition guardConditionIsMet (                                                                 *)
+
+    (* Hence, in order to define a run, we first must verify if the above proposition is satisfied by   *)
+    (* the input. TODO derivative, essa eu to quebrado.                                                 *)
+
+    (* We can start thinking about formalizing a run in such formalism:                                 *)
+    (* The run can start in any q0 \in Q0. Hence, we must define a function that first runs starting    *)
+    (* a state. *)
+
+    (*TODO under construction: Fixpoint run                                                             *)
 
   End ConstraintAutomata.
 End ConstraintAutomata.
@@ -285,7 +302,7 @@ End ConstraintAutomata.
   Proof.
   induction n. 
   + unfold timeStampTest. cbv. intros. inversion H.
-  + unfold timeStampTest.
+  + unfold timeStampTest. (*alguma tática de ring em cima de Q deve resolver aqui. procurar depois *)
   Admitted.
 
   Definition portA := {|
@@ -309,7 +326,7 @@ End ConstraintAutomata.
   (* execution time it may always be satisfied, i.e., the data constraint needs to be true     *)
   (* in order to the transition to be triggered.                                               *)
   Definition LSCA (s:states) (st:set (ConstraintAutomata.port ports nat)) (g:ConstraintAutomata.DC) : states :=
-    pumba.
+    teste.
 
   Check ConstraintAutomata.port.
 
@@ -318,9 +335,9 @@ End ConstraintAutomata.
   (* falta definir transição para começar a brncar com a run.                                      *)
   (* Problema: set ports NÃO é igual a um set de records que efetivamente representam as ports. OK.*)
   Definition lossySynchronousChannel_CA := {|
-    ConstraintAutomata.Q := [pumba];
+    ConstraintAutomata.Q := [teste];
     ConstraintAutomata.N := realPorts;
     ConstraintAutomata.T := LSCA;
-    ConstraintAutomata.Q0 := [pumba]
+    ConstraintAutomata.Q0 := [teste]
   |}.
 
