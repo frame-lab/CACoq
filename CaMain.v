@@ -5,12 +5,13 @@ Require Import Coq.Program.Program.
 Require Import QArith.
 Require Import Coq.Numbers.BinNums.
 
+
 Close Scope Q_scope.
 
 Obligation Tactic := unfold complement, equiv ; program_simpl.
 
-(*olhar QArith, biblioteca Coq com números racionais. *)
-(* a time stamp a agora é definida como uma função do tipo nat -> Q, Q o conjunto dos números racionais.*)
+(*olhar QArith, biblioteca Coq com números racionais. https://coq.inria.fr/stdlib/Coq.ZArith.Znat.html#*)
+(* a time stamp agora é definida como uma função do tipo nat -> Q, Q o conjunto dos números racionais.*)
 Set implicit arguments.
 Set Maximal Implicit Insertion.
 
@@ -32,6 +33,7 @@ Program Instance option_eqdec A `(EqDec A eq) : EqDec (option A) eq :=
       | Some _, None | None, Some _ => in_right
     end
  }.
+ Eval compute in Z.of_N (3).
 Module ConstraintAutomata.
   Section ConstraintAutomata.
 
@@ -53,28 +55,24 @@ Module ConstraintAutomata.
     (* ver o que mk<nome_do_record> efetivamente faz*)
     Record port: Type := mkport{
       id : name;
-      (* dataAssignment can be a function nat -> data too, since record's fields are immutable.      *)
-      (* maybe nat -> data will fit better, being usable in checking whether at some time n the port *)
+      (* nat -> data will fit better, being usable in checking whether at some time n the port *)
       (* can have a data item x                                                                      *)
       (* maybe option data to totalize:None, if there is no data defined for a given k               *)
       (* Some x, for x in data                                                                       *)
       dataAssignment : nat -> option data; 
       timeStamp : nat -> QArith_base.Q (* nat -> real *);
       (* We need to assure that timeStamp is always crescent:                                        *)
-      portCond : forall n:nat, Qle (timeStamp n) (timeStamp (S n))
-      (* The above field is useful to ensure the correctness of the modelled worlds, but requires a  *)
-      (* little overhead from the users                                                              *)
+      portCond : forall n:nat, Qle (timeStamp n) (timeStamp (S n)) 
+      (* True não pode ser fornecido assim (nem se colocar um \/ True no fim). A solução pode ser pa-*)
+      (* ssar o tipo de portCond para Prop. Porém o usuário vai poder provar qualquer coisa se isso  *)
+      (* for feito.                                                                                  *)
+
+
+      (* The above field is useful to ensure the correctness of the modelled worlds (in terms of the *)
+      (* time in which a data item is observed in a given port. If the user does not want to prove   *)
+      (* that, it is only needed to supply "True" as the argument.                                   *)
     }.
 
-    Definition buildPort (i:name) (data : nat -> option data) (time: nat -> QArith_base.Q) 
-        port_cond: port := {|
-        id := i;
-        dataAssignment := data;
-        timeStamp := time ;
-        portCond := port_cond
-    |}.
-
-    Notation "0" := 0 : nat_scope.
     (* TDS^names can be seen as a set of ports as defined above.. *)
     (* In order to totalize the functions, we opted to use option type for both data and the time when  *)
     (* the data happens in a port. This lets the user to define a instant that there will be no data in *)
@@ -91,7 +89,7 @@ Module ConstraintAutomata.
     Record constraintAutomata := CA {
       Q : set state;
       N : set port; (* ou set name?*)
-      T : state -> set port -> bool -> state;
+      T : state -> set port -> DC -> state;
       (* A definição atual de T não vai dar certo se para um mesmo estado tivermos 2 definições diferentes
       (i.e., transições com diferentes conjuntos de portas ou uma diferente DC válidas simultaneamente.
       Uma solução é talvez modelá-la como modelado as transições de um NFA-epsilon no RGCoq.                *)
@@ -100,7 +98,6 @@ Module ConstraintAutomata.
       (* serão disparadas                                                                                   *)
       Q0 : set state;
     }.
-
 
     Fixpoint returnSmallerNumber (m:QArith_base.Q) (l:set QArith_base.Q) :=
       match l with
@@ -115,12 +112,20 @@ Module ConstraintAutomata.
     (* isso vai ser útil na hora de definir a run para ver quais portas possuem dados no tempo a(k) *)
     Definition hasData (p:port) (k:nat) :=
       match (dataAssignment p(k)) with
-      | Some _ => true
+      | Some a => true
       | None => false
       end.
 
-    (* caso necessário voltar para nat, basta trocar QArith_base.Q por nat *)
+    Lemma hasDataSound : forall p, forall k, hasData p k = true <-> exists data, dataAssignment p(k) = Some data.
+    Proof.
+    intros. split.
+    - intros. unfold hasData in H1. destruct dataAssignment. exists d. reflexivity.
+      inversion H1.
+    - intros. unfold hasData. inversion H1. rewrite H2. reflexivity.
+    Defined.
 
+    (* mapAp is a function that given a natural number and a set of functions, returns the result *)
+    (* of all functions within the set with the given natural number:                             *)
     Fixpoint mapAp (n:nat) (l:set (nat -> QArith_base.Q)) : set QArith_base.Q:=
       match l with
       | [] =>  []
@@ -136,27 +141,43 @@ Module ConstraintAutomata.
     Definition tetaTime (k:nat) := Eval vm_compute in returnSmallerNumber (9999#1) (mapAp k (setTimeStream)).
 
 
+    (*Aqui vai entrar uma função que faz timeStamp a(l) =? tetaTime(k) para algum dado l \in 1..m*)
+    (* timeStamp: function within ports which type is nat ->                                   *)
+    (* the definition below is no longer needed.                                               *)
+    (* Definition timeIsTeta (l:nat) (k:nat) (a:port) : bool := timeStamp a(l) =? tetaTime(k). *)
+    Close Scope Q_scope.
+
+    (* By algorithmic aspects, we define the following function as a function that implements the *)
+    (* idea behind the calculus of theta.N(k) by imposing a upper bound to find the li value where*)
+    (* ai(li) = theta.time(k)                                                                     *)
+    Fixpoint timeStampEqThetaTime (k: nat) (l: nat) (a:port) :=
+      match l with
+      | 0 => if timeStamp a(0) =? tetaTime(k) then true else false
+      | S n => if timeStamp a(S n) =? tetaTime(k) then true else timeStampEqThetaTime (k) (n) (a)
+      end.
+
+    (*The following definition returns the i-th natural number where timeStamp a(S n) = tetaTime(k).*)
+    (* For it to work properly, one must supply a default return number greater than the specified  *)
+    (* l number. Therefore, it returns 0<=i<=l if if timeStamp a(i) =? tetaTime(k) and default      *)
+    (* otherwise                                                                                    *)
+    (* TODO: definir se o default será fixo ou deixa para o usuário especificar o número que ele desejar? *)
+     Fixpoint timeStampIndex (k:nat) (l:nat) (a:port) (default: nat) :=
+      match l with
+      | 0 => if timeStamp a(0) =? tetaTime(k) then 0 else default
+      | S n => if timeStamp a(S n) =? tetaTime(k) then S n else timeStampIndex(k) (n) (a) (default)
+      end.
     (* Therefore it is possible to define tetaN: *)
-    Fixpoint tetaN (k:nat) (s:set port) : set name := 
+    Fixpoint tetaN (k:nat) (l:nat) (s:set port) : set name := 
       match s with
       | a::t => match hasData a(k) with
-                | true => if (timeStamp a(k) =? tetaTime(k)) then
-                             id a :: tetaN k t
-                          else tetaN k t
-                | false => tetaN k t
+                | true => if (timeStampEqThetaTime k l a) then
+                             id a :: tetaN k l t
+                          else tetaN k l t
+                | false => tetaN k l t
                 end
       | []   => []
       end.
 
-    (*
-    Fixpoint portsWithData (k:nat) (s:set port) : set(option data * QArith_base.Q) :=
-      match s with
-      | [] => []
-      | a::t => match hasData(a) (k) with
-                | true =>  (dataAssignment a k , timeStamp a(k)) :: portsWithData k t
-                | false => portsWithData k t
-                end
-      end. *)
     (* É possível retirar o dado de option caso necessário                                          *)
     (* Returns tuples of ports, data and the time where a given data item is "seen" in a given port *)
     (* in the instant denoted by timeStamp k                                                        *)
@@ -164,21 +185,26 @@ Module ConstraintAutomata.
     (* The following function retrieves all ports as tuples (name, data(k), timeStamp(k)) iff the port*)
     (* contains data at time teta.time(k), where teta.time(k) is the smallest time stamp obtained     *)
     (* by merging all time stamps with a given natural number "k"                                     *)
-    Fixpoint portsWithData (k:nat) (s:set port) : set((name * option data) * QArith_base.Q) :=
+    (* the two following function implements tetaDelta.                                               *)
+    (* TODO definir uma função igual a timeStampEqThetaTime que retorna o indice li tal que           *)
+    (* timeStamp a(S n) =? tetaTime(k)  FEITO: timeStampIndex                                         *)
+    (* do jeito que tá portsWithData tá bugado. *)
+    Fixpoint portsWithData (k:nat) (l:nat) (s:set port) (default:nat) : set((name * option data) * QArith_base.Q) :=
       match s with
       | [] => []
       | a::t => match hasData(a) (k) with
-                | true => if (timeStamp a(k) =? tetaTime(k)) then
-                         ((id a) , (dataAssignment a(k)), (timeStamp a(k))) :: portsWithData k t
-                         else portsWithData k t
-                | false => portsWithData k t
+                | true => if (timeStampEqThetaTime k l a) then
+                           ((id a) , (dataAssignment a(timeStampIndex(k) (l) (a) (default))), (timeStamp a(k))) 
+                           :: portsWithData k l t default
+                         else portsWithData k l t default
+                | false => portsWithData k l t default
                 end
       end.
 
     (* rever definição de teta.time no artigo e reimplementar aqui *)
-    (*CORRECTED acima eu acho 22/03/2018*)
+    (*CORRECTED acima eu acho 22/03/2018 (bugado as of 14/04/18, revisto em 15/04/18)   *)
 
-    Definition tetaDelta (k : nat) (a: constraintAutomata) := portsWithData k (N a).
+    Definition tetaDelta (k : nat) (l:nat) (a: constraintAutomata) (default:nat) := portsWithData k l (N a) default.
 
     Close Scope Q_scope. 
     (* ao importar QArith o escopo tá em números racionais. Acho que haverá um overhead          *)
@@ -193,44 +219,43 @@ Module ConstraintAutomata.
       | a::t => if (na == (id a)) then (Some a) else retrievePort na t
       end.
 
-    (* We define a procedure that injects a natural number to Z: *)
-    Fixpoint injection (n:nat) : Z :=
-      match n with
-      | 0 => 0%Z
-      | S m => 1%Z + injection m
+
+    (* A procedure to inject N to Z is defined as  Z.to_N in the standard library: It takes as argument *)
+    (* natural numbers defined in a binary way as seen in N that can be obtained from nat numbers by    *)
+    (*  Z.to_N                                                                                          *)
+
+
+    (* Before starting a run in a CA, it is interesting to verify whether the given set of TDS given as *)
+    (* input contains a TDS for each port defined in the CA:                                            *)
+    (* We will define TDS slightly different as defined by the authors; instead of pairs of (alpha, a)  *)
+    (* for each port in the automaton, we define as pairs (id,alpha,a) where id refers to the port this *)
+    (* pair is meant to carry data for.                                                                 *)
+    (* Therefore, the following function checks whether for a given port and a given set of ports, there*)
+    (* is a TDS definition for the given port in the set:                                               *)
+    Fixpoint portInSet (a:port) (c: set port) : bool :=
+      match c with
+      | [] => false
+      | y::t => if (id a == id y) then true else portInSet a t
       end.
 
-    (*Lemma injection_sound : forall n, injection n = 0%Z <-> n = 0.
-    Proof.
-    intros.
-    split.
-    - (*induction n. intros. reflexivity. intros. contradict H1.*)
-      induction n. simpl. auto. intros.
-    Admitted.*)
-    Lemma injection_sound1 : forall n, n = 0 -> injection n = 0%Z.
-    Proof.
-    intros. rewrite H1. reflexivity.
-    Qed.
-
-    Lemma injection_sound2 : forall n, injection n = 0%Z -> n = 0.
-    Proof.
-    intros. destruct n eqn:Ha. reflexivity. unfold injection in H1. case Ha. Admitted.
-
-    (* We need to define a TDS in order to define the input:                                  *)
-    (* We define TDS as a pair of functions nat -> data and nat -> QArith_base.Q              *)
-    (*Variable tds : set (nat -> data * nat -> QArith_base.Q).                                *)
-    (* TODO: ou a entrada deve ter uma tds pra cada porta (obrigatoriamente) ou simplemsnete ignora *)
-    (* caso falte alguma tds para alguma porta?                                               *)
+    (* Now it is possible to define a function that will check if for a given CA and a given set of TDS *)
+    (* there is a tds record for all ports defined by the Constraint Automaton:                         *)
+    Fixpoint TDSForAllPorts (s: set port) (ca: constraintAutomata) : bool :=
+      match s with 
+      | [] => true
+      | a::t => if (portInSet (a) (ConstraintAutomata.N ca)) then TDSForAllPorts t ca else false
+      end.
+    (* TODO derivative, essa eu to quebrado.                                                            *)
 
   End ConstraintAutomata.
 End ConstraintAutomata.
 
-  (* Example                                                                                *) 
+  (* Example  *) 
 
   Definition timeStampTest (n:nat) : QArith_base.Q :=
     match n with
     | 0 =>  1#1
-    | S n => ConstraintAutomata.injection (S n) + 1#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 1#1
     end.
 
   Inductive states := pumba.
@@ -258,8 +283,9 @@ End ConstraintAutomata.
 
   Lemma timeStampTestHolds : forall n, Qle (timeStampTest n) (timeStampTest (S n)).
   Proof.
-  induction n.
-  + unfold timeStampTest. simpl.
+  induction n. 
+  + unfold timeStampTest. cbv. intros. inversion H.
+  + unfold timeStampTest.
   Admitted.
 
   Definition portA := {|
@@ -282,7 +308,7 @@ End ConstraintAutomata.
   (* Record port in ConstraintAutomata, a data constraint which is represented by a bool (in   *)
   (* execution time it may always be satisfied, i.e., the data constraint needs to be true     *)
   (* in order to the transition to be triggered.                                               *)
-  Definition LSCA (s:states) (st:set (ConstraintAutomata.port ports nat)) (g:bool) : states :=
+  Definition LSCA (s:states) (st:set (ConstraintAutomata.port ports nat)) (g:ConstraintAutomata.DC) : states :=
     pumba.
 
   Check ConstraintAutomata.port.
