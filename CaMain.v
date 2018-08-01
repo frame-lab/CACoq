@@ -100,7 +100,7 @@ Module ConstraintAutomata.
     Record constraintAutomata : Type := CA {
       Q : set state;
       N : set port; 
-      T : state -> nat -> nat -> set (set (name) * bool * set(state)); (* ERICK -> set(state) por causa do comportamento não determinístico do CA. *)
+      T : state -> nat -> set (set (name) * bool * set(state)); (* ERICK -> set(state) por causa do comportamento não determinístico do CA. *)
                                                                        (* Also, set (set name)) * ... p/ permitir a verificação correta da porta na*)
                                                                        (* na transição em questão.                                                 *)
       Q0 : set state;
@@ -170,17 +170,6 @@ Module ConstraintAutomata.
       | S n => if timeStamp a(S n) =? thetaTime (ca)(k) then true else timeStampEqThetaTime (ca) (k) (n) (a)
       end.
 
-     (*Lemma timeStampEqThetaTimeSound : forall ca, forall k l, forall a,
-       timeStampEqThetaTime ca k l a = true <-> timeStamp a(l) =? thetaTime (ca) (k) = true.
-     Proof.
-     intros.
-     split.
-     - destruct l.
-     + simpl; intros. unfold timeStampEqThetaTime in H2. inversion H2. destruct Qeq_bool.
-     reflexivity. inversion H2.
-     + intros. unfold timeStampEqThetaTime in H2. inversion H2. destruct Qeq_bool. reflexivity. inversion H2.
-     - intros. unfold timeStampEqThetaTime. destruct Qeq_bool. reflexivity. inversion H2.
-     Qed. *)
     (*ERICK : timeStampEqThetaTime serve para encontrar se em algum l_i da timestamp bate com o theta(k) *)
     (* atual, vide a teoria em Arbab (2004)                                                              *) 
 
@@ -308,22 +297,47 @@ Module ConstraintAutomata.
       match s with
       | [] => false
       | a::t => match fst(a) with
-                | p => if d == snd(a) then true else dataMatchesData p d t
+                | p => if d == snd(a) then true else dataMatchesData p d t 
                 end
       end.
 
+    Lemma dataMatchesData_sound1 : forall p: name, forall d: option data, forall s, dataMatchesData p d s = true -> s <> [] /\
+      exists a: (name * option data) , d = snd(a) \/ exists t, dataMatchesData (fst a) d t = true.
+    intros.
+    destruct s.
+    inversion H2.
+    cbn in H2.
+    split. congruence. destruct equiv_dec in H2. inversion e.
+    + exists p0. left. reflexivity.
+    + exists p0. right. exists s. assumption.
+    Defined.
+
+    (* Lemma dataMatchesData_sound2 : forall p: name, forall d: option data, forall s, 
+     (s <> [] /\
+      exists a: (name * option data) , d = snd(a) \/ exists t, dataMatchesData (fst a) d t = true) -> dataMatchesData p d s = true.
+    intros.
+    destruct s.
+    destruct H2. congruence. destruct H2. simpl. destruct equiv_dec. reflexivity. destruct H3. destruct H3.
+    Defined.  *)
+
     (* Now the above function may be called with its "nice" values: *)
     (* NOTA: em termos de desempenho não fora testada ainda! Testarei para o v0                         *)
-     Definition isDCmatchedByThetaDelta (ca:constraintAutomata) (p:port) (d: option data) (s: set((name * option data))) 
+    (* LOST: Definition isDCmatchedByThetaDelta (ca:constraintAutomata) (p:port) (d: option data) (s: set((name * option data))) 
      (k:nat) (l:nat) (s:set port) := 
-       dataMatchesData (id p) d (portsWithData (s) (k) (l) (s)).
+       dataMatchesData (id p) d (portsWithData (s) (k) (l) (s)). 
 
-     Check isDCmatchedByThetaDelta.
+     Check isDCmatchedByThetaDelta. *)
 
     (* We model a function to update the record of a given port that is used in a transition; a way to  *)
     (* model the derivative of a atream:                                                                *)
     Definition derivative (p: port) := mkport (id p) (dataAssignment p) (timeStamp p)
         (portCond p) (S (index p)).
+
+    Lemma derivative_sound : forall p, derivative p = mkport (id p) (dataAssignment p) (timeStamp p)
+        (portCond p) ( S(index p)).
+    Proof.
+    reflexivity.
+    Defined.
 
     Check derivative.
 
@@ -331,7 +345,7 @@ Module ConstraintAutomata.
     a fim de comparar se no index da porta na input referente ao name dado como parâmetro, a data constraint vale *)
     Definition DC (p:port) (k:nat) (d : option data) : bool :=
        if (dataAssignment p(k) == d) then true else false.
-    (* DC apenas define que pra um determinado índice k, o valor na porta será igual ao dado ou não     *) 
+    (* DC defines that for a given moment in the run, it may be satistied by the ports in the input. *) 
 
     (* We can start thinking about formalizing a run in such formalism:                                 *)
     (* The run can start in any q0 \in Q0. Hence, we must define a function that first runs starting    *)
@@ -371,7 +385,7 @@ Module ConstraintAutomata.
       match s with
       | [] => []
       | x::t => if x == id a then derivative(a)::derivativePortInvolved t a
-                else derivativePortInvolved t a
+                else a::derivativePortInvolved t a
       end.
 
     (* NEW then we have a way to calculate the derivatives from all ports in the input involved with the actual step *)
@@ -436,7 +450,7 @@ Module ConstraintAutomata.
      (s: set(set name * bool * set(state))) :=
      match s with
      | [] => []
-     | a::t => if (set_eq (ports) ((fst(fst(a))))) && 
+     | a::t => if (set_eq (ports)(*thetaN (input) (k) (l) (input)*) ((fst(fst(a))))) && 
                   (onlyPortsInvolvedContainsData ca (fst(fst(a))) k l input)
                    && (snd(fst(a))) then snd(a)++step' ca k l  input ports t
                    else step' ca k l input ports t
@@ -449,7 +463,7 @@ Module ConstraintAutomata.
     Check istep'.
 
     Definition stepAux (ca:constraintAutomata) (k l : nat) (input:set port) (ports:set name) (s: state) :=
-      istep' ca k l input (T ca s k l) ports.
+      istep' ca k l input (T ca s k) ports. (* O correto nessa chamada é k, e não l *)
     Check stepAux.
 
     (* We apply the step to every state in the given configuration:                     *)
@@ -462,19 +476,22 @@ Module ConstraintAutomata.
       stepa ca s k l input (retrievePortsFromThetaN k l input).
 
    (* We define run' as a function that iterates over a list of naturals. v0                                *)
-   (* ERICK: note que a noção de run' é diferente do trace de execução do autômato *)
+   (* ERICK: note que a noção de runa' é diferente do trace de execução do autômato (dada por run').        *)
+   (* Isso aparenta ser inútil pois constraint automata não possui noção de estados finais, embora possamos dizer 
+     que uma run é aceita se sempre é possível disparar uma transição em algum estado ao longo da run. *)
     Definition runa' (ca:constraintAutomata) (*s:state*)  : 
-      set port -> list nat -> nat -> set state -> set state :=
+      set port -> list nat -> nat -> (set state) -> set state :=
       (* k : índice de execução               *)
       (* l : profundidade da busca            *)
       fix rec input k l acc :=
         match k with 
           | [] => acc
           | a::t => snd (step ca acc a l input)
-                 (*++*)|> rec (portsDerivative(fst((step ca acc a l input))) input) t  l (*(snd (step ca acc a l input))*)
+                    |> rec (portsDerivative(fst((step ca acc a l input))) input) t  l 
         end. 
 
-    Definition run' (ca:constraintAutomata) (*s:state*)  : 
+
+    Definition run' (ca:constraintAutomata)  : 
       set port -> list nat -> nat -> set state -> set (set state) -> set (set state) :=
       (* k : índice de execução               *)
       (* l : profundidade da busca            *)
@@ -482,7 +499,7 @@ Module ConstraintAutomata.
         match k with 
           | [] => resp
           | a::t => resp ++ [snd (step ca acc a l input)]
-                 (*++*)|> rec (portsDerivative(fst((step ca acc a l input))) input) t  l (snd (step ca acc a l input))
+                    |> rec (portsDerivative(fst((step ca acc a l input))) input) t  l (snd (step ca acc a l input))
         end.
     (* In order to use run' as defined above, we define a function that given a natural number n, it creates an ordered *)
     (* list containing naturals that ranges from 0 to n                                                 *)
@@ -492,58 +509,10 @@ Module ConstraintAutomata.
       | S n => count_into_list n ++ [S n]
       end.
 
-    (* A run está bugada. Eu devo rever isto aqui. *)
+    (* We define a run on a constraint automaton. *)
     Definition run (ca:constraintAutomata) (input: set port) (k l : nat) :=
-      run' ca input (count_into_list k) l (Q0 ca) [].
+      run' ca input (count_into_list k) l (Q0 ca) [Q0 ca].
 
-   (* Um passo de um estado para outro *)
-   (* Definition step (ca:constraintAutomata) (s:state) (k l default : nat) (input:set port) :=
-      applyEligibleStep (step'' ca k l default input (T ca s k l)).
-    (* No momento de uma "single step", a TDS de entrada (obviamente) também deve ser levada *)
-    (* em conta, além das transições acessíveis a partir de um estado. *)
-    (* Definition step (ca: constraintAutomata) (s:state)(input: set port) (k l default: nat)  :=
-      (step' ca k l default) input (T ca s k l). Check step. *) 
-
-    (* We define a function that updates the ports used in a transition in the input: *)
-    Fixpoint calculateADerivative (po: name) (input: set port) :=
-      match input with
-      | [] => []
-      | a::t => if (po == id a) then derivative a::calculateADerivative po t else calculateADerivative po t
-      end.
-
-    Fixpoint calculateDerivative (ports:set name) (input: set port) :=
-      match ports with
-      | [] => []
-      | a::t => calculateADerivative a input::calculateDerivative t input
-      end.
-
-    (* Me parece possível definir uma run que faça em momentos diferentes a run e o applyEligibleStep *)
-    (* A ideia aqui é a cada iteração é rodar step'', pegar as portas pra calcular a derivada 
-      na input e aplicar o eligibleStep e fazer isso recursivamente até que k atinja l *)
-    (* l: nº de iterações *)
-    (* run' será chamada com os parâmetros do autômato. *)
-    Fixpoint run' (k l default: nat) (input: set port) (s: set(set name * bool * set(state))):=
-    (* ERICK: aparentemente k é o nosso iterador, sendo que ele mesmo pode ser o número de iterações        *)
-    (* A princípio o 0 ainda é usado. Porém a partir do momento que ele passar a ser o "default", isso terá *)
-    (* que ser modificado                                                                                   *)
-      match k with
-      | 0 => step'' 0 l input
-      
-     (* ERICK: aqui vai ser necessário atualizar a entrada que se dá para run' (a TDS) tal como é feito*)
-     (* na parse' da gramática *)
-     (*ERICK: TODO 
-    Fixpoint run' (step: state -> (set(ConstraintAutomata.port) * bool * set(state))) 
-    (input: set port)  (k l default:nat) :=
-      match k with
-      | 0 => 
-      *)
-    (* k : índice da busca *)
-    (* l : limite da busca *)
-    (* default (sumirá em breve) : valor de retorno padrão p funções theta.time e etc. *)
-   (* ERICK: note que definimos tanto a entrada quanto as portas do CA do tipo Port: Nesse caso, para *)
-   (* a TDS de entrada do autômato deverá ser definida uma porta para cada porta definida no autômato.*)
-   (* Seguindo a definição de transição como pautada na última reunião, o default deve ser também     *)
-   (* junto da definição.    *)                                                         *)
   End ConstraintAutomata.
 End ConstraintAutomata.
 
@@ -585,14 +554,21 @@ End ConstraintAutomata.
   Definition dataAssignmentA n := 
     match n with
     | 0 => Some 0
-    (* | 1 => None *)
+    | 1 => None
+    | 2 => Some 1 
+    | 3 => None
+    | 4 => Some 1
     | S n => Some (1)
     end.
 
   Definition dataAssignmentB n :=
     match n with
-    | 0 => Some 0
-    | S n => Some (1)
+    | 0 => None
+    | 1 => Some (0)
+    | 2 => None
+    | 3 => Some 1
+    | 4 => None
+    | S n => Some 1
     end.
 
   Lemma timeStampTestHolds : forall n, Qle (timeStampTest n) (timeStampTest (S n)).
@@ -636,18 +612,15 @@ End ConstraintAutomata.
   (* Se optarmos por usar o tipo indutivo transition definido no modulo ConstraintAutomata, seria necessário *)
   (* pegar transições como parâmetros de entrada pra função abaixo (solução 1)                         *)
 
-  Check ConstraintAutomata.isDCmatchedByThetaDelta.
-
-  Check option_eqdec.
   (* ERICK: esse k abaixo é justamente o índice l_i tal que a(l_i) = teta.time(k), para algum l_i \in [0,1,...]*)
   (* NOTA: k abaixo náo é dado como parâmetro, é o índice da porta a ser avaliado. *)
-  Definition oneBoundedFIFOrel (s:states) (k:nat) (l:nat) : 
+  Definition oneBoundedFIFOrel (s:states) (l:nat) : 
   set (set (ports) * bool * set states) :=
     match s with
-    | q0 => [([A], (ConstraintAutomata.DC(portA) (k) (Some 0)), [p0]) ;
-             ([A], (ConstraintAutomata.DC(portA) (k) (Some 1)), [p1])]
-    | p0 => [([B], (ConstraintAutomata.DC(portB) (k) (Some 0)), [q0])]
-    | p1 => [([B], (ConstraintAutomata.DC(portB) (k) (Some 1)), [q0])]
+    | q0 => [([A], (ConstraintAutomata.DC(portA) l (Some 0)), [p0]) ;
+             ([A], (ConstraintAutomata.DC(portA) l (Some 1)), [p1])]
+    | p0 => [([B], (ConstraintAutomata.DC(portB) l (Some 0)), [q0])]
+    | p1 => [([B], (ConstraintAutomata.DC(portB) l (Some 1)), [q0])]
     end.
 
 
@@ -661,7 +634,9 @@ End ConstraintAutomata.
 
   Eval compute in ConstraintAutomata.tetaDelta oneBoundedFIFOCA 0 0 [portA;portB].
 
-  Eval compute in ConstraintAutomata.retrievePortsFromThetaN  0 0 [portA;portB].
+  Eval compute in ConstraintAutomata.retrievePortsFromThetaN 0 20 [portA;portB].
+
+  (*Eval compute in ConstraintAutomata.tetaDelta oneBoundedFIFOCA 2 20 [portA;portB].*)
   (*onlyPortsInvolvedContainsData (ca:constraintAutomata) (ports : set name) 
       (k l default : nat) (input : set port)
     Definition tetaDelta (ca:constraintAutomata) (k : nat) (l:nat) (po: set port) (default:nat) := 
@@ -669,24 +644,128 @@ End ConstraintAutomata.
   Eval compute in ConstraintAutomata.onlyPortsInvolvedContainsData (oneBoundedFIFOCA) [A] 
       0 20 [portA;portB]. 
 
-  Eval compute in ConstraintAutomata.step oneBoundedFIFOCA [q0] 0 0 [portA;portB].
-  (* (ca:constraintAutomata) (s: state) (k l default: nat) (input:set port) *)
+  Eval compute in ConstraintAutomata.step oneBoundedFIFOCA [p0] 1 10 [portA;portB].
 
-  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA [portA;portB] 10 20.
+  Definition x := Eval compute in ConstraintAutomata.portsDerivative ([A]) ([portA;portB]).
+  Definition videos := Eval compute in ConstraintAutomata.portsDerivative ([A]) (x).
+
+
+  (* TODO: tetaDelta aparenta estar ok. A porta de entrada é parametrizada. O problema parece ser na definição de DC
+   estar fixa em uma porta (a inicial, sem atualização de index (cálculo de derivada)                                 *)
+  Eval compute in ConstraintAutomata.tetaDelta oneBoundedFIFOCA 2 20 videos.
+  Print videos.
+
+  Eval compute in ConstraintAutomata.tetaDelta oneBoundedFIFOCA 5 20 [portA;portB].
+
+  (* Debugging - 22072018 *)
+
+  Eval compute in ConstraintAutomata.step oneBoundedFIFOCA (ConstraintAutomata.Q0 oneBoundedFIFOCA) 0 20  (* --> PEGUEI O FDP *)
+  [portA;portB].
+
+  Eval compute in ConstraintAutomata.step' oneBoundedFIFOCA  0 20 [portA;portB].
+
+  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA [portA;portB] 4 20.
+  Eval compute in oneBoundedFIFOrel (q0) .
+
   (* Eval compute in ConstraintAutomata.run' oneBoundedFIFOCA [portA;portB] [0;1;2;3;4;5;6;7;8;9;10] 
   20 (ConstraintAutomata.Q oneBoundedFIFOCA). *)
 
-Fixpoint count_into_list (n:nat) :=
-  match n with
-  | 0 => 0::nil
-  | S n => count_into_list n ++ [S n]
-  end.
-Fixpoint rev_fat (n:nat) :=
-  match n with
-  | 0 => 1
-  | S n => rev_fat n * S n
-  end.
-Theorem rev_fat_5 : rev_fat 5 = 120.
-Proof. auto. Qed.
-Eval compute in count_into_list 5. (* Já temos algo parecido com o iterator tabajara *)
+
+(* We model another example seen in Airbab(2004)  *)
+
+  Inductive states2 : Type := qa | qb.
+  Inductive ports2 : Type := A0 | B0.
+  Instance portsEq2 : EqDec ports2 eq :=
+    {equiv_dec x y := 
+      match x,y with
+      | A0,A0 | B0,B0 => in_left
+      | A0,B0 | B0,A0 => in_right
+      end }.
+   Proof.
+   all: congruence.
+   Defined.
+
+  Definition dataAssignmentA0 n := 
+    match n with
+    | 0 => Some 0
+    | 1 => Some 1
+    | 2 => Some 1 
+    | S n => Some (1)
+    end.
+
+  Definition dataAssignmentB0 n :=
+    match n with
+    | 0 => Some 0
+    | 1 => Some 1
+    | 2 => Some 1
+    | S n => Some (1)
+    end.
+
+  Definition timeStampTestA0 (n:nat) : QArith_base.Q :=
+    match n with
+    | 0 =>  1#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 1#1 (* injecting N to Z *)
+    end.
+
+
+  Lemma timeStampTestHoldsA0 : forall n, 
+    Qle (timeStampTestA0 n) (timeStampTestA0 (S n)). 
+  Proof. Admitted.
+
+  (*Erick : questiono se as portas tiverem uma stream de tempo diferente, 
+    onde uma sempre está atrasada em comparação à outra. Essa porta jamais verá dados? (não aparece em theta.time *)
+
+  Definition portA0 := {|
+        ConstraintAutomata.id := A0;
+        ConstraintAutomata.dataAssignment := dataAssignmentA0;
+        ConstraintAutomata.timeStamp := timeStampTestA0;
+        ConstraintAutomata.portCond := timeStampTestHoldsA0;
+        ConstraintAutomata.index := 0 |}.
+
+   Definition timeStampTestB0 (n:nat) : QArith_base.Q :=
+    match n with
+    | 0 =>  2#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 1#1 (* injecting N to Z *)
+    end.
+
+  Lemma timeStampTestHoldsB0 : forall n, 
+    Qle (timeStampTestB0 n) (timeStampTestB0 (S n)). 
+  Proof. Admitted.
+
+  Definition portB0 := {|
+        ConstraintAutomata.id := B0;
+        ConstraintAutomata.dataAssignment := dataAssignmentA0;
+        ConstraintAutomata.timeStamp := timeStampTestB0;
+        ConstraintAutomata.portCond := timeStampTestHoldsB0;
+        ConstraintAutomata.index := 0 |}.
+
+  Definition anotherCABehaves (s:states2) (l:nat) : 
+  set (set (ports2) * bool * set states2) :=
+    match s with
+    | qa => [([A0], (true), [qa]) ;
+             ([A0], (true), [qb])]
+    | qb => [([A0;B0] , (ConstraintAutomata.DC(portA0) l (ConstraintAutomata.dataAssignment(portB0)(l))), [qb])] 
+    end.
+
+
+  Definition anotherCA := {|
+    ConstraintAutomata.Q := [qa;qb];
+    ConstraintAutomata.N := [portA0;portB0]; (*TODO : ports -> Names  *)
+    ConstraintAutomata.T := anotherCABehaves;
+    ConstraintAutomata.Q0 := [qa]
+  |}.
+
+  
+  Eval compute in ConstraintAutomata.step anotherCA ([qa]) 0 10 [portA0;portB0].
+
+  (* Sem o cálculo de derivada não trava, mas ainda assim o resultado está incorreto. *)
+  (* Erick : acho que não entendi como passar a entrada corretamente pro autômato, não pode ser *)
+  (* ou a implementação de theta.time pode não estar correta. *)
+  Eval compute in ConstraintAutomata.run anotherCA [portA0;portB0] 0 20.
+
+
+
+
+
+
 
