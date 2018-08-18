@@ -200,12 +200,11 @@ Module ConstraintAutomata.
     (* idea behind the calculus of theta.N(k) by imposing a upper bound to find the li value where*)
     (* ai(li) = theta.time(k)                                                                     *)
     Fixpoint timeStampEqThetaTime (ca:set port) (k: nat) (l: nat) (a:port) :=
-      (*if timeStamp a(l) =? thetaTime (ca) (k) then true else false.
-      ERICK: isso aqui está incorreto. Eu interpretei errado a definição no artigo. (ou seria o de cima errado?) *)
       match l with
       | 0 => if (timeStamp a(0) =? thetaTime (ca) (k) == true) then true else false
       | S n => if (timeStamp a(S n) =? thetaTime (ca)(k) == true) then true else timeStampEqThetaTime (ca) (k) (n) (a)
       end.
+
     Lemma timeStampEqThetaTimeSound : forall ca, forall k, forall l, forall a, 
     timeStampEqThetaTime ca k l a = true <->  timeStamp a(l) =? thetaTime (ca) (k) = true \/ 
     (exists x, x < l /\ timeStamp a(x) =? thetaTime (ca) (k) = true).
@@ -213,7 +212,19 @@ Module ConstraintAutomata.
     split.
     - intros. induction l.
     + inversion H2. destruct Qeq_bool; auto.
-    + inversion H2. destruct Qeq_bool in H4. Admitted.
+    + simpl in H2. destruct equiv_dec in H2. inversion e. left. reflexivity.
+      right. apply IHl in H2. destruct H2.
+      exists l. split. auto.
+      assumption. destruct H2. destruct H2. exists x.
+      split. auto. assumption.
+    - intros. induction l.
+      + simpl. destruct equiv_dec. 
+      { reflexivity. } 
+      { destruct H2. congruence. inversion H2. destruct H3. inversion H3. }
+      + simpl. destruct equiv_dec.
+      { reflexivity. }
+      { destruct H2. congruence. apply IHl. right. destruct H2. destruct H2. exists x. split. auto. 
+    Admitted.
 
     (*ERICK : timeStampEqThetaTime serve para encontrar se em algum l_i da timestamp bate com o theta(k) *)
     (* atual, vide a teoria em Arbab (2004)                                                              *) 
@@ -227,19 +238,21 @@ Module ConstraintAutomata.
     (* Decidido que o default é 0. Isso tem que ser explicitado na documentação. *)
     Fixpoint timeStampIndex (ca: set port)(*constraintAutomata)*) (k:nat) (l:nat) (a:port) :=
       match l with
-      | 0 => if timeStamp a(0) =? thetaTime (ca) (k) then 0 else 0
-      | S n => if timeStamp a(S n) =? thetaTime (ca) (k) then S n else timeStampIndex (ca) (k) (n) (a) 
+      | 0 => if (timeStamp a(0) =? thetaTime (ca) (k) == true) then 0 else 0
+      | S n => if (timeStamp a(S n) =? thetaTime (ca) (k) == true) then S n else timeStampIndex (ca) (k) (n) (a) 
       end.
 
     (* Pode ser formalizada dessa forma? *)
     Lemma timeStampIndexSound : forall ca, forall k, forall l, forall a, 
-    timeStampIndex ca k l a <> 0 <-> (exists n, timeStamp a(n) =? thetaTime (ca) (k) = true /\ n <> 0).
+    timeStampIndex ca k l a <> 0 -> (exists n, timeStamp a(n) =? thetaTime (ca) (k) = true /\ n <> 0).
     Proof.
-    split.
+    (*split. *)
     - intros. induction l. 
-    + simpl in H2. destruct Qeq_bool in H2. congruence. congruence.
-    + simpl in H2. destruct Qeq_bool eqn: xA in H2. apply IHl. Admitted.
-
+    + simpl in H2. destruct equiv_dec in H2. congruence. congruence.
+    + simpl in H2. destruct equiv_dec in H2. exists (S l).
+      { split. inversion e. reflexivity. exact H2. }
+      { apply IHl. exact H2. }
+    Defined.
 
     Check timeStampIndex.
     (* Therefore it is possible to define tetaN: l has the same meaning as in timeStampEqThetaTime       *)
@@ -248,7 +261,7 @@ Module ConstraintAutomata.
     Fixpoint thetaN (ca: set port) (k:nat) (l:nat) (s:set port) : set name := 
       match s with
       | a::t => match hasData a(k) with
-                | true => if (timeStampEqThetaTime ca k l a) then
+                | true => if (timeStampEqThetaTime ca k l a == true) then
                              id a :: thetaN ca k l t
                           else thetaN ca k l t
                 | false => thetaN ca k l t
@@ -262,16 +275,15 @@ Module ConstraintAutomata.
     split.
     - intros. induction s.
     + simpl in H2. congruence.
-    + simpl in H2. exists a. split.
-      simpl;auto. destruct hasData in H2. destruct timeStampEqThetaTime in H2.  Admitted.
-
+    + simpl in H2. destruct hasData eqn:Ha in H2. destruct equiv_dec eqn: Hb in H2.
+      { exists a. split. simpl;auto.  inversion e. split. Admitted.
     (* Returns tuples of ports, data and the time where a given data item is "seen" in a given port *)
     (* in the instant denoted by timeStamp k                                                        *)
 
     (* The following function retrieves all ports as tuples (name, data(k), timeStamp(k)) iff the port*)
     (* contains data at time teta.time(k), where teta.time(k) is the smallest time stamp obtained     *)
     (* by merging all time stamps with a given natural number "k"                                     *)
-    (* the two following function implements tetaDelta.                                               *)
+    (* the two following function implements thetaDelta.                                               *)
     (* TODO definir uma função igual a timeStampEqThetaTime que retorna o indice li tal que           *)
     (* timeStamp a(S n) =? thetaTime(k)  FEITO: timeStampIndex                                        *)
    
@@ -288,7 +300,7 @@ Module ConstraintAutomata.
                 end
       end.
 
-    (* Idéia: salvar o índice de tetaDelta pra cada função. Porém falha ao lembrar que ele pode ser diferente pra *)
+    (* Idéia: salvar o índice de thetaDelta pra cada função. Porém falha ao lembrar que ele pode ser diferente pra *)
     (* cada dataStream em cada porta. Porém parece ser possível usar a ideia da função acima pra pegar o índice   *)
     (* exato para avaliar a porta na transição:                                                                   *)
     (* Fixpoint indexportsWithData (ca:set port) (k:nat) (l:nat) (s:set port) : set((name * nat) ) :=
@@ -303,11 +315,11 @@ Module ConstraintAutomata.
                 end
       end. *)
     (* Enquanto eu escrevia isso eu tive uma ideia melhor até: "existsb" nat tal que a definição da dc na transição *)
-    (* avaliada em k bata com o mesmo valor da porta em tetaDelta(k)                                                *)
+    (* avaliada em k bata com o mesmo valor da porta em thetaDelta(k)                                                *)
 
-    Definition tetaDelta (ca:constraintAutomata) (k : nat) (l:nat) (po: set port) := 
+    Definition thetaDelta (ca:constraintAutomata) (k : nat) (l:nat) (po: set port) := 
       portsWithData po k l po.
-    Check tetaDelta.
+    Check thetaDelta.
 
     Close Scope Q_scope.
 
@@ -329,24 +341,64 @@ Module ConstraintAutomata.
     Definition DC (p:port) (k:nat) (d : option data) : bool :=
        if (dataAssignment p(k) == d) then true else false.
 
+    Lemma DCSound : forall p, forall k, forall d, DC p k d = true <-> dataAssignment p(k) = d.
+    Proof.
+    split.
+    - intros. unfold DC in H2. destruct equiv_dec.
+    + exact e.
+    + discriminate.
+    - intros. destruct H2. unfold DC. destruct equiv_dec.
+    + reflexivity.
+    + congruence.
+    Defined.
+
+
     Fixpoint derivativePortInvolved (s:set name) (a: port) :=
       match s with
-      | [] => []
+      | [] => [] (*ERICK wtf esse derivative aqui embaixo?*)
       | x::t => if x == id a then derivative(a)::derivativePortInvolved t a
                 else a::derivativePortInvolved t a
       end.
 
+    Lemma derivativePortsInvolvedSound : forall s, forall a, 
+      derivativePortInvolved s a <> [] <-> s <> [].
+    Proof.
+    split.
+    - intros. induction s.
+    + simpl in H2. congruence.
+    + simpl in H2. discriminate.
+    - intros. induction s.
+    + simpl. congruence.
+    + simpl. destruct equiv_dec. discriminate. discriminate.
+    Defined.
+  
+
     (* NEW then we have a way to calculate the derivatives from all ports in the input involved with the actual step *)
-    Fixpoint allDerivativesFromPortsInvolved(names: set name) (ports:set port) : set port :=
+    Fixpoint allDerivativesFromPortsInvolved (names: set name) (ports:set port) : set port :=
       match ports with
       | [] => []
       | a::t => derivativePortInvolved names a ++ allDerivativesFromPortsInvolved names t
       end.
     Check allDerivativesFromPortsInvolved.
 
+    Lemma allDerivativesFromPortsInvolvedSound : forall names, forall ports, 
+      allDerivativesFromPortsInvolved names ports <> [] <-> names <> [] /\ ports <> [].
+    Proof.
+    split.
+    - intros. induction ports.
+    +  simpl in H2. congruence.
+    +  destruct names.  simpl in H2. apply IHports in H2. destruct H2. congruence.
+       split. congruence. congruence.
+    - intros. induction ports. destruct H2.
+    + simpl. exact H3.
+    + destruct names. simpl. apply IHports. destruct H2. split. exact H2. congruence.
+      simpl. destruct equiv_dec. simpl. congruence. simpl. congruence.
+    Defined.
+
    (* The following function may calculate the derivative of ports involved in a given transition *)
     Definition portsDerivative (names: set name) (input: set port) := 
       allDerivativesFromPortsInvolved names input.
+
 
     (* We also need to check if the ports involved in a transition are the only ones with data so it can fire *)
 
@@ -381,7 +433,7 @@ Module ConstraintAutomata.
 
     Definition onlyPortsInvolvedContainsData (ca:constraintAutomata) (ports : set name) 
       (k l : nat) (input : set port) :=
-      checkPorts (retrievePortsOutsideTransition (input) ports) (tetaDelta (ca) (k) (l) (input)).
+      checkPorts (retrievePortsOutsideTransition (input) ports) (thetaDelta (ca) (k) (l) (input)).
 
 
     (* Before taking a step, we want to retrieve ports in theta.N                                               *)
@@ -579,14 +631,14 @@ End ConstraintAutomata.
     ConstraintAutomata.Q0 := [q0]
   |}.
 
-  Eval compute in ConstraintAutomata.tetaDelta oneBoundedFIFOCA 0 0 [portA;portB].
+  Eval compute in ConstraintAutomata.thetaDelta oneBoundedFIFOCA 0 0 [portA;portB].
 
   Eval compute in ConstraintAutomata.retrievePortsFromThetaN 0 20 [portA;portB].
 
-  (*Eval compute in ConstraintAutomata.tetaDelta oneBoundedFIFOCA 2 20 [portA;portB].*)
+  (*Eval compute in ConstraintAutomata.thetaDelta oneBoundedFIFOCA 2 20 [portA;portB].*)
   (*onlyPortsInvolvedContainsData (ca:constraintAutomata) (ports : set name) 
       (k l default : nat) (input : set port)
-    Definition tetaDelta (ca:constraintAutomata) (k : nat) (l:nat) (po: set port) (default:nat) := 
+    Definition thetaDelta (ca:constraintAutomata) (k : nat) (l:nat) (po: set port) (default:nat) := 
       portsWithData po k l po default.*)
   Eval compute in ConstraintAutomata.onlyPortsInvolvedContainsData (oneBoundedFIFOCA) [A] 
       0 20 [portA;portB]. 
@@ -597,12 +649,12 @@ End ConstraintAutomata.
   Definition videos := Eval compute in ConstraintAutomata.portsDerivative ([A]) (x).
 
 
-  (* TODO: tetaDelta aparenta estar ok. A porta de entrada é parametrizada. O problema parece ser na definição de DC
+  (* TODO: thetaDelta aparenta estar ok. A porta de entrada é parametrizada. O problema parece ser na definição de DC
    estar fixa em uma porta (a inicial, sem atualização de index (cálculo de derivada)                                 *)
-  Eval compute in ConstraintAutomata.tetaDelta oneBoundedFIFOCA 2 20 videos.
+  Eval compute in ConstraintAutomata.thetaDelta oneBoundedFIFOCA 2 20 videos.
   Print videos.
 
-  Eval compute in ConstraintAutomata.tetaDelta oneBoundedFIFOCA 5 20 [portA;portB].
+  Eval compute in ConstraintAutomata.thetaDelta oneBoundedFIFOCA 5 20 [portA;portB].
 
   (* Debugging - 22072018 *)
 
@@ -770,7 +822,7 @@ End ConstraintAutomata.
   Eval compute in ConstraintAutomata.onlyPortsInvolvedContainsData (anotherCA) [A0;B0] 
       2 20 [portA0;portB0].
 
-  Eval compute in ConstraintAutomata.tetaDelta anotherCA 2 20 [portA0;portB0].
+  Eval compute in ConstraintAutomata.thetaDelta anotherCA 2 20 [portA0;portB0].
 
   Eval compute in anotherCABehaves qb 2.
 
