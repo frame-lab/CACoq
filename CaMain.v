@@ -90,7 +90,7 @@ Module ConstraintAutomata.
 
     Record constraintAutomata : Type := CA {
       Q : set state;
-      N : set port; 
+      N : set name; (* ou set port?*) 
       T : state -> nat -> set (set (name) * bool * set(state)); (* ERICK -> set(state) por causa do comportamento não determinístico do CA. *)
                                                                        (* Also, set (set name)) * ... p/ permitir a verificação correta da porta na*)
                                                                        (* na transição em questão.                                                 *)
@@ -186,13 +186,26 @@ Module ConstraintAutomata.
 
     Notation "x |> f" := (f x) (at level 69, only parsing).
 
+
+    (* In order to calculate the definition of theta.time correctly, we first bind it to its zero. *)
+    Definition thetaTimeInZero (s:set port)  := 
+      returnSmallerNumber (100000#1) (mapAp 0 ((s) |> getTimeStampFromPorts)).
+
+
+    (* Fixpoint getNextThetaTime (p: port) (k : nat) (s: set port) :=
+      match k with
+      | 0 => if (timeStream p(0) > thetaTimeInZero s) then (timeStream p(0)) else (thetaTimeInZero s)
+      | *)
+ 
     (* We can define thetaTime as a function that a given natural k, returns the smaller number from a set of *)
     (* rational numbers obtained by applying f to k.                                                          *)
     (* ERICK: theta.time(k) é calculado na entrada, e não no conjunto de portas do autômato...                *)
     (* s: TDS         de entrada do autômato                                                                  *)
     Definition thetaTime (s:set port) (k:nat)  := 
       returnSmallerNumber (100000#1) (mapAp k ((s) |> getTimeStampFromPorts)).
-
+      (* match k with
+      | 0 => returnSmallerNumber (100000#1) (mapAp 0 ((s) |> getTimeStampFromPorts)).
+      | S n => *)
 
     Close Scope Q_scope.
 
@@ -206,25 +219,29 @@ Module ConstraintAutomata.
       end.
 
     Lemma timeStampEqThetaTimeSound : forall ca, forall k, forall l, forall a, 
-    timeStampEqThetaTime ca k l a = true <->  timeStamp a(l) =? thetaTime (ca) (k) = true \/ 
+    timeStampEqThetaTime ca k l a = true ->  timeStamp a(l) =? thetaTime (ca) (k) = true \/ 
     (exists x, x < l /\ timeStamp a(x) =? thetaTime (ca) (k) = true).
     Proof.
-    split.
+    (* split. *)
     - intros. induction l.
-    + inversion H2. destruct Qeq_bool; auto.
+    + simpl in H2. destruct equiv_dec in H2. auto. discriminate.
     + simpl in H2. destruct equiv_dec in H2. inversion e. left. reflexivity.
       right. apply IHl in H2. destruct H2.
       exists l. split. auto.
       assumption. destruct H2. destruct H2. exists x.
-      split. auto. assumption.
-    - intros. induction l.
-      + simpl. destruct equiv_dec. 
-      { reflexivity. } 
-      { destruct H2. congruence. inversion H2. destruct H3. inversion H3. }
-      + simpl. destruct equiv_dec.
-      { reflexivity. }
-      { destruct H2. congruence. apply IHl. right. destruct H2. destruct H2. exists x. split. auto. 
-    Admitted.
+      split. auto. assumption. Defined.
+
+    (*Lemma timeStampEqThetaTimeSound2 : forall ca, forall k, forall l, forall a, 
+    timeStamp a(l) =? thetaTime (ca) (k) = true \/ 
+    (exists x, x < l /\ timeStamp a(x) =? thetaTime (ca) (k) = true) ->  timeStampEqThetaTime ca k l a = true.
+    Proof.
+    - intros. induction l. 
+    + destruct H2. simpl. rewrite H2. auto. destruct H2. destruct H2. inversion H2.
+    + simpl. destruct equiv_dec. reflexivity. 
+      destruct H2. congruence.
+      destruct H2. destruct H2.
+      unfold timeStampEqThetaTime.
+    Admitted. *)
 
     (*ERICK : timeStampEqThetaTime serve para encontrar se em algum l_i da timestamp bate com o theta(k) *)
     (* atual, vide a teoria em Arbab (2004)                                                              *) 
@@ -242,8 +259,7 @@ Module ConstraintAutomata.
       | S n => if (timeStamp a(S n) =? thetaTime (ca) (k) == true) then S n else timeStampIndex (ca) (k) (n) (a) 
       end.
 
-    (* Pode ser formalizada dessa forma? *)
-    Lemma timeStampIndexSound : forall ca, forall k, forall l, forall a, 
+    Definition timeStampIndexSound : forall ca, forall k, forall l, forall a, 
     timeStampIndex ca k l a <> 0 -> (exists n, timeStamp a(n) =? thetaTime (ca) (k) = true /\ n <> 0).
     Proof.
     (*split. *)
@@ -275,8 +291,11 @@ Module ConstraintAutomata.
     split.
     - intros. induction s.
     + simpl in H2. congruence.
-    + simpl in H2. destruct hasData eqn:Ha in H2. destruct equiv_dec eqn: Hb in H2.
-      { exists a. split. simpl;auto.  inversion e. split. Admitted.
+    + simpl in H2. 
+      unfold hasData in H2. Admitted.
+      
+
+
     (* Returns tuples of ports, data and the time where a given data item is "seen" in a given port *)
     (* in the instant denoted by timeStamp k                                                        *)
 
@@ -304,7 +323,7 @@ Module ConstraintAutomata.
     (* cada dataStream em cada porta. Porém parece ser possível usar a ideia da função acima pra pegar o índice   *)
     (* exato para avaliar a porta na transição:                                                                   *)
     (* Fixpoint indexportsWithData (ca:set port) (k:nat) (l:nat) (s:set port) : set((name * nat) ) :=
-      match s with
+      match s with ERICK: a ideia aqui implementada está implementada na função acima.
       | [] => []
       | a::t => match hasData(a) (k) with
                 | true => if (timeStampEqThetaTime ca k l a) then
@@ -397,23 +416,82 @@ Module ConstraintAutomata.
 
    (* The following function may calculate the derivative of ports involved in a given transition *)
     Definition portsDerivative (names: set name) (input: set port) := 
-      allDerivativesFromPortsInvolved names input.
+      allDerivativesFromPortsInvolved names input. (* NOTICE: no longer used *)
 
 
     (* We also need to check if the ports involved in a transition are the only ones with data so it can fire *)
 
-    Fixpoint portsOutsideTransition (input: port) (transition : set name) :=
-      match transition with
+    Fixpoint portsOutsideTransition (input: port) (ports : set name) :=
+      match ports with
        | [] => true
        | a::t => if (id input <> a) then portsOutsideTransition input t else false
       end.
 
-    Fixpoint retrievePortsOutsideTransition (input: set port) (transition : set name) :=
+    Lemma portsOutsideTransitionSound : forall input, forall ports, portsOutsideTransition input ports = false <->
+      (* ports <> [] /\ (exists b, In b ports /\ (id input = b)). *)
+      (*     split.
+    - intros. induction ports.
+    + split. inversion H2. inversion H2.
+    + simpl in H2. destruct nequiv_dec in H2. apply IHports in H2.
+      destruct H2. destruct H3. destruct H3.
+      split. discriminate. exists x. split. simpl;auto.
+      exact H4. split. discriminate. exists a. split. simpl;auto. inversion e. reflexivity.
+    - intros. induction ports. 
+    + destruct H2. congruence.
+    + simpl. destruct nequiv_dec. apply IHports. destruct H2. destruct H3. destruct H3. simpl in H3.
+      destruct H3. congruence. split. apply in_split in H3. destruct H3. destruct H3. rewrite H3. Admitted.*)
+    (* - intros. induction ports.
+      destruct H2. destruct H2. inversion H2.
+      simpl. destruct nequiv_dec. apply IHports.
+      destruct H2. *)
+      (exists b, In b ports /\ (id input = b)).
+    Proof.
+    split.
+    - intros. induction ports.
+    + simpl in H2. inversion H2.
+    + simpl in H2. destruct nequiv_dec in H2. apply IHports in H2.
+      repeat destruct H2. exists x. split.
+      simpl;auto.
+      exact H3.
+      inversion e. exists a.
+      split. simpl;auto.
+      exact H3.
+    - intros. induction ports.
+    + repeat destruct H2.
+    + simpl. destruct nequiv_dec. apply IHports. repeat destruct H2. congruence. exists x. split; assumption.
+      reflexivity. 
+    Defined.
+
+
+    Fixpoint retrievePortsOutsideTransition (input: set port) (ports : set name) :=
       match input with
       | [] => []
-      | a::x => if portsOutsideTransition a transition then a::retrievePortsOutsideTransition x transition
-                else retrievePortsOutsideTransition x transition
+      | a::x => if (portsOutsideTransition a ports) == true then a::retrievePortsOutsideTransition x ports
+                else retrievePortsOutsideTransition x ports
       end.
+
+    Lemma retrievePortsOutsideTransitionSound : forall input, forall ports,
+    retrievePortsOutsideTransition input ports <> [] <-> exists a, portsOutsideTransition a ports = true /\
+    In a input.
+    Proof.
+    split.
+    - intros. induction input.
+    + simpl in H2. congruence.
+    + simpl in H2. destruct equiv_dec in H2. inversion e.
+      exists a. split. reflexivity.  simpl;auto.
+      apply IHinput in H2. destruct H2. exists x. destruct H2.
+      split. assumption.
+      simpl;auto.
+    - intros. induction input. destruct H2. destruct H2. 
+    + inversion H3. 
+    + simpl. destruct equiv_dec.
+      discriminate. 
+      apply IHinput. destruct H2.
+      destruct H2. simpl in H3.
+      destruct H3. rewrite <- H3 in H2. congruence.
+      exists x. split. exact H2. exact H3. Defined.
+    
+    
 
     Fixpoint hasDataInThetaDelta (p: port) (thetadelta: set (name * option data)) :=
       match thetadelta with
@@ -423,6 +501,31 @@ Module ConstraintAutomata.
                     else hasDataInThetaDelta (p) (t)
                 else hasDataInThetaDelta p t
       end.
+
+    Lemma hasDataInThetaDeltaSound : forall p, forall thetadelta, hasDataInThetaDelta p thetadelta = true <-> 
+      exists a, In a thetadelta /\ (id p = (fst(a))) /\ (snd(a)<> None).
+    Proof. (*descartar o In a thetadelta *)
+    split.
+    - intros. induction thetadelta.
+    + inversion H2.
+    + simpl in H2. destruct equiv_dec in H2. destruct nequiv_dec in H2. inversion e.
+      exists a. split.
+      simpl;auto.
+      split. exact H4.
+      congruence.
+      apply IHthetadelta in H2. destruct H2. destruct H2. exists x. split.
+      simpl;auto. exact H3.
+      apply IHthetadelta in H2. destruct H2. destruct H2. exists x. split.
+      simpl;auto. exact H3.
+    - intros. induction thetadelta.
+    + repeat destruct H2. 
+    +  destruct H2. destruct H2. destruct H3. simpl in H2. 
+       (*destruct H2. simpl. rewrite H2. destruct equiv_dec. destruct nequiv_dec. reflexivity.
+       inversion e0. congruence. congruence. *)
+       simpl. destruct equiv_dec. destruct nequiv_dec. reflexivity. inversion e0. 
+       apply IHthetadelta. exists a. Admitted.
+
+      
 
     Fixpoint checkPorts (t:set port) (thetadelta: set (name * option data)) :=
       match t with
@@ -512,8 +615,133 @@ Module ConstraintAutomata.
     Definition run (ca:constraintAutomata) (input: set port) (k l : nat) :=
       run' ca input (count_into_list k) l (Q0 ca) [Q0 ca].
 
+
+    (* Beginning of Product Automata *)
+
+    (* Variable state1 state2 : Type. <- não necessário visto que o primeiro produto é o produto de dois autômatos *)
+    (* "normais" *)
+
+    (* Vale notar que o tipo de estados de ambos os autômatos devem ser o mesmo.*)
+    (* Existe um problema na run para esse caso : ela não espera como argumento um par de estados como um estado inicial.
+       Uma possível solução consiste em criar uma "run" que chama a run atual adaptada pra cada elemento de cada par
+       (q_i,q_j) \in Q0,1 X Q0,2 (Ou não, dependendo de como os estados no autômato resultante vão ficar.*)
+    (* We produce the reusulting set of states *)
+    Definition resultingStatesSet (a1: constraintAutomata) (a2: constraintAutomata) :=
+      list_prod (Q a1) (Q a2). (*list_prod: cartesian product of lists *)
+
+    Lemma resultingStatesSetSound : forall a1, forall a2, forall a, forall b,
+      In (a,b) (resultingStatesSet a1 a2) <-> In a (Q a1) /\ In b (Q a2).
+    Proof.
+    intros. apply in_prod_iff. 
+    Defined.
+
+    (* We produce the resulting set name *)
+    Definition resultingNameSet (a1:constraintAutomata) (a2: constraintAutomata) :=
+      set_union equiv_dec (N a1) (N a2).
+    
+    Lemma resultingNameSetSound : forall a1, forall a2, forall a,
+      In a (resultingNameSet a1 a2) <-> In a (N a1) \/ In a (N a2).
+    Proof.
+    intros. apply set_union_iff.
+    Defined.
+
+    (* We produce the resulting set of initial states *)
+
+    Definition resultingInitialStatesSet (a1: constraintAutomata) (a2: constraintAutomata) :=
+      list_prod (Q0 a1) (Q0 a2).
+
+    Lemma resultingInitialStatesSetSound : forall a1, forall a2, forall a, forall b,
+      In (a,b) (resultingInitialStatesSet a1 a2) <-> In a (Q0 a1) /\ In b (Q0 a2).
+    Proof.
+    intros. apply in_prod_iff. 
+    Defined.
+
+    (* We define an inductive type in order to denote a transition in the resulting automaton. *)
+
+(*    Inductive productTransition q1 q2 state := 
+    (* let us label state as the resulting state of this composite transition, which may contain 1 or more target
+       states *)
+    | resTrans : (q1 * q2) -> (* nat ->*) set (set (name) * bool * set(state)) -> productTransition q1 q2 state.
+    (*ERICK: isso aqui tá trash *)
+
+    (* The following definitions stand for the definition of the resulting transition set. *)
+
+    (* The first definition 
+    Fixpoint retrieveNotAffectedTransitions (s : set (state * state))
+*)
+    (* Second transition generation rule *)
+    (*ERICK: essa função recebe uma relação de transição de um autômato e um conjunto de portas que vai ser o
+     do outro autômato. Logo, posso parametrizá-la com A1 e A2, onde me interessa a relação de transição de A1 
+     O conjunto final de transições será montado tal como o resultante do nfa sem transição epsilon a partir de um
+     nfa epsilon tal como feito no RGCoq (um conjunto que possui todas as transições geradas conforme as regras espe
+     cificadas em Arbab (2006)   *)
+    (* The following definition is bound to recover a transition only present in one of the automatons which is not *)
+    (* influencend by the other, as specified by the transition derivation in Arbab (2006)                          *)
+
+      Definition getTransitionsFromSingleCA (a1: constraintAutomata) (q1 : state) :=
+      if (fst(q1 |> (T(a1))) == true) then 3 else 4.
+
+    *)
+
   End ConstraintAutomata.
 End ConstraintAutomata.
+
+(* Module ProductAutomata.
+  Section ProductAutomata.
+
+  Variables states names : Type.
+
+  Variables a1 a2 : ConstraintAutomata.constraintAutomata states names.
+
+    (* Beginning of Product Automata *)
+    (* Vale notar que o tipo de estados de ambos os autômatos devem ser o mesmo.*)
+    (* Existe um problema na run para esse caso : ela não espera como argumento um par de estados como um estado inicial.
+       Uma possível solução consiste em criar uma "run" que chama a run atual adaptada pra cada elemento de cada par
+       (q_i,q_j) \in Q0,1 X Q0,2 (Ou não, dependendo de como os estados no autômato resultante vão ficar.*)
+    (* We produce the reusulting set of states *)
+    Definition resultingStatesSet :=
+      list_prod (ConstraintAutomata.Q a1) (ConstraintAutomata.Q a2). (*list_prod: cartesian product of lists *)
+
+    Lemma resultingStatesSetSound : forall a1 : ConstraintAutomata.constraintAutomata states names, forall a2, forall a, forall b,
+      In (a,b) (resultingStatesSet a1 a2) <-> In a (ConstraintAutomata.Q a1) /\ In b (ConstraintAutomata.Q a2).
+    Proof.
+    intros. apply in_prod_iff. 
+    Defined.
+
+    (* We produce the resulting set name *)
+    Definition resultingNameSet (a1:constraintAutomata) (a2: constraintAutomata) :=
+      set_union equiv_dec (N a1) (N a2).
+    
+    Lemma resultingNameSetSound : forall a1, forall a2, forall a,
+      In a (resultingNameSet a1 a2) <-> In a (N a1) \/ In a (N a2).
+    Proof.
+    intros. apply set_union_iff.
+    Defined.
+
+    (* We produce the resulting set of initial states *)
+
+    Definition resultingInitialStatesSet (a1: constraintAutomata) (a2: constraintAutomata) :=
+      list_prod (Q0 a1) (Q0 a2).
+
+    Lemma resultingInitialStatesSetSound : forall a1, forall a2, forall a, forall b,
+      In (a,b) (resultingInitialStatesSet a1 a2) <-> In a (Q0 a1) /\ In b (Q0 a2).
+    Proof.
+    intros. apply in_prod_iff. 
+    Defined.
+
+    (* The following definitions stand for the definition of the resulting transition set. *)/
+
+    (* The first definition 
+    Fixpoint retrieveNotAffectedTransitions (s : set (state * state))
+*)
+    (* Second transition generation rule *)
+    (*ERICK: essa função recebe uma relação de transição de um autômato e um conjunto de portas que vai ser o
+     do outro autômato. Logo, posso parametrizá-la com A1 e A2, onde me interessa a relação de transição de A1 
+     e o conjunto de estados de A2. *)
+
+  End ProductAutomata.
+End ProductAutomata. *)
+
 
   Definition foo (n:nat) : nat :=
     match n with
@@ -626,7 +854,7 @@ End ConstraintAutomata.
   (* falta definir transição para começar a brncar com a run.                                      *)
   Definition oneBoundedFIFOCA:= {|
     ConstraintAutomata.Q := [q0;p0;p1];
-    ConstraintAutomata.N := realports; (*TODO : ports -> Names  *)
+    ConstraintAutomata.N := [A;B]; (*TODO : ports -> Names  *)
     ConstraintAutomata.T := oneBoundedFIFOrel;
     ConstraintAutomata.Q0 := [q0]
   |}.
@@ -723,7 +951,7 @@ End ConstraintAutomata.
 
   Definition syncCA := {|
     ConstraintAutomata.Q := [X];
-    ConstraintAutomata.N := [portE;portF];
+    ConstraintAutomata.N := [E;F];
     ConstraintAutomata.T := syncCaBehavior;
     ConstraintAutomata.Q0 := [X]
   |}.
@@ -814,7 +1042,7 @@ End ConstraintAutomata.
 
   Definition anotherCA := {|
     ConstraintAutomata.Q := [qa;qb];
-    ConstraintAutomata.N := [portA0;portB0];
+    ConstraintAutomata.N := [A0;B0];
     ConstraintAutomata.T := anotherCABehaves;
     ConstraintAutomata.Q0 := [qa]
   |}.
