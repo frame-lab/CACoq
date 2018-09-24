@@ -4,6 +4,7 @@ Require Import Classes.EquivDec.
 Require Import Coq.Program.Program.
 Require Import QArith.
 Require Import Coq.Numbers.BinNums.
+(*Require Import Coq.Logic.FunctionalExtensionality.*)
 
 (* Keywords: ERICK, TODO *)
 
@@ -38,10 +39,14 @@ Fixpoint s1_in_s2 {A} `{EqDec A eq} (s1 s2 : set A) :=
     | [] => true
     | a::t => set_mem equiv_dec a s2 && s1_in_s2 t s2
   end.
-(*
 Lemma s1_in_s2_sound {A} `{EqDec A eq} : forall s1, forall s2, s1_in_s2 s1 s2 = true <-> s1 = [] \/
-                                         (forall a, In a s1 -> set_mem equiv_dec a s2 && s1_in_s2 t s2 == true).
-*)
+                                         (forall a, In a s1 -> set_mem equiv_dec a s2  = true).
+Proof.
+split.
+- intros. induction s1. left. reflexivity.
+simpl in H0. Admitted.
+
+
 Fixpoint set_eq {A} `{EqDec A eq} (s1 s2 : set A) :=
   if (length s1 == length s2) then
       if (s1_in_s2 s1 s2) then
@@ -73,7 +78,7 @@ Module ConstraintAutomata.
     Record port := mkport{
       id : name;
       dataAssignment : nat -> option data; 
-      timeStamp : nat -> QArith_base.Q (* models nat -> real *);
+      timeStamp : nat -> QArith_base.Q;
       (* We need to assure that timeStamp is always crescent:                                        *)
       portCond : forall n:nat, Qle (timeStamp n) (timeStamp (S n));
       index : nat (* the actual index of the port; aka a way to calculate the derivative.            *)
@@ -84,19 +89,46 @@ Module ConstraintAutomata.
       (* This obliges the user to supply a proof of the same type as portCond, but if they rather not   *)
       (* prove it, they can axiomixe it                                                                 *)
 
-      (* A idéia de limitar a "profundidade" das funções nat -> Q e nat -> Data  vai ser aplicada na run. *)
     }.
     Check dataAssignment.
     Check port.
+    (*Lemma dataAssignmentaaa : forall a: nat -> option data, forall b, a = b <-> a = b.
+    intros. split.
+    intros. exact H2. auto. Qed.*)
+    (*Lemma eqdeczao : forall a,forall b, forall c, forall d, forall e, forall f, forall g, forall h,forall i, forall j,
+      a = f /\ b = g /\ c = h  /\ e = j -> (mkport a b c d e) = (mkport f g h i j).
+    intros.*)
+
+    (* Instance port_EqDec *)
+    (*Instance port_EqDec name `(EqDec name eq) data `(EqDec data eq) : EqDec (port) eq := {
+       equiv_dec x y :=
+          match x, y with
+          | mkport a b c d e, mkport f g h i j => if (a == f) then 
+                                                    if (b == g) then
+                                                      if (c == h) then
+                                                        if (d == i) then
+                                                          if (e == j) then in_left
+                                                        else in_right
+                                                       else in_right
+                                                      else in_right
+                                                  else in_right
+                                                else in_right
+        end
+    }.*)
+
+    (*Definition sheila name `(EqDec name eq) (p1: port) (p2:port) :=
+      if (id p1 == id p2) then in_left else in_right.  *)
+
+    (*ERICK : necessário uma relação de igualdade para portas Instance port_eqdec
+      dica : f_equal.  *)
 
 
-    (* TDS^names can be seen as a set of ports as defined above.. *)
+    (* TDS^names can be seen as a set of ports as defined above. *)
     (* In order to totalize the functions, we opted to use option type for both data and the time when  *)
     (* the data happens in a port. This lets the user to define a instant that there will be no data in *)
     (* a given port A_i                                                                                 *)
 
-    (* Begin da nova DC *)
-    Inductive DC := (*TODO parametrizar a dc? *)
+    Inductive DC := (*TODO parametrizar a dc? nao necessário*)
     | tDc : DC (* permite a formalização de DCs como tendo um booleano direto (leia-se true) *)
     | dc : name -> option data -> DC (*esse option data fica a critério do usuário usar ou já forço aqui? *)
                                      (*isso não afeta o funcionamento do autõmato                         *)
@@ -267,7 +299,7 @@ Module ConstraintAutomata.
     Fixpoint getThetaTimeCandidate (p:port) (k:set nat) :=
       match k with
       | [] => []
-      | a::t => timeStamp p(a)::getThetaTimeCandidate p t (*ERICK: isso aqui tá errado. 
+      | a::t => timeStamp p(index(p))::getThetaTimeCandidate p t (*ERICK: isso aqui tá errado. 
                             o tempo tem que ser calculado em cima do index*)
       end.
 
@@ -291,10 +323,13 @@ Module ConstraintAutomata.
       end.
 
     Definition thetaTime (s:set port) (k:nat) :=
+      getNextThetaTime(getAllThetaTimes s (count_into_list k)).
+
+    (*Definition thetaTime (s:set port) (k:nat) :=
       match k with
       | 0 => thetaTimeInZero s
       | S n => getNextThetaTime (getAllThetaTimes s (count_into_list(S n)))
-      end.
+      end.*)
 
     (* By algorithmic aspects, we define the following function as a function that implements the *)
     (* idea behind the calculus of theta.N(k) by imposing a upper bound to find the li value where*)
@@ -430,7 +465,7 @@ Module ConstraintAutomata.
 
     (* We model a function to update the record of a given port that is used in a transition; a way to  *)
     (* model the derivative of a atream:                                                                *)
-    Definition derivative (p: port) := Eval compute in mkport (id p) (dataAssignment p) (timeStamp p)
+    Definition derivative (p: port) := mkport (id p) (dataAssignment p) (timeStamp p)
         (portCond p) (S (index p)).
 
     Lemma derivative_sound : forall p, derivative p = mkport (id p) (dataAssignment p) (timeStamp p)
@@ -439,19 +474,35 @@ Module ConstraintAutomata.
     reflexivity.
     Defined.
 
+    Definition calculateDerivative (p:port) (a:name) :=
+      if a == id p then [derivative(p)] else [p].
+
+    (*Fixpoint derivativePortInvolved (s:set name) (a:port) :=
+      match s with
+      | [] => [a]
+      | x::t => calculateDerivative a x *)
 
     (* BEGIN calculating a port's derivative *)
+    Fixpoint derivativePortInvolved (s:set name) (a: port)  :=
+      match s with
+      | [] => [a] 
+      | x::t => if x == id a then [derivative(a)]
+                else derivativePortInvolved t a
+      end. 
+
     (* First we need to define an equality relation for ports *)
     (* Context `{EqDec port eq}. *)
-    Fixpoint derivativePortInvolved (s:set name) (a: port) :=
+    (* ERICK URGENTE: necessário manter apenas as portas no estado da step k *)
+    (* TODO resolver o quanto antes*)
+    (*Fixpoint derivativePortInvolved (s:set name) (a: port)  :=
       match s with
       | [] => [] 
       | x::t => if x == id a then derivative(a)::derivativePortInvolved t a(*set_add equiv_dec (derivative(a))(derivativePortInvolved t a)*)
-                else (*set_add equiv_dec (a)(derivativePortInvolved t a)*)(derivativePortInvolved t a)
+                else ((*set_add equiv_dec (a)(derivativePortInvolved t a)*)a::derivativePortInvolved t a)
       end.
 
     Lemma derivativePortsInvolvedSound : forall s, forall a, 
-      derivativePortInvolved s a <> [] <-> s <> [] /\ exists x, In x s /\ x = id a.
+      derivativePortInvolved s a  <> [] <-> s <> [] /\ exists x, In x s /\ x = id a.
     Proof.
     split.
     - intros. induction s.
@@ -461,17 +512,18 @@ Module ConstraintAutomata.
     + simpl. congruence.
     + simpl. destruct equiv_dec. *) Admitted. (*simpl. discriminate. discriminate.
     Defined.*)
-  
+  *)
 
     (* NEW then we have a way to calculate the derivatives from all ports in the input involved with the actual step *)
     Fixpoint allDerivativesFromPortsInvolved (names: set name) (ports:set port) : set port :=
-      match ports with
+      flat_map (derivativePortInvolved names) ports (*|> nodup equiv_dec*).
+     (* match ports with
       | [] => []
       | a::t => derivativePortInvolved names a ++ allDerivativesFromPortsInvolved names t
-      end.
+      end.*)
     Check allDerivativesFromPortsInvolved.
 
-    Lemma allDerivativesFromPortsInvolvedSound : forall names, forall ports, 
+    (*Lemma allDerivativesFromPortsInvolvedSound : forall names, forall ports, 
       allDerivativesFromPortsInvolved names ports <> [] <-> names <> [] /\ ports <> [].
     Proof.
     split.
@@ -483,10 +535,12 @@ Module ConstraintAutomata.
     + simpl. exact H3.
     + destruct names. simpl. apply IHports. destruct H2. split. exact H2. congruence.
       simpl. destruct equiv_dec. Admitted. (*simpl. congruence. simpl. congruence.
-    Defined *)
+    Defined *) *)
    (* The following function may calculate the derivative of ports involved in a given transition *)
     Definition portsDerivative (names: set name) (input: set port) := 
-      allDerivativesFromPortsInvolved names input.
+      allDerivativesFromPortsInvolved names input. 
+      (*Erick: existe um bug implícito que ocorre quando há mais de uma porta
+      em theta time *)
 
     (* END calculate derivative *)
 
@@ -671,9 +725,24 @@ Module ConstraintAutomata.
                       (flat_map(derivativePortInvolved(fst((step ca acc a l input)))) input) t  l (snd (step ca acc a l input))
         end.
 
+    Definition xamboca (ca:constraintAutomata)  : 
+      set port -> list nat -> nat -> set state -> set (set port) -> set (set port) :=
+      (* k : índice de execução               *)
+      (* l : profundidade da busca            *)
+      fix rec input k l acc resp :=
+        match k with 
+          | [] => resp
+          | a::t => resp ++ [input]
+                    |> rec
+                      (flat_map(derivativePortInvolved(fst((step ca acc a l input)))) input) t  l (snd (step ca acc a l input))
+        end.
+
     (* We define a run on a constraint automaton. *)
     Definition run (ca:constraintAutomata) (input: set port) (k l : nat) :=
       run' ca input (count_into_list k) l (Q0 ca) [Q0 ca].
+
+    Definition xamboca2 (ca:constraintAutomata) (input: set port) (k l : nat) :=
+      xamboca ca input (count_into_list k) l (Q0 ca) [].
 
   End ConstraintAutomata.
 End ConstraintAutomata.
@@ -746,11 +815,6 @@ Module ProductAutomata.
                     if (q2 == snd(a)) then Some a else recoverOutboundStateRule1 q1 q2 t
                 else recoverOutboundStateRule1 q1 q2 t
       end.  
-
-    (*Definition buildResultingTransitionRule1 (q1: state) (q2 : state) (n1: set (name)) (n2 : set (name))
-      (g1 : DC) (g2: DC) (p1: state) (p2: state) :=
-      ((q1,q2),(((set_union equiv_dec (n1) (n2)),ConstraintAutomata.andDc (g1) (g2)),(p1,p2))).
-    Check buildResultingTransitionRule1.*)
 
     Fixpoint buildResultingTransitionFromStatesRule1 (p1: state) (p2: set state) :=
       match p2 with
@@ -1119,7 +1183,7 @@ End ProductAutomata.
     ConstraintAutomata.Q0 := [q0]
   |}.
 
-  Eval compute in ConstraintAutomata.thetaDelta oneBoundedFIFOCA 0 0 [portA;portB].
+  Eval compute in ConstraintAutomata.thetaDelta oneBoundedFIFOCA 1 1 [portA;portB].
 
   Eval compute in ConstraintAutomata.retrievePortsFromThetaN 0 20 [portA;portB].
 
@@ -1134,7 +1198,8 @@ End ProductAutomata.
   Eval compute in ConstraintAutomata.step oneBoundedFIFOCA [p0] 0 10 [portA;portB].
 
   Definition x := Eval compute in ConstraintAutomata.portsDerivative ([A]) ([portA;portB]).
-  Definition videos := Eval compute in ConstraintAutomata.portsDerivative ([A]) (x).
+  Definition videos := Eval compute in ConstraintAutomata.portsDerivative ([B]) (x).
+  Print videos.
 
 
   (* TODO: thetaDelta aparenta estar ok. A porta de entrada é parametrizada. O problema parece ser na definição de DC
@@ -1147,6 +1212,7 @@ End ProductAutomata.
   Eval compute in ConstraintAutomata.step oneBoundedFIFOCA (ConstraintAutomata.Q0 oneBoundedFIFOCA) 0 20  (* --> PEGUEI O FDP *)
   [portA;portB].
 
+  Eval compute in ConstraintAutomata.xamboca2 oneBoundedFIFOCA [portA;portB] 0 20.
   Eval compute in ConstraintAutomata.run oneBoundedFIFOCA [portA;portB] 5 20.
   Eval compute in oneBoundedFIFOrel (q0) .
 
@@ -1239,7 +1305,18 @@ End ProductAutomata.
     (ConstraintAutomata.Q0 syncCA) 1 20 (flat_map (ConstraintAutomata.derivativePortInvolved
     (fst(ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 20 [portE;portF]))) ([portE;portF])).
 
- Eval compute in ConstraintAutomata.run syncCA [portE;portF] 20 20.
+  Definition aaa := Eval compute in ConstraintAutomata.xamboca2 syncCA [portE;portF] 3 20. (*olha o baile ai: portsDerivative apresenta
+                                                                         bug se houver mais de uma porta em thetaTime.*)
+
+  Eval compute in ConstraintAutomata.run syncCA [portE;portF] 5 20.
+  Eval compute in ConstraintAutomata.xamboca2 syncCA [portE;portF] 1 20.
+  Eval compute in length(aaa).
+
+  Definition spacer x := x + 1.
+  Definition sum1 (s:set nat) := map spacer s.
+
+  Definition ha := sum1 [1;2].
+  Eval compute in sum1 ha.
 
 (* We model another example seen in Airbab(2004)  *)
 
@@ -1265,7 +1342,7 @@ End ProductAutomata.
 
   Definition dataAssignmentB0 n :=
     match n with
-    | 0 => Some 0
+    | 0 => Some 1
     | 1 => Some 1
 
     | S n => Some (1)
@@ -1334,7 +1411,11 @@ End ProductAutomata.
   Eval compute in ConstraintAutomata.onlyPortsInvolvedContainsData (anotherCA) [A0;B0] 
       2 20 [portA0;portB0].
 
-  Eval compute in ConstraintAutomata.thetaDelta anotherCA 2 20 [portA0;portB0].
+  Definition step1 := ConstraintAutomata.allDerivativesFromPortsInvolved(ConstraintAutomata.N anotherCA) [portA0;portB0].
+  Eval compute in step1.
+  Check step1.
+
+  
 
   Eval compute in anotherCABehaves qb.
 
@@ -1344,11 +1425,13 @@ End ProductAutomata.
      (s: set(set name * bool * set(state))) *)
   Eval compute in ConstraintAutomata.stepa anotherCA [qa;qb] 1 10 [portA0;portB0] [A0;B0].
 
-  Eval compute in ConstraintAutomata.step anotherCA ([qb]) 0 20 [portA0;portB0].
+  Eval compute in ConstraintAutomata.step anotherCA ([qa]) 1 20 [portA0;portB0].
 
   (* Sem o cálculo de derivada não trava, mas ainda assim o resultado está incorreto. *)
   (* Erick : acho que não entendi como passar a entrada corretamente pro autômato, não pode ser *)
   (* ou a implementação de theta.time pode não estar correta. *)
-  Eval compute in ConstraintAutomata.run anotherCA [portA0;portB0] 21 20.
+  Eval compute in ConstraintAutomata.run anotherCA [portA0;portB0] 2 20. (*ERICK : aparentemente um problema no thetatime desse cara aqui *)
+  (* ERICK: e possivelmente um bug oculto na run *)
+  Eval compute in ConstraintAutomata.xamboca2 anotherCA [portA0;portB0] 2 20.
 
 
