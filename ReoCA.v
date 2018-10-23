@@ -16,7 +16,7 @@ Require Import CaMain.
   Definition dataAssignmentBoth n := 
     match n with
     | 0 => Some 0
-    | 1 => Some 1
+    | 1 => Some 455
     | S n => Some (1)
     end.
 
@@ -55,7 +55,12 @@ Require Import CaMain.
         ConstraintAutomata.portCond := timeStampTestHoldsSync;
         ConstraintAutomata.index := 0 |}.
 
+
   Definition syncCaBehavior (s: syncState) :=
+    match s with
+    | X => [([E;F] , ConstraintAutomata.eqDc nat E F, [X])] 
+    end.
+  (* Definition syncCaBehavior (s: syncState) :=
     match s with
     | X => [([E;F] , (ConstraintAutomata.orDc (ConstraintAutomata.andDc (ConstraintAutomata.dc (E) (Some 0)) 
                                                 ((ConstraintAutomata.dc (F) (Some 0))))
@@ -64,7 +69,7 @@ Require Import CaMain.
                                                 ((ConstraintAutomata.dc (F) (Some 1)))
                             )
                         ), [X])] 
-    end.
+    end. *)
 
   (* The CA itself is formalized as *)
   Definition syncCA := {|
@@ -117,7 +122,7 @@ Inductive lossySyncStates := q0.
 
   Definition timeStampLossyB (n:nat) : QArith_base.Q :=
     match n with
-    | 0 =>  0#1
+    | 0 =>  4#1
     | S n =>  Z.of_N (N.of_nat(S n)) + 1#1
     end.
 
@@ -131,6 +136,12 @@ Inductive lossySyncStates := q0.
 
   Definition lossySyncCaBehavior (s: lossySyncStates) :=
     match s with
+    | q0 => [([A;B] , ConstraintAutomata.eqDc nat A B, [q0]);
+             ([A], (ConstraintAutomata.tDc lossySyncPorts nat), [q0])] 
+    end.
+
+ (* Definition lossySyncCaBehavior (s: lossySyncStates) :=
+    match s with
     | q0 => [([A;B] , (ConstraintAutomata.orDc (ConstraintAutomata.andDc (ConstraintAutomata.dc (A) (Some 0)) 
                                                 ((ConstraintAutomata.dc (B) (Some 0))))
 
@@ -138,7 +149,7 @@ Inductive lossySyncStates := q0.
                                                 ((ConstraintAutomata.dc (B) (Some 1)))
                             )
                         ), [q0]);([A], (ConstraintAutomata.tDc lossySyncPorts nat), [q0])] 
-    end.
+    end. *)
 
   (* The CA itself is formalized as *)
   Definition lossySyncCA := {|
@@ -435,6 +446,91 @@ Inductive lossySyncStates := q0.
   Eval compute in ConstraintAutomata.run aSyncDrainCA  [portAA;portBA] 10 12.
 
   (* Filter CA *)
+  Inductive filterState := q1F.
+  Inductive filterPorts :=  C | D.
+
+  Instance filterStateEq: EqDec filterState eq :=
+    {equiv_dec x y := 
+      match x,y with
+      | q1F, q1F => in_left
+      end }.
+   Proof.
+   all: congruence.
+   Defined.
+
+  Definition dataAssignmentfilterBoth n := 
+    match n with
+    | 0 => Some 0
+    | 1 => Some 0
+    | S n => Some (1)
+    end.
+
+ Definition timeStampfilterA (n:nat) : QArith_base.Q :=
+    match n with
+    | 0 =>  0#1
+    | 1 =>  3#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 7#1
+    end.
+
+   Definition timeStampfilterB (n:nat) : QArith_base.Q :=
+    match n with
+    (*| 0 =>  1#1
+    | 1 => 2#1 *)
+    | 0 => 555#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 20#1
+    end.
+
+  Lemma timeStampfilterHolds : forall n, 
+    Qle (timeStampfilterA n) (timeStampfilterA (S n)). 
+  Proof. Admitted.
+
+  Lemma timeStampfilterBHolds : forall n, 
+    Qle (timeStampfilterB n) (timeStampfilterB (S n)). 
+  Proof. Admitted.
+
+  Instance filterPortsEq: EqDec filterPorts eq :=
+    {equiv_dec x y := 
+      match x,y with
+      | C,C | D,D => in_left
+      | C,D | D,C => in_right
+      end }.
+   Proof.
+   all: congruence.
+   Defined.
+
+
+  Definition portC := {|
+        ConstraintAutomata.id := C;
+        ConstraintAutomata.dataAssignment := dataAssignmentfilterBoth;
+        ConstraintAutomata.timeStamp := timeStampfilterA;
+        ConstraintAutomata.portCond := timeStampfilterHolds;
+        ConstraintAutomata.index := 0 |}.
+
+  Definition portD:= {|
+        ConstraintAutomata.id := D;
+        ConstraintAutomata.dataAssignment := dataAssignmentfilterBoth;
+        ConstraintAutomata.timeStamp := timeStampfilterB;
+        ConstraintAutomata.portCond := timeStampfilterBHolds;
+        ConstraintAutomata.index := 0 |}.
+
+  (*suppose the expression over the data item in port A is the data should be  Some 3 *)
+  Definition filterCaBehavior (s: filterState) :=
+    match s with
+    | q1F => [([C;D] , ConstraintAutomata.andDc (ConstraintAutomata.dc C (Some 3)) 
+                                                 (ConstraintAutomata.eqDc nat C D), [q1F]);
+              ([C] , ConstraintAutomata.negDc (ConstraintAutomata.dc C (Some 3)), [q1F]) ]
+    end.
+
+  (* The CA itself is formalized as *)
+  Definition filterCA := {|
+    ConstraintAutomata.Q := [q1F];
+    ConstraintAutomata.N := [C;D];
+    ConstraintAutomata.T := filterCaBehavior;
+    ConstraintAutomata.Q0 := [q1F]
+  |}.
+
+  Eval compute in ConstraintAutomata.run filterCA [portC;portD] 10 10.
+
 
   (* Transform CA *)
 

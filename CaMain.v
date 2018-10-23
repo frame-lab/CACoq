@@ -43,7 +43,8 @@ Lemma s1_in_s2_sound {A} `{EqDec A eq} : forall s1, forall s2, s1_in_s2 s1 s2 = 
 Proof.
 split.
 - intros. induction s1. left. reflexivity.
-simpl in H0. destruct H0. Admitted.
+simpl in H0. intros. unfold andb in H0. destruct set_mem in H0.
+apply IHs1 in H0. destruct H0. destruct IHs1. rewrite H0. reflexivity. Admitted.
 
 
 Fixpoint set_eq {A} `{EqDec A eq} (s1 s2 : set A) :=
@@ -142,17 +143,10 @@ Module ConstraintAutomata.
     Lemma retrievePortFromInputSound : forall s:set port, forall n: name,forall a, retrievePortFromInput s n = Some a
     -> In a s /\ n = id a.
     Proof.
-    (* split. *) 
     - intros. 
     + induction s. inversion H2.
     simpl in H2. destruct equiv_dec in H2. inversion e. split. inversion H2. simpl. auto. inversion H2. reflexivity.
     apply IHs in H2. split. simpl. destruct H2. right. exact H2. destruct H2. exact H3. Defined.
-    (* - intros. induction s. destruct H2. inversion H2.
-    + inversion H2.
-    + simpl. destruct equiv_dec. inversion e. Defined.*)
-    (*congruence. apply IHs. exact H2. Defined.
-    - intros.
-    + rewrite H2.  induction s. *)
 
     (* The following definition enables the case of evaluating whether a port has data equal to the data in another port in a easy way*)
     Definition eqDataPorts (n1: name) (n2: name) (s: set port) :=
@@ -168,8 +162,20 @@ Module ConstraintAutomata.
       exists a, retrievePortFromInput s n1 = Some a /\ exists b, retrievePortFromInput s n1 = Some b 
       /\ (dataAssignment a(index a)) = (dataAssignment b(index b)).
     Proof.
-    intros. induction s. unfold eqDataPorts in H2. simpl in H2. discriminate.
-    unfold eqDataPorts in H2. simpl in H2. destruct equiv_dec in H2. Admitted.
+    intros. unfold eqDataPorts in H2. case (retrievePortFromInput s n1) in H2. intros.
+    Admitted.
+    (* intros. induction s.
+    - unfold eqDataPorts in H2. simpl in H2. discriminate. 
+    - unfold eqDataPorts in H2. simpl in H2. destruct equiv_dec eqn:HA in H2. destruct equiv_dec in H2.
+    destruct equiv_dec in H2. exists a. split. unfold retrievePortFromInput. case equiv_dec. 
+    + intros. reflexivity.
+    + intros. congruence.
+    + exists a. split. unfold retrievePortFromInput. case equiv_dec.
+      intros. reflexivity. intros. congruence. reflexivity.
+    + inversion H2.
+    + destruct retrievePortFromInput eqn:Hioi in H2. 
+      exists a. Admitted. *)
+    
     (* The following definition dismembers composite DCs into "canonical" ones in order to check whether they are
       satisfied *)
     (*s : set port (que será chamado na run com as portas atualizadas *)
@@ -206,7 +212,7 @@ Module ConstraintAutomata.
         destruct H2. destruct H2. destruct H2. destruct H2. rewrite H2. simpl. exact H3.
         destruct H2. destruct H2. destruct H2. destruct H2. rewrite H2. simpl. exact H3.
         destruct H2. destruct H2. rewrite H2. simpl. exact H3.
-      Qed.
+      Defined.
 
     (* End da nova DC *)
 
@@ -380,13 +386,6 @@ Module ConstraintAutomata.
                      id a :: thetaN ca k l t
                    else thetaN ca k l t
                 else thetaN ca k l t
-
-                (* match hasData a(k) with
-                | true => if (timeStampEqThetaTime ca k l a == true) then
-                             id a :: thetaN ca k l t
-                          else thetaN ca k l t
-                | false => thetaN ca k l t
-                end *)
       | []   => []
       end.
 
@@ -565,19 +564,25 @@ Module ConstraintAutomata.
     Fixpoint checkPorts (t:set port) (thetadelta: set (name * option data)) :=
       match t with
       | [] => true
-      | a::x => if negb (hasDataInThetaDelta a thetadelta) then checkPorts x thetadelta
+      | a::x => if (negb (hasDataInThetaDelta a thetadelta) == true) then checkPorts x thetadelta
                 else false
       end.
 
     Lemma checkPortsSound : forall t, forall thetadelta, checkPorts t thetadelta = false <->
-      exists a, In a t /\ hasDataInThetaDelta a thetadelta = true.
+      exists a, In a t /\ negb (hasDataInThetaDelta a thetadelta) = false.
     Proof.
     split.
     - intros. induction t.
     + inversion H2.
-    + simpl in H2. destruct negb in H2. apply IHt in H2. repeat destruct H2.
+    + simpl in H2. destruct equiv_dec in H2. apply IHt in H2. repeat destruct H2.
       exists x. split. simpl;auto. exact H3.
-      exists a. simpl. split;auto. unfold hasDataInThetaDelta. Admitted.
+      exists a. destruct hasDataInThetaDelta. split. simpl;auto. reflexivity. simpl in c. congruence.
+    - intros. induction t.
+    + repeat destruct H2.
+    +  simpl. destruct equiv_dec. apply IHt. destruct H2. destruct H2. simpl in H2. destruct H2.
+      inversion e. rewrite H2 in H5. congruence.
+      exists x. split. exact H2. exact H3. reflexivity.
+      Defined.
 
     Definition onlyPortsInvolvedContainsData (ports : set name) 
       (k l : nat) (input : set port) :=
@@ -599,14 +604,25 @@ Module ConstraintAutomata.
      | [] => []
      | a::t => if (set_eq (ports)((fst(fst(a))))) && 
                   (onlyPortsInvolvedContainsData (fst(fst(a))) k l input)
-                   && (evalCompositeDc (input) (snd(fst(a)))) then snd(a)++step' k l  input ports t
+                   && (evalCompositeDc (input) (snd(fst(a)))) == true then snd(a)++step' k l  input ports t
                    else step' k l input ports t
      end.
     Check step'.
 
+    Lemma step'_sound : forall k, forall l, forall input, forall ports, forall s, step' k l input ports s <> [] -> exists a,
+    In a s /\ (set_eq (ports)((fst(fst(a))))) && (onlyPortsInvolvedContainsData (fst(fst(a))) k l input)
+                   && (evalCompositeDc (input) (snd(fst(a)))) = true.
+    Proof. 
+    (* split. *)
+    - intros. induction s. simpl in H2. congruence. simpl in H2. destruct equiv_dec in H2. inversion e.
+    + exists a. split. simpl;auto. reflexivity.
+    + apply IHs in H2. destruct H2. destruct H2. exists x. split. simpl;auto. exact H3. Defined.
+    (* - intros. induction s. destruct H2. destruct H2. 
+    + inversion H2.
+    + simpl. destruct equiv_dec. simpl. *)
 
     Definition stepAux (ca:constraintAutomata) (k l : nat) (input:set port) (ports:set name) (s: state) :=
-      step' k l input ports (T ca s). (* O correto nessa chamada é k, e não l *)
+      step' k l input ports (T ca s).
     Check stepAux.
 
     (* We apply the step to every state in the given configuration:                     *)
@@ -722,6 +738,17 @@ Module ProductAutomata.
       (names1 : set name) (names2: set name) :=
       if set_eq (set_inter equiv_dec (names2) (fst(fst(t1)))) (set_inter equiv_dec (names1) (fst(fst(t2)))) then true else false.
 
+    Lemma evaluateConditionsFirstRuleSound : forall t1, forall t2, forall names1, forall names2,
+    evaluateConditionsFirstRule t1 t2 names1 names2 = true <-> 
+    set_eq (set_inter equiv_dec (names2) (fst(fst(t1)))) (set_inter equiv_dec (names1) (fst(fst(t2)))) = true.
+    Proof. 
+    split. 
+    - intros. unfold evaluateConditionsFirstRule in H2. case_eq (set_eq (set_inter equiv_dec names2 (fst (fst t1)))
+         (set_inter equiv_dec names1 (fst (fst t2)))).
+    + intros. reflexivity.
+    + intros. rewrite H3 in H2. discriminate.
+    - intros. unfold evaluateConditionsFirstRule. rewrite H2. reflexivity.
+    Defined.
     (* Retrieve the outgoing resulting state of the resulting transition in the product automaton as depicted by Arbab(2006). *)
     (*ERICK: acho que está inutilizada. A não ser que eu tenha que extrair isso do conjunto de estados do autômato. *)
     Fixpoint recoverOutboundStateRule1 (q1 : state) (q2 : state) (states : set (state * state)) :=
