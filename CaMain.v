@@ -107,6 +107,7 @@ Module ConstraintAutomata.
     | eqDc : name -> name -> DC
     | andDc : DC -> DC -> DC
     | orDc  : DC -> DC -> DC
+    | trDc  : (option data -> option data) -> name -> name -> DC  (* a function data -> data, the source node and the sink node's names *)
     | negDc : DC -> DC.
     (*alguma coisa que separe cada data constraint em uma construção como essa
       se nesse contexto o primeiro data seja o dado da porta e o segundo um item
@@ -158,24 +159,48 @@ Module ConstraintAutomata.
       | None => false
       end.
 
-    Lemma eqDataPortsSound : forall n1, forall n2, forall s , eqDataPorts n1 n2 s = true -> 
-      exists a, retrievePortFromInput s n1 = Some a /\ exists b, retrievePortFromInput s n1 = Some b 
+    Lemma eqDataPortsSound : forall n1, forall n2, forall s , eqDataPorts n1 n2 s = true <-> 
+      exists a, retrievePortFromInput s n1 = Some a /\ exists b, retrievePortFromInput s n2 = Some b 
       /\ (dataAssignment a(index a)) = (dataAssignment b(index b)).
     Proof.
-    intros. unfold eqDataPorts in H2. case (retrievePortFromInput s n1) in H2. intros.
-    Admitted.
-    (* intros. induction s.
-    - unfold eqDataPorts in H2. simpl in H2. discriminate. 
-    - unfold eqDataPorts in H2. simpl in H2. destruct equiv_dec eqn:HA in H2. destruct equiv_dec in H2.
-    destruct equiv_dec in H2. exists a. split. unfold retrievePortFromInput. case equiv_dec. 
-    + intros. reflexivity.
-    + intros. congruence.
-    + exists a. split. unfold retrievePortFromInput. case equiv_dec.
-      intros. reflexivity. intros. congruence. reflexivity.
-    + inversion H2.
-    + destruct retrievePortFromInput eqn:Hioi in H2. 
-      exists a. Admitted. *)
-    
+    split.
+    - intros. unfold eqDataPorts in H2. case_eq (retrievePortFromInput s n1). 
+      case_eq (retrievePortFromInput s n2).
+    + intros. rewrite H3 in H2.  rewrite H4 in H2. destruct equiv_dec in H2. inversion e.
+      exists p0. split. reflexivity. exists p. split. reflexivity. assumption.
+      inversion H2.
+    + intros. rewrite H4 in H2. rewrite H3 in H2. inversion H2.
+    + intros. rewrite H3 in H2. inversion H2.
+    - intros. destruct H2. destruct H2. destruct H3. destruct H3. 
+      unfold eqDataPorts. rewrite H2. rewrite H3. rewrite H4. destruct equiv_dec. reflexivity. congruence.
+  Defined.
+
+    (* The following definition enables the evaluation of data constraint formalized as for the transform constraint automaton*)
+    Definition transformDC (transform: option data -> option data) (n1: name) (n2: name) (s:set port) :=
+      match (retrievePortFromInput s n1) with
+      | Some a => match (retrievePortFromInput s n2) with
+                  | Some b => if transform((dataAssignment a(index a))) == (dataAssignment b(index b)) then true else false
+                  | None => false
+                  end
+      | None => false
+      end.
+
+    Lemma transformDCsound : forall transform, forall n1, forall n2, forall s, transformDC transform n1 n2 s = true <->
+      exists a, retrievePortFromInput s n1 = Some a /\ exists b, retrievePortFromInput s n2 = Some b 
+      /\ transform((dataAssignment a(index a))) = (dataAssignment b(index b)).
+    Proof.
+    split.
+    - intros. unfold transformDC in H2. case_eq (retrievePortFromInput s n1). 
+      case_eq (retrievePortFromInput s n2).
+    + intros. rewrite H3 in H2.  rewrite H4 in H2. destruct equiv_dec in H2. inversion e.
+      exists p0. split. reflexivity. exists p. split. reflexivity. assumption.
+      inversion H2.
+    + intros. rewrite H4 in H2. rewrite H3 in H2. inversion H2.
+    + intros. rewrite H3 in H2. inversion H2.
+    - intros. destruct H2. destruct H2. destruct H3. destruct H3. 
+      unfold transformDC. rewrite H2. rewrite H3. rewrite H4. destruct equiv_dec. reflexivity. congruence.
+    Defined.
+
     (* The following definition dismembers composite DCs into "canonical" ones in order to check whether they are
       satisfied *)
     (*s : set port (que será chamado na run com as portas atualizadas *)
@@ -186,6 +211,7 @@ Module ConstraintAutomata.
       | eqDc a b => eqDataPorts a b s
       | andDc a b => evalCompositeDc s a && evalCompositeDc s b
       | orDc a b => evalCompositeDc s a || evalCompositeDc s b
+      | trDc transform a b  => transformDC transform a b s
       | negDc a => negb (evalCompositeDc s a)
       end.  
 
@@ -195,8 +221,9 @@ Module ConstraintAutomata.
       (exists a, exists b, dca = eqDc a b /\ eqDataPorts a b s = true) \/
       (exists a, exists b, dca = andDc a b /\ evalCompositeDc s a && evalCompositeDc s b = true) \/
       (exists a,exists b, dca = orDc a b /\ evalCompositeDc s a || evalCompositeDc s b = true) \/
+      (exists a, exists b, exists tr, dca = trDc tr a b /\ transformDC tr a b s = true) \/
       (exists a, dca = negDc a /\ negb (evalCompositeDc s a) = true).
-      Proof.
+      Proof.  
       split.
       - intros. destruct dca.
       + left. reflexivity.
@@ -204,6 +231,7 @@ Module ConstraintAutomata.
       + simpl in H2. right. right. left. exists n. exists n0. auto.
       + simpl in H2. right. right. right. left.  exists dca1. exists dca2. auto.
       + simpl in H2. right. right. right. right. left. exists dca1. exists dca2. auto.
+      + simpl in H2. right. right. right. right. right. left. exists n. exists n0. exists o. auto.
       + simpl in H2. repeat right. exists dca.  auto.
       - intros. destruct H2.
       + rewrite H2. reflexivity.
@@ -211,8 +239,9 @@ Module ConstraintAutomata.
         destruct H2. destruct H2. destruct H2. destruct H2. rewrite H2. simpl. exact H3.
         destruct H2. destruct H2. destruct H2. destruct H2. rewrite H2. simpl. exact H3.
         destruct H2. destruct H2. destruct H2. destruct H2. rewrite H2. simpl. exact H3.
+        destruct H2. destruct H2. destruct H2. destruct H2. destruct H2. rewrite H2. simpl. exact H3.
         destruct H2. destruct H2. rewrite H2. simpl. exact H3.
-      Defined.
+      Defined. 
 
     (* End da nova DC *)
 
@@ -749,15 +778,6 @@ Module ProductAutomata.
     + intros. rewrite H3 in H2. discriminate.
     - intros. unfold evaluateConditionsFirstRule. rewrite H2. reflexivity.
     Defined.
-    (* Retrieve the outgoing resulting state of the resulting transition in the product automaton as depicted by Arbab(2006). *)
-    (*ERICK: acho que está inutilizada. A não ser que eu tenha que extrair isso do conjunto de estados do autômato. *)
-    Fixpoint recoverOutboundStateRule1 (q1 : state) (q2 : state) (states : set (state * state)) :=
-      match states with
-      | [] => None
-      | a::t => if (q1 == fst(a)) then 
-                    if (q2 == snd(a)) then Some a else recoverOutboundStateRule1 q1 q2 t
-                else recoverOutboundStateRule1 q1 q2 t
-      end.  
 
     Fixpoint buildResultingTransitionFromStatesRule1 (p1: state) (p2: set state) :=
       match p2 with
@@ -765,6 +785,17 @@ Module ProductAutomata.
       | a::t => (p1,a)::
                 buildResultingTransitionFromStatesRule1 p1 t
       end.
+    Lemma buildResultingTransitionFromStatesRule1Sound : forall p1, forall p2, 
+      buildResultingTransitionFromStatesRule1 p1 p2 <> [] <-> p2 <> [].
+    Proof.
+    split.
+    - intros. destruct p2.
+    + simpl in H2. congruence.
+    + discriminate.
+    - intros. destruct p2.
+    + congruence.
+    + discriminate.
+    Defined.
     Check buildResultingTransitionFromStatesRule1.
 
     Fixpoint buildResultingTransitionFromStatesBothTransitionsRule1 (p1: set state) (p2: set state) :=

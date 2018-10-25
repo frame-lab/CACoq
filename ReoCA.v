@@ -534,8 +534,13 @@ Inductive lossySyncStates := q0.
 
   (* Transform CA *)
 
-  Definition trasformFunction := fun x => x + 1.
-  Eval compute in trasformFunction 3.
+  (* Definition trasformFunction := fun x => x + 1.
+  Eval compute in trasformFunction 3. *)
+  Definition trasformFunction (n: option nat) :=
+    match n with
+    | Some x => Some (x + 3)
+    | None   => None
+    end.
 
   Inductive transformState := q1T.
   Inductive transformPorts :=  AT | BT.
@@ -549,11 +554,18 @@ Inductive lossySyncStates := q0.
    all: congruence.
    Defined.
 
-  Definition dataAssignmenttransformBoth n := 
+  Definition dataAssignmenttransformAF n := 
     match n with
     | 0 => Some 0
     | 1 => Some 0
     | S n => Some (1)
+    end.
+
+  Definition dataAssignmenttransformBF n := 
+    match n with
+    | 0 => Some 3
+    | 1 => Some 3
+    | S n => Some (4)
     end.
 
  Definition timeStamptransformA (n:nat) : QArith_base.Q :=
@@ -565,7 +577,7 @@ Inductive lossySyncStates := q0.
 
    Definition timeStamptransformB (n:nat) : QArith_base.Q :=
     match n with
-    | 0 =>  1#1
+    | 0 =>  0#1
     | 1 => 2#1
     | S n =>  Z.of_N (N.of_nat(S n)) + 11#1
     end.
@@ -591,23 +603,22 @@ Inductive lossySyncStates := q0.
 
   Definition portAT := {|
         ConstraintAutomata.id := AT;
-        ConstraintAutomata.dataAssignment := dataAssignmenttransformBoth;
+        ConstraintAutomata.dataAssignment := dataAssignmenttransformAF;
         ConstraintAutomata.timeStamp := timeStamptransformA;
         ConstraintAutomata.portCond := timeStamptransformHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portBT:= {|
         ConstraintAutomata.id := BT;
-        ConstraintAutomata.dataAssignment := dataAssignmenttransformBoth;
+        ConstraintAutomata.dataAssignment := dataAssignmenttransformBF;
         ConstraintAutomata.timeStamp := timeStamptransformB;
         ConstraintAutomata.portCond := timeStamptransformBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition transformCaBehavior (s: transformState) :=
     match s with
-    | q1T => [([AT;BT] , ConstraintAutomata.dc BT (Some 0), [q1T])] 
-    end. (* --> tá errado. preciso de uma forma de permitir meter um dado diretão da porta AT, algo mais genérico. *)
-         (* Talvez uma definição a mais de CA que permita pegar o dado direto da porta no thetaTime *)
+    | q1T => [([AT;BT] , ConstraintAutomata.trDc trasformFunction AT BT, [q1T])] 
+    end.
 
   (* The CA itself is formalized as *)
   Definition transformCA := {|
@@ -617,6 +628,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1T]
   |}.
 
+  Eval compute in ConstraintAutomata.run transformCA [portAT;portBT] 10 10.
 
   (* Merger CA*)
   Inductive mergerState := q1M.
