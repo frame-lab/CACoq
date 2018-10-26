@@ -303,13 +303,6 @@ Module ConstraintAutomata.
 
 
     Notation "x |> f" := (f x) (at level 69, only parsing).
- 
-    (* We can define thetaTime as a function that a given natural k, returns the smaller number from a set of *)
-    (* rational numbers obtained by applying f to k.                                                          *)
-    (* ERICK: theta.time(k) é calculado na entrada, e não no conjunto de portas do autômato...                *)
-    (* s: TDS         de entrada do autômato                                                                  *)
-    (*Definition thetaTime (s:set port) (k:nat)  := 
-      returnSmallerNumber (100000#1) (mapAp k ((s) |> getTimeStampFromPorts)).*)
 
     Close Scope Q_scope.
 
@@ -344,82 +337,50 @@ Module ConstraintAutomata.
     Definition thetaTime (s:set port) (k:nat) :=
       getNextThetaTime(getAllThetaTimes s).
 
-    (* By algorithmic aspects, we define the following function as a function that implements the *)
-    (* idea behind the calculus of theta.N(k) by imposing a upper bound to find the li value where*)
-    (* ai(li) = theta.time(k)                                                                     *)
-    Fixpoint timeStampEqThetaTime (ca:set port) (k: nat) (l: nat) (a:port) :=
-      match l with
-      | 0 => if (timeStamp a(0) =? thetaTime (ca) (k) == true) then true else false
-      | S n => if (timeStamp a(S n) =? thetaTime (ca)(k) == true) then true else timeStampEqThetaTime (ca) (k) (n) (a)
-      end.
+    Definition timeStampEqThetaTime (s:set port) (k:nat) (a:port) :=
+      if ((timeStamp a(index a) =? thetaTime (s) (k)) == true) then true else false.
 
-    Lemma timeStampEqThetaTimeSound : forall ca, forall k, forall l, forall a, 
-    timeStampEqThetaTime ca k l a = true ->  timeStamp a(l) =? thetaTime (ca) (k) = true \/ 
-    (exists x, x < l /\ timeStamp a(x) =? thetaTime (ca) (k) = true).
+    Lemma timeStampEqThetaTimeSound : forall s, forall k, forall a, timeStampEqThetaTime s k a = true <-> 
+      ((timeStamp a(index a) =? thetaTime (s) (k)) = true).
     Proof.
-    (* split. *)
-    - intros. induction l.
-    + simpl in H2. destruct equiv_dec in H2. auto. discriminate.
-    + simpl in H2. destruct equiv_dec in H2. inversion e. left. reflexivity.
-      right. apply IHl in H2. destruct H2.
-      exists l. split. auto.
-      assumption. destruct H2. destruct H2. exists x.
-      split. auto. assumption. Defined.
-
-    Lemma timeStampEqThetaTimeSound2 : forall ca, forall k, forall l, forall a, 
-    timeStamp a(l) =? thetaTime (ca) (k) = true \/ 
-    (exists x, x < l /\ timeStamp a(x) =? thetaTime (ca) (k) = true) ->  timeStampEqThetaTime ca k l a = true.
-    Proof.
-    - intros. induction l. 
-    + destruct H2. simpl. rewrite H2. auto. destruct H2. destruct H2. inversion H2.
-    + simpl. destruct equiv_dec. reflexivity. 
-      destruct H2. congruence.
-      destruct H2. destruct H2. apply IHl.
-    Admitted.
-
-    (*ERICK : timeStampEqThetaTime serve para encontrar se em algum l_i da timestamp bate com o theta(k) *)
-    (* atual, vide a teoria em Arbab (2004)                                                              *) 
-
-
-    (*The following definition returns the i-th natural number where timeStamp a(S n) = thetaTime(k).     *)
-    (* For it to work properly, one must supply a default return number greater than the specified        *)
-    (* l number. Therefore, it returns 0<=i<=l if if timeStamp a(i) =? thetaTime(k) and default           *)
-    (* otherwise                                                                                          *)
-    (* TODO: definir se o default será fixo ou deixa para o usuário especificar o número que ele desejar? *)
-    (* Decidido que o default é 0. Isso tem que ser explicitado na documentação. *)
-    Fixpoint timeStampIndex (ca: set port)(*constraintAutomata)*) (k:nat) (l:nat) (a:port) :=
-      match l with
-      | 0 => if (timeStamp a(0) =? thetaTime (ca) (k) == true) then 0 else 0
-      | S n => if (timeStamp a(S n) =? thetaTime (ca) (k) == true) then S n else timeStampIndex (ca) (k) (n) (a) 
-      end.
-
-    Definition timeStampIndexSound : forall ca, forall k, forall l, forall a, 
-    timeStampIndex ca k l a <> 0 -> (exists n, timeStamp a(n) =? thetaTime (ca) (k) = true /\ n <> 0).
-    Proof.
-    (*split. *)
-    - intros. induction l. 
-    + simpl in H2. destruct equiv_dec in H2. congruence. congruence.
-    + simpl in H2. destruct equiv_dec in H2. exists (S l).
-      { split. inversion e. reflexivity. exact H2. }
-      { apply IHl. exact H2. }
+    split.
+    - intros. unfold timeStampEqThetaTime in H2. destruct equiv_dec in H2.
+      inversion e. reflexivity.
+      inversion H2.
+    - intros. unfold timeStampEqThetaTime. rewrite H2. reflexivity.
     Defined.
 
-    Check timeStampIndex.
+    (* By algorithmic aspects, we define the following function as a function that implements the        *)
+    (* idea behind the calculus of theta.N(k) recovering the index of the port if it is in theta.time(k) *)
+
+    (* Definition timeStampIndex (s: set port) (k:nat) (a:port) :=
+      if (timeStamp a(index a) =? thetaTime (s) (k) == true) then (index a) else 0.
+
+    Lemma timeStampIndexSound : forall s, forall k, forall a, timeStampIndex s k a = (index a) <-> 
+      timeStamp a(index a) =? thetaTime (s) (k) = true.
+    Proof.
+    split.
+    - intros. unfold timeStampIndex in H2. destruct equiv_dec in H2.
+      inversion e. reflexivity.
+      inversion H2. Admitted.
+    TODO talvez totalizar isso pra none e fazer um evaluator tabajara, embora isso não afeta o funcionamento (a porta
+      NÃO aparece em theta.delta de qualquer forma *)
+
     (* Therefore it is possible to define tetaN: l has the same meaning as in timeStampEqThetaTime       *)
     (* ERICK: é necessário passar duas instâncias da TDS de entrada, uma é usada para calcular thetaTime *)
     (* e a outra para montar o thetaN                                                                    *)
-    Fixpoint thetaN (ca: set port) (k:nat) (l:nat) (s:set port) : set name := 
+    Fixpoint thetaN (ca: set port) (k:nat) (s:set port) : set name := 
       match s with
       | a::t => if (hasData a k == true) then
-                  if (timeStampEqThetaTime ca k l a == true) then
-                     id a :: thetaN ca k l t
-                   else thetaN ca k l t
-                else thetaN ca k l t
+                  if (timeStampEqThetaTime ca k a == true) then
+                     id a :: thetaN ca k t
+                   else thetaN ca k t
+                else thetaN ca k t
       | []   => []
       end.
 
-    Lemma thetaNSound : forall ca, forall k, forall l, forall s, thetaN ca k l s <> [] <-> 
-    (exists a, In a s /\ hasData a(k) = true /\ timeStampEqThetaTime ca k l a = true).
+    Lemma thetaNSound : forall ca, forall k, forall s, thetaN ca k s <> [] <-> 
+    (exists a, In a s /\ hasData a(k) = true /\ timeStampEqThetaTime ca k a = true).
     Proof.
     split.
     - intros. induction s.
@@ -447,21 +408,49 @@ Module ConstraintAutomata.
     (* the two following function implements thetaDelta.                                              *)
    
 
-    Fixpoint portsWithData (ca:set port) (k:nat) (l:nat) (s:set port) : set((name * option data) ) :=
+    (* Fixpoint portsWithData (ca:set port) (k:nat) (s:set port) : set((name * option data) ) :=
       match s with
       | [] => []
       | a::t => match hasData(a) (k) with
-                | true => if (timeStampEqThetaTime ca k l a) then
-                           ((id a) , (dataAssignment a(timeStampIndex ca (k) (l) (a) ))) 
-                           :: portsWithData ca k l t
-                         else portsWithData ca k l t 
-                | false => portsWithData ca k l t
+                | true => if (timeStampEqThetaTime ca k a == true) then
+                           ((id a) , (dataAssignment a(index(a)))) 
+                           :: portsWithData ca k t
+                         else portsWithData ca k t 
+                | false => portsWithData ca k t
                 end
+      end. *)
+    Fixpoint portsWithData (ca: set port) (k:nat) (s:set port) : set((name * option data)) := 
+      match s with
+      | a::t => if (hasData a k == true) then
+                  if (timeStampEqThetaTime ca k a == true) then
+                     ((id a) , (dataAssignment a(index(a)))) :: portsWithData ca k t
+                   else portsWithData ca k t
+                else portsWithData ca k t
+      | []   => []
       end.
-                                        
+
+    Lemma portsWithDataSound : forall ca, forall k, forall s, portsWithData ca k s <> [] <-> 
+    (exists a, In a s /\ hasData a(k) = true /\ timeStampEqThetaTime ca k a = true).
+    Proof.
+    split.
+    - intros. induction s.
+    + simpl in H2. congruence.
+    + simpl in H2. destruct equiv_dec in H2. destruct equiv_dec in H2.
+      exists a. split. simpl;auto. split. inversion e. reflexivity. inversion e0. reflexivity.
+      apply IHs in H2. destruct H2. destruct H2. destruct H3. exists x. split. simpl;auto.
+      split. exact H3. exact H4.
+      apply IHs in H2. destruct H2.  destruct H2. destruct H3. exists x. split. simpl;auto.
+      split. exact H3. exact H4. 
+    -  intros. induction s. 
+    + destruct H2.  destruct H2. inversion H2.
+    + simpl. destruct equiv_dec. destruct equiv_dec. discriminate.
+      apply IHs. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H3. rewrite <- H2 in H4. 
+      congruence. exists x. split. exact H2. exact H3.
+      apply IHs. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H3. rewrite <- H2 in H4. 
+      congruence. exists x. split. exact H2. exact H3. Defined.
 
     Definition thetaDelta (k : nat) (l:nat) (po: set port) := 
-      portsWithData po k l po.
+      portsWithData po k po.
     Check thetaDelta.
 
     Close Scope Q_scope.
@@ -620,7 +609,7 @@ Module ConstraintAutomata.
 
     (* Before taking a step, we want to retrieve ports in theta.N                                               *)
     Definition retrievePortsFromThetaN (k l : nat) (input: set port) :=
-      thetaN (input) (k) (l) (input).
+      thetaN (input) (k) (input).
 
    Check retrievePortsFromThetaN.
 
@@ -820,6 +809,16 @@ Module ProductAutomata.
                   (fst(fst(transition2))) (snd(fst(transition1))) (snd(fst(transition2))) (snd(transition1)) 
                   (snd(transition2))*)
                 else [].
+
+    Lemma buildResultingTransitionFromSingleStateRule1Sound : forall Q1, forall Q2, forall transition1, 
+    forall transition2, forall names1, forall names2, buildResultingTransitionFromSingleStateRule1 Q1 Q2 transition1 transition2
+    names1 names2 <> [] <-> (evaluateConditionsFirstRule (transition1) (transition2) (names1) (names2)) = true.
+    Proof.
+    split.
+    - intros. unfold buildResultingTransitionFromSingleStateRule1 in H2. destruct equiv_dec. inversion e. reflexivity. congruence.
+    - intros. unfold buildResultingTransitionFromSingleStateRule1. rewrite H2. simpl. discriminate.
+    Defined.
+
     Check buildResultingTransitionFromSingleStateRule1.
 
     Fixpoint buildTransitionFromMoreTransitionsRule1 (Q1: state) (Q2: state)
@@ -1408,8 +1407,7 @@ End ProductAutomata.
   Eval compute in ConstraintAutomata.step anotherCA ([qa]) 2 20 [ConstraintAutomata.derivative(ConstraintAutomata.derivative(portA0));portB0].
 
 
-  Eval compute in ConstraintAutomata.run anotherCA [portA0;portB0] 3 20. (*ERICK : aparentemente um problema no thetatime desse cara aqui *)
-  (* ERICK: e possivelmente um bug oculto na run, talvez relacionado com a chamada da derivada (creio que não). isso só afeta execuções não determinísticas. *)
+  Eval compute in ConstraintAutomata.run anotherCA [portA0;portB0] 3 20. 
   Eval compute in ConstraintAutomata.xamboca2 anotherCA [portA0;portB0] 10 20.
 
 (* TESTE - PA *)
@@ -1417,7 +1415,7 @@ End ProductAutomata.
 
   Definition sheila := ProductAutomata.buildPA anotherCA anotherCA. (*TODO: possibilitar estados de tipos diferentes *)
   Eval compute in ConstraintAutomata.T sheila.
-  Eval compute in ConstraintAutomata.run sheila [portA0;portB0] 3 20.
+  Eval compute in ConstraintAutomata.run sheila [portA0;portB0] 0 20.
 
 
 Require Export ListSet.
