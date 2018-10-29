@@ -884,6 +884,15 @@ Module ProductAutomata.
     Definition intersectionNAndNames (tr: set (name) * DC * set(state)) (names2: set name) :=
       if (set_inter equiv_dec (fst(fst(tr))) names2) == nil then true else false.
 
+    Lemma intersectionNAndNamesSound : forall tr, forall names2, intersectionNAndNames tr names2 = true <->
+      set_inter equiv_dec (fst(fst(tr))) names2 = nil.
+    Proof.
+    split.
+    - intros. unfold intersectionNAndNames in H2. destruct equiv_dec in H2. inversion e. reflexivity.
+      inversion H2.
+    - intros. unfold intersectionNAndNames. rewrite H2. reflexivity.
+    Defined.
+
     (* Create the corresponding states out of a set of states that are the inbound states of a transition *)
     Fixpoint iterateOverOutboundStatesRule2  (p1: set state) (q2: state) :=
       match p1 with
@@ -915,6 +924,17 @@ Module ProductAutomata.
     end.
     Check createSingleTransition.
 
+    Lemma createSingleTransitionSound : forall q1, forall transition, forall a2States, forall a2Names, 
+      createSingleTransition q1 transition a2States a2Names <> [] <-> intersectionNAndNames (transition) (a2Names) = true /\ a2States <> [].
+    Proof.
+    split.
+    - intros. induction a2States. unfold createSingleTransition in H2. congruence.
+      simpl in H2. case_eq (intersectionNAndNames transition a2Names). intros. split. reflexivity. congruence.
+      intros. rewrite H3 in H2. simpl in H2. apply IHa2States in H2. destruct H2. congruence.
+    - intros. induction a2States. unfold createSingleTransition. destruct H2. congruence.
+      simpl. destruct equiv_dec. discriminate. apply IHa2States. destruct H2. congruence.
+    Defined.
+     
     (* Builds all resulting transitions as specified by rule2 *)
     (* q1: origin state *)
     Definition createTransitionRule2 (q1:state) : set (set (name) * DC * (set(state))) -> 
@@ -953,6 +973,19 @@ Module ProductAutomata.
                 else createSingleTransitionRule3 q2 transition t a1Names
     end.
 
+    Lemma createSingleTransitionRule3Sound : forall q2, forall transition, forall a1States, forall a1Names,
+    createSingleTransitionRule3 q2 transition a1States a1Names <> [] <-> 
+    intersectionNAndNames (transition) (a1Names) = true /\ a1States <> [].
+    Proof.
+    split. 
+    - intros. induction a1States. simpl in H2. congruence.
+    simpl in H2. destruct equiv_dec in H2. inversion e. split. reflexivity. discriminate.
+    apply IHa1States in H2. destruct H2. congruence.
+    - intros. induction a1States. destruct H2. congruence.
+    simpl. destruct equiv_dec. discriminate.
+    destruct H2. congruence.
+    Defined.
+  
     (* Then createSingleTransitionRule3 must be applied with all transitions that leaves a state of A_2 *)
     Definition createTransitionRule3 (q2:state) : set (set (name) * DC * (set(state))) -> 
       set state -> set name   (*a2States : estados do autômato a2. Em um primeiro momento, para um único q2 *)
@@ -976,7 +1009,7 @@ Module ProductAutomata.
     Definition transitionsRule3 (a1: constraintAutomata) (a2 : constraintAutomata)  :=
       (createTransitionRule3AllStates (ConstraintAutomata.Q a2) (ConstraintAutomata.T a2) 
                                       (ConstraintAutomata.N a1) (ConstraintAutomata.Q a1)).
-    Check transitionsRule3. (*TODO: ERICK rever se necessário uma nova definição para a simétrica da rule 2 ok*)
+    Check transitionsRule3. 
 
     (* The following definition builds the set of states as depicted by the rules presented in Arbab(2006) *)
     Definition buildTransitionRuleProductAutomaton (a1: constraintAutomata) (a2: constraintAutomata) :=
@@ -1007,8 +1040,6 @@ Module ProductAutomata.
 
     Definition buildPA := ConstraintAutomata.CA 
       (resultingStatesSet a1 a2) (resultingNameSet a1 a2) (transitionPA) (resultingInitialStatesSet a1 a2). 
-
-    (* ERICK: necessário testes. TODO bolar um exemplo maneiro para testar isso aqui (ou um bem basiquinho) *)
 
   End ProductAutomata.
 End ProductAutomata.
