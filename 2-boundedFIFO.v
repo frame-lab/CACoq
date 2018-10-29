@@ -173,7 +173,7 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
     ConstraintAutomata.Q0 := [q0a]
   |}.
 
-  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 10 69.
+  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 10.
 
 (*Second FIFO CA *)
 

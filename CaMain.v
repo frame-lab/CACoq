@@ -449,7 +449,7 @@ Module ConstraintAutomata.
       apply IHs. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H3. rewrite <- H2 in H4. 
       congruence. exists x. split. exact H2. exact H3. Defined.
 
-    Definition thetaDelta (k : nat) (l:nat) (po: set port) := 
+    Definition thetaDelta (k : nat) (po: set port) := 
       portsWithData po k po.
     Check thetaDelta.
 
@@ -603,12 +603,12 @@ Module ConstraintAutomata.
       Defined.
 
     Definition onlyPortsInvolvedContainsData (ports : set name) 
-      (k l : nat) (input : set port) :=
-      checkPorts (retrievePortsOutsideTransition (input) ports) (thetaDelta (k) (l) (input)).
+      (k : nat) (input : set port) :=
+      checkPorts (retrievePortsOutsideTransition (input) ports) (thetaDelta (k) (input)).
 
 
     (* Before taking a step, we want to retrieve ports in theta.N                                               *)
-    Definition retrievePortsFromThetaN (k l : nat) (input: set port) :=
+    Definition retrievePortsFromThetaN (k : nat) (input: set port) :=
       thetaN (input) (k) (input).
 
    Check retrievePortsFromThetaN.
@@ -616,19 +616,19 @@ Module ConstraintAutomata.
 
     (* A single step can be defined in terms of the following definitions:                                    *)
     (* ERICK: falta um intermediário que pegue a step de acordo com cada índice de cada porta. *)
-    Fixpoint step' (k l : nat) (input : set port) (ports: set name)
+    Fixpoint step' (k : nat) (input : set port) (ports: set name)
      (s: set(set name * DC * set(state))) :=
      match s with
      | [] => []
      | a::t => if (set_eq (ports)((fst(fst(a))))) && 
-                  (onlyPortsInvolvedContainsData (fst(fst(a))) k l input)
-                   && (evalCompositeDc (input) (snd(fst(a)))) == true then snd(a)++step' k l  input ports t
-                   else step' k l input ports t
+                  (onlyPortsInvolvedContainsData (fst(fst(a))) k input)
+                   && (evalCompositeDc (input) (snd(fst(a)))) == true then snd(a)++step' k input ports t
+                   else step' k input ports t
      end.
     Check step'.
 
-    Lemma step'_sound : forall k, forall l, forall input, forall ports, forall s, step' k l input ports s <> [] -> exists a,
-    In a s /\ (set_eq (ports)((fst(fst(a))))) && (onlyPortsInvolvedContainsData (fst(fst(a))) k l input)
+    Lemma step'_sound : forall k, forall input, forall ports, forall s, step' k input ports s <> [] -> exists a,
+    In a s /\ (set_eq (ports)((fst(fst(a))))) && (onlyPortsInvolvedContainsData (fst(fst(a))) k input)
                    && (evalCompositeDc (input) (snd(fst(a)))) = true.
     Proof. 
     (* split. *)
@@ -639,65 +639,65 @@ Module ConstraintAutomata.
     + inversion H2.
     + simpl. destruct equiv_dec. simpl. *)
 
-    Definition stepAux (ca:constraintAutomata) (k l : nat) (input:set port) (ports:set name) (s: state) :=
-      step' k l input ports (T ca s).
+    Definition stepAux (ca:constraintAutomata) (k : nat) (input:set port) (ports:set name) (s: state) :=
+      step' k input ports (T ca s).
     Check stepAux.
 
     (* We apply the step to every state in the given configuration:                     *)
-    Definition stepa (ca:constraintAutomata) (s: set state) (k l : nat) (input:set port) (ports: set name):=
-     (ports, flat_map (stepAux ca k l input ports) s).
+    Definition stepa (ca:constraintAutomata) (s: set state) (k : nat) (input:set port) (ports: set name):=
+     (ports, flat_map (stepAux ca k input ports) s).
 
     Check stepa.
 
-    Definition step (ca:constraintAutomata) (s: set state) (k l : nat) (input:set port) :=
-      stepa ca s k l input (retrievePortsFromThetaN k l input).
+    Definition step (ca:constraintAutomata) (s: set state) (k : nat) (input:set port) :=
+      stepa ca s k input (retrievePortsFromThetaN k input).
 
    (* We define run' as a function that iterates over a list of naturals. v0                                *)
    (* ERICK: note que a noção de runa' é diferente do trace de execução do autômato (dada por run').        *)
    (* Isso aparenta ser inútil pois constraint automata não possui noção de estados finais, embora possamos dizer 
      que uma run é aceita se sempre é possível disparar uma transição em algum estado ao longo da run. *)
     Definition runa' (ca:constraintAutomata) (*s:state*)  : 
-      set port -> list nat -> nat -> (set state) -> set state :=
+      set port -> list nat -> (set state) -> set state :=
       (* k : índice de execução               *)
       (* l : profundidade da busca            *)
-      fix rec input k l acc :=
+      fix rec input k acc :=
         match k with 
           | [] => acc
-          | a::t => snd (step ca acc a l input)
-                    |> rec (portsDerivative(fst((step ca acc a l input))) input) t  l 
+          | a::t => snd (step ca acc a input)
+                    |> rec (portsDerivative(fst((step ca acc a input))) input) t  
         end. 
 
 
     Definition run' (ca:constraintAutomata)  : 
-      set port -> list nat -> nat -> set state -> set (set state) -> set (set state) :=
+      set port -> list nat -> set state -> set (set state) -> set (set state) :=
       (* k : índice de execução               *)
       (* l : profundidade da busca            *)
-      fix rec input k l acc resp :=
+      fix rec input k acc resp :=
         match k with 
           | [] => resp
-          | a::t => resp ++ [snd (step ca acc a l input)]
+          | a::t => resp ++ [snd (step ca acc a input)]
                     |> rec
-                      (flat_map(derivativePortInvolved(fst((step ca acc a l input)))) input) t  l (snd (step ca acc a l input))
+                      (flat_map(derivativePortInvolved(fst((step ca acc a input)))) input) t (snd (step ca acc a input))
         end.
 
     Definition xamboca (ca:constraintAutomata)  : 
-      set port -> list nat -> nat -> set state -> set (set port) -> set (set port) :=
+      set port -> list nat -> set state -> set (set port) -> set (set port) :=
       (* k : índice de execução               *)
       (* l : profundidade da busca            *)
-      fix rec input k l acc resp :=
+      fix rec input k acc resp :=
         match k with 
           | [] => resp
           | a::t => resp ++ [input]
                     |> rec
-                      (flat_map(derivativePortInvolved(fst((step ca acc a l input)))) input) t  l (snd (step ca acc a l input))
+                      (flat_map(derivativePortInvolved(fst((step ca acc a input)))) input) t (snd (step ca acc a input))
         end.
 
     (* We define a run on a constraint automaton. *)
-    Definition run (ca:constraintAutomata) (input: set port) (k l : nat) :=
-      run' ca input (count_into_list k) l (Q0 ca) [Q0 ca].
+    Definition run (ca:constraintAutomata) (input: set port) (k : nat) :=
+      run' ca input (count_into_list k) (Q0 ca) [Q0 ca].
 
-    Definition xamboca2 (ca:constraintAutomata) (input: set port) (k l : nat) :=
-      xamboca ca input (count_into_list k) l (Q0 ca) [].
+    Definition xamboca2 (ca:constraintAutomata) (input: set port) (k : nat) :=
+      xamboca ca input (count_into_list k) (Q0 ca) [].
 
   End ConstraintAutomata.
 End ConstraintAutomata.
@@ -1030,6 +1030,12 @@ Module ProductAutomata.
       end.
     Check recoverResultingStatesPA.
 
+    Lemma recoverResultingStatesPASound : forall st, forall t, recoverResultingStatesPA st t <> [] <->
+      exists a, In a t /\ st = fst(a).
+    Proof.
+    split.
+    - intros. Admitted.
+
     (*Definition buildTransitionsSetProductAutomaton (a1: constraintAutomata) (a2: constraintAutomata) :=
       buildTransitionRuleProductAutomaton a1 a2.
     Check buildTransitionsSetProductAutomaton. *)
@@ -1165,9 +1171,9 @@ End ProductAutomata.
     ConstraintAutomata.Q0 := [q0]
   |}.
 
-  Eval compute in ConstraintAutomata.thetaDelta 1 1 [portA;portB].
+  Eval compute in ConstraintAutomata.thetaDelta 1 [portA;portB].
 
-  Eval compute in ConstraintAutomata.retrievePortsFromThetaN 0 20 [portA;portB].
+  Eval compute in ConstraintAutomata.retrievePortsFromThetaN 0 [portA;portB].
 
   (*Eval compute in ConstraintAutomata.thetaDelta oneBoundedFIFOCA 2 20 [portA;portB].*)
   (*onlyPortsInvolvedContainsData (ca:constraintAutomata) (ports : set name) 
@@ -1175,9 +1181,9 @@ End ProductAutomata.
     Definition thetaDelta (ca:constraintAutomata) (k : nat) (l:nat) (po: set port) (default:nat) := 
       portsWithData po k l po default.*)
   Eval compute in ConstraintAutomata.onlyPortsInvolvedContainsData [A] 
-      0 20 [portA;portB]. 
+      0 [portA;portB]. 
 
-  Eval compute in ConstraintAutomata.step oneBoundedFIFOCA [p0] 0 10 [portA;portB].
+  Eval compute in ConstraintAutomata.step oneBoundedFIFOCA [p0] 0 [portA;portB].
 
   (* Definition x := Eval compute in ConstraintAutomata.portsDerivative ([A]) ([portA;portB]).
   Definition videos := Eval compute in ConstraintAutomata.portsDerivative ([B]) (x).
@@ -1188,11 +1194,11 @@ End ProductAutomata.
 
   Eval compute in ConstraintAutomata.thetaDelta 0 20 [portA;portB]. *)
 
-  Eval compute in ConstraintAutomata.step oneBoundedFIFOCA (ConstraintAutomata.Q0 oneBoundedFIFOCA) 0 20  (* --> PEGUEI O FDP *)
+  Eval compute in ConstraintAutomata.step oneBoundedFIFOCA (ConstraintAutomata.Q0 oneBoundedFIFOCA) 0 
   [portA;portB].
 
-  Eval compute in ConstraintAutomata.xamboca2 oneBoundedFIFOCA [portA;portB] 0 20.
-  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA [portA;portB] 6 20.
+  Eval compute in ConstraintAutomata.xamboca2 oneBoundedFIFOCA [portA;portB] 0.
+  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA [portA;portB] 6.
   Eval compute in oneBoundedFIFOrel (q0) .
 
 
@@ -1274,23 +1280,23 @@ End ProductAutomata.
  Eval compute in ConstraintAutomata.retrievePortsFromThetaN 3 10 [portE;portF].
  Eval compute in ConstraintAutomata.stepa syncCA [X] 4 10 [portE;portF] [E;F]. *)
 
- Definition teste0 := Eval compute in ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 20 [portE;portF].
+ Definition teste0 := Eval compute in ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 [portE;portF].
 
-  Eval compute in (fst(ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 20 [portE;portF])).
+  Eval compute in (fst(ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 [portE;portF])).
 
   (*flat_map(derivativePortInvolved(fst((step ca acc a l input)))) input*)
 
   Eval compute in flat_map (ConstraintAutomata.derivativePortInvolved
-    (fst(ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 20 [portE;portF]))) ([portE;portF]).
+    (fst(ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 [portE;portF]))) ([portE;portF]).
 
     Eval compute in ConstraintAutomata.step syncCA 
-    (ConstraintAutomata.Q0 syncCA) 1 20 (flat_map (ConstraintAutomata.derivativePortInvolved
-    (fst(ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 20 [portE;portF]))) ([portE;portF])).
+    (ConstraintAutomata.Q0 syncCA) 1 (flat_map (ConstraintAutomata.derivativePortInvolved
+    (fst(ConstraintAutomata.step syncCA (ConstraintAutomata.Q0 syncCA) 0 [portE;portF]))) ([portE;portF])).
 
-  Definition aaa := Eval compute in ConstraintAutomata.xamboca2 syncCA [portE;portF] 3 20.
+  Definition aaa := Eval compute in ConstraintAutomata.xamboca2 syncCA [portE;portF] 3.
 
-  Eval compute in ConstraintAutomata.run syncCA [portE;portF] 20 20.
-  Eval compute in ConstraintAutomata.xamboca2 syncCA [portE;portF] 1 20.
+  Eval compute in ConstraintAutomata.run syncCA [portE;portF] 20.
+  Eval compute in ConstraintAutomata.xamboca2 syncCA [portE;portF] 1.
   Eval compute in length(aaa).
 
   Definition spacer x := x + 1.
@@ -1408,9 +1414,9 @@ End ProductAutomata.
   |}.
 
   Eval compute in ConstraintAutomata.onlyPortsInvolvedContainsData [A0;B0] 
-      2 20 [portA0;portB0].
+      2 [portA0;portB0].
 
-  Eval compute in ConstraintAutomata.thetaDelta 2 20 [portA0;portB0].
+  Eval compute in ConstraintAutomata.thetaDelta 2 [portA0;portB0].
 
   (*Definition onlyPortsInvolvedContainsData (ports : set name) 
       (k l : nat) (input : set port) :=
@@ -1425,28 +1431,28 @@ End ProductAutomata.
 
   Eval compute in anotherCABehaves qb.
 
-  Eval compute in ConstraintAutomata.step' 0 20 [portA0;portB0] [A0;B0] (ConstraintAutomata.T anotherCA qb).
+  Eval compute in ConstraintAutomata.step' 0 [portA0;portB0] [A0;B0] (ConstraintAutomata.T anotherCA qb).
 
   (* step' (ca:constraintAutomata) (k l : nat) (input : set port) (ports: set name)
      (s: set(set name * bool * set(state))) *)
-  Eval compute in ConstraintAutomata.stepa anotherCA [qa;qb] 0 10 [portA0;portB0] [A0;B0].
+  Eval compute in ConstraintAutomata.stepa anotherCA [qa;qb] 0 [portA0;portB0] [A0;B0].
 
-  Eval compute in ConstraintAutomata.step anotherCA ([qa]) 0 20 [portA0;portB0].
+  Eval compute in ConstraintAutomata.step anotherCA ([qa]) 0 [portA0;portB0].
 
-  Eval compute in ConstraintAutomata.step anotherCA ([qa]) 1 20 [ConstraintAutomata.derivative(portA0);portB0].
+  Eval compute in ConstraintAutomata.step anotherCA ([qa]) 1 [ConstraintAutomata.derivative(portA0);portB0].
 
-  Eval compute in ConstraintAutomata.step anotherCA ([qa]) 2 20 [ConstraintAutomata.derivative(ConstraintAutomata.derivative(portA0));portB0].
+  Eval compute in ConstraintAutomata.step anotherCA ([qa]) 2 [ConstraintAutomata.derivative(ConstraintAutomata.derivative(portA0));portB0].
 
 
-  Eval compute in ConstraintAutomata.run anotherCA [portA0;portB0] 3 20. 
-  Eval compute in ConstraintAutomata.xamboca2 anotherCA [portA0;portB0] 10 20.
+  Eval compute in ConstraintAutomata.run anotherCA [portA0;portB0] 3. 
+  Eval compute in ConstraintAutomata.xamboca2 anotherCA [portA0;portB0] 10.
 
 (* TESTE - PA *)
   Check ProductAutomata.buildPA.
 
   Definition sheila := ProductAutomata.buildPA anotherCA anotherCA. (*TODO: possibilitar estados de tipos diferentes *)
   Eval compute in ConstraintAutomata.T sheila.
-  Eval compute in ConstraintAutomata.run sheila [portA0;portB0] 0 20.
+  Eval compute in ConstraintAutomata.run sheila [portA0;portB0] 5.
 
 
 Require Export ListSet.

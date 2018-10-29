@@ -278,5 +278,5 @@ Require Import CaMain.
       ConstraintAutomata.portCond := timeStampTestHoldsLossyB;
       ConstraintAutomata.index := 0 |}.
 
-   Eval compute in ConstraintAutomata.run lossyFIFO [portR1;portR2;portR3;portR4] 10 12.  
+   Eval compute in ConstraintAutomata.run lossyFIFO [portR1;portR2;portR3;portR4] 10.  
    Eval compute in ConstraintAutomata.T lossyFIFO (q0, q0F).

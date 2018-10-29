@@ -79,7 +79,7 @@ Require Import CaMain.
     ConstraintAutomata.Q0 := [X]
   |}.
 
-Eval compute in ConstraintAutomata.run syncCA [portE;portF] 20 20.
+Eval compute in ConstraintAutomata.run syncCA [portE;portF] 20.
 
 
 (* LossySync Channel CA *)
@@ -173,7 +173,7 @@ Inductive lossySyncStates := q0.
         ConstraintAutomata.portCond := timeStampTestHoldsLossyB;
         ConstraintAutomata.index := 0 |}.
 
-  Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10 20. (*does not accept the TDS composed by portA and portB because
+  Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10. (*does not accept the TDS composed by portA and portB because
                                                                             B has data in theta.time, which is not comprised by the automaton's transitions *)
   
   (* FIFO CA *)
@@ -289,7 +289,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q0F]
   |}.
 
-  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 10 69.
+  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 8.
 
   (* SyncDrain CA *)
 
@@ -360,7 +360,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1D]
   |}.
 
-  Eval compute in ConstraintAutomata.run SyncDrainCA [portAD;portBD] 10 10.
+  Eval compute in ConstraintAutomata.run SyncDrainCA [portAD;portBD] 15.
 
   (* AsyncDrain *)
   Inductive aSyncDrainState := q1A.
@@ -443,7 +443,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1A]
   |}.
 
-  Eval compute in ConstraintAutomata.run aSyncDrainCA  [portAA;portBA] 10 12.
+  Eval compute in ConstraintAutomata.run aSyncDrainCA  [portAA;portBA] 10.
 
   (* Filter CA *)
   Inductive filterState := q1F.
@@ -529,7 +529,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1F]
   |}.
 
-  Eval compute in ConstraintAutomata.run filterCA [portC;portD] 10 10.
+  Eval compute in ConstraintAutomata.run filterCA [portC;portD] 10.
 
 
   (* Transform CA *)
@@ -628,7 +628,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1T]
   |}.
 
-  Eval compute in ConstraintAutomata.run transformCA [portAT;portBT] 10 10.
+  Eval compute in ConstraintAutomata.run transformCA [portAT;portBT] 10.
 
   (* Merger CA*)
   Inductive mergerState := q1M.
@@ -726,8 +726,7 @@ Inductive lossySyncStates := q0.
     match s with
     | q1M => [([AM;CM] , ConstraintAutomata.eqDc nat AM CM, [q1M]);
               ([BM;CM] , ConstraintAutomata.eqDc nat BM CM, [q1M])] 
-    end. (* --> tá errado. preciso de uma forma de permitir meter um dado diretão da porta AT, algo mais genérico. *)
-         (* Talvez uma definição a mais de CA que permita pegar o dado direto da porta no thetaTime *)
+    end. 
 
     Check mergerCaBehavior.
 
@@ -739,8 +738,8 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1M]
   |}.
 
-  Eval compute in ConstraintAutomata.xamboca2 mergerCA [portAM;portBM;portCM] 10 10.
-  Eval compute in ConstraintAutomata.run mergerCA [portAM;portBM;portCM] 10 10. (*all of them are in theta-time *)
+  Eval compute in ConstraintAutomata.xamboca2 mergerCA [portAM;portBM;portCM] 10.
+  Eval compute in ConstraintAutomata.run mergerCA [portAM;portBM;portCM] 10. (*all of them are in theta-time *)
 
   (* Replicator CA *)
   Inductive replicatorState := q1R.
@@ -845,7 +844,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1R]
   |}.
 
-  Eval compute in ConstraintAutomata.run replicatorCA [portAR;portBR;portCR] 10 10.
+  Eval compute in ConstraintAutomata.run replicatorCA [portAR;portBR;portCR] 11.
 
 
 
