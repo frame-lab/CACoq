@@ -558,6 +558,8 @@ Inductive lossySyncStates := q0.
     match n with
     | 0 => Some 0
     | 1 => Some 0
+    | 2 => Some 0
+    | 3 => Some 3
     | S n => Some (1)
     end.
 
@@ -571,7 +573,7 @@ Inductive lossySyncStates := q0.
  Definition timeStamptransformA (n:nat) : QArith_base.Q :=
     match n with
     | 0 =>  0#1
-    | 1 =>  3#1
+    | 1 =>  2#1
     | S n =>  Z.of_N (N.of_nat(S n)) + 7#1
     end.
 
@@ -617,7 +619,8 @@ Inductive lossySyncStates := q0.
 
   Definition transformCaBehavior (s: transformState) :=
     match s with
-    | q1T => [([AT;BT] , ConstraintAutomata.trDc trasformFunction AT BT, [q1T])] 
+    | q1T => [([AT;BT] , ConstraintAutomata.trDc trasformFunction AT BT, [q1T]);
+              ([AT] , ConstraintAutomata.negDc ( ConstraintAutomata.trDc trasformFunction AT BT), [q1T])]
     end.
 
   (* The CA itself is formalized as *)

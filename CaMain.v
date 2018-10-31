@@ -68,7 +68,7 @@ Lemma set_eq_sound {A} `{EqDec A eq} : forall s1 : set A, forall s2 : set A, set
 Module ConstraintAutomata.
   Section ConstraintAutomata.
 
-    Variable state name data: Type. 
+    Variable state name data: Set. 
 
     Context `{EqDec name eq} `{EqDec state eq} `{EqDec (option data) eq}.
     (*`{EqDec data eq} será necessária p/ satisfazer a DC.*)
@@ -114,6 +114,7 @@ Module ConstraintAutomata.
       de dado (que também pode ser um conteúdo de uma porta, um evalDC da vida
       vai pegar a porta em questão e ver na entrada se o dado naquele momento atende
       a dc. Por essa perspectiva, um data só ja serve. *)
+    Check DC.
 
     Notation "a @ b" := (andDc a b)(no associativity, at level 69).
     Notation "a $ b" := (orDc a b) (no associativity, at level 69).
@@ -704,12 +705,13 @@ End ConstraintAutomata.
 
 Module ProductAutomata.
   Section ProductAutomata.
-      Variable state name data : Type.
-      Context `{EqDec name eq} `{EqDec state eq} `{EqDec (option data) eq}.
+      Variable state name data state2: Set.
+      Context `{EqDec name eq} `{EqDec state eq} `{EqDec state2 eq} `{EqDec (option data) eq}.
       (*Variables a1 a2 : ConstraintAutomata.constraintAutomata state name data.*)
       (* Beginning of Product Automata  ---------------------------------------------------- *)
 
-    Definition constraintAutomata := ConstraintAutomata.constraintAutomata state name data.
+    Definition constraintAutomata  := ConstraintAutomata.constraintAutomata state name data.
+    Definition constraintAutomata2 := ConstraintAutomata.constraintAutomata state2 name data.
     Definition DC := ConstraintAutomata.DC name data.
     (*ERICK: as definições acima é apenas pra não ficar (exaustivamente) escrevendo todos os parâmetros *)
 
@@ -719,7 +721,7 @@ Module ProductAutomata.
        (q_i,q_j) \in Q0,1 X Q0,2 (Ou não, dependendo de como os estados no autômato resultante vão ficar.*)
     (* We produce the reusulting set of states *)
 
-    Definition resultingStatesSet (a1:ConstraintAutomata.constraintAutomata state name data) (a2:ConstraintAutomata.constraintAutomata state name data) :=
+    Definition resultingStatesSet (a1:ConstraintAutomata.constraintAutomata state name data) (a2:ConstraintAutomata.constraintAutomata state2 name data) :=
       list_prod (ConstraintAutomata.Q a1) (ConstraintAutomata.Q a2).
     Check resultingStatesSet.
 
@@ -730,7 +732,7 @@ Module ProductAutomata.
     Defined.
 
     (* We produce the resulting set name *)
-    Definition resultingNameSet (a1:ConstraintAutomata.constraintAutomata state name data) (a2:ConstraintAutomata.constraintAutomata state name data) :=
+    Definition resultingNameSet (a1:ConstraintAutomata.constraintAutomata state name data) (a2:ConstraintAutomata.constraintAutomata state2 name data) :=
       set_union equiv_dec (ConstraintAutomata.N a1) (ConstraintAutomata.N a2).
     
     Lemma resultingNameSetSound : forall a1, forall a2, forall a,
@@ -741,7 +743,7 @@ Module ProductAutomata.
 
     (* We produce the resulting set of initial states *)
 
-    Definition resultingInitialStatesSet (a1: constraintAutomata) (a2: constraintAutomata) :=
+    Definition resultingInitialStatesSet (a1: constraintAutomata) (a2: constraintAutomata2) :=
       list_prod (ConstraintAutomata.Q0 a1) (ConstraintAutomata.Q0 a2).
 
     Lemma resultingInitialStatesSetSound : forall a1, forall a2, forall a, forall b,
@@ -752,7 +754,7 @@ Module ProductAutomata.
 
     (* Definition of transitions in the product automaton *)
     (* The following definiton may evaluate the necessary conditions to create a transition as specified by the first rule *)
-    Definition evaluateConditionsFirstRule (t1 : ( set(name) * DC * set(state))) (t2 : (set(name) * DC * set(state)))
+    Definition evaluateConditionsFirstRule (t1 : ( set(name) * DC * set(state))) (t2 : (set(name) * DC * set(state2)))
       (names1 : set name) (names2: set name) :=
       if set_eq (set_inter equiv_dec (names2) (fst(fst(t1)))) (set_inter equiv_dec (names1) (fst(fst(t2)))) then true else false.
 
@@ -764,11 +766,11 @@ Module ProductAutomata.
     - intros. unfold evaluateConditionsFirstRule in H2. case_eq (set_eq (set_inter equiv_dec names2 (fst (fst t1)))
          (set_inter equiv_dec names1 (fst (fst t2)))).
     + intros. reflexivity.
-    + intros. rewrite H3 in H2. discriminate.
-    - intros. unfold evaluateConditionsFirstRule. rewrite H2. reflexivity.
+    + intros. unfold evaluateConditionsFirstRule in H3. rewrite H4 in H3. discriminate.
+    - intros. unfold evaluateConditionsFirstRule. rewrite H3. reflexivity.
     Defined.
 
-    Fixpoint buildResultingTransitionFromStatesRule1 (p1: state) (p2: set state) :=
+    Fixpoint buildResultingTransitionFromStatesRule1 (p1: state) (p2: set state2) :=
       match p2 with
       | [] => []
       | a::t => (p1,a)::
@@ -779,7 +781,7 @@ Module ProductAutomata.
     Proof.
     split.
     - intros. destruct p2.
-    + simpl in H2. congruence.
+    + simpl in H3. congruence.
     + discriminate.
     - intros. destruct p2.
     + congruence.
@@ -787,7 +789,7 @@ Module ProductAutomata.
     Defined.
     Check buildResultingTransitionFromStatesRule1.
 
-    Fixpoint buildResultingTransitionFromStatesBothTransitionsRule1 (p1: set state) (p2: set state) :=
+    Fixpoint buildResultingTransitionFromStatesBothTransitionsRule1 (p1: set state) (p2: set state2) :=
       match p1 with
       | [] => []
       | a::t => buildResultingTransitionFromStatesRule1 a p2++
@@ -798,16 +800,13 @@ Module ProductAutomata.
     (*Given two single transitions as hereby formalized, this definition builds all resulting states according to *)
     (* the first rule that defines the transition relation of the product automata *)
 
-    Definition buildResultingTransitionFromSingleStateRule1 (Q1: state) (Q2: state)
+    Definition buildResultingTransitionFromSingleStateRule1 (Q1: state) (Q2: state2)
       (transition1: (set (name) * DC * (set(state)))) 
-      (transition2: (set (name) * DC * (set(state)))) 
-      (names1 : set name) (names2: set name) :  (set (state * state * ((set name * DC) * set (state * state)))) :=
+      (transition2: (set (name) * DC * (set(state2)))) 
+      (names1 : set name) (names2: set name) :  (set (state * state2 * ((set name * DC) * set (state * state2)))) :=
       if (evaluateConditionsFirstRule (transition1) (transition2) (names1) (names2)) == true then
                   [((Q1,Q2),(((set_union equiv_dec (fst(fst(transition1))) (fst(fst(transition2)))),ConstraintAutomata.andDc (snd(fst(transition1))) 
                             (snd(fst(transition2)))),(buildResultingTransitionFromStatesBothTransitionsRule1(snd(transition1)) (snd(transition2)))))]
-                  (*buildResultingTransitionFromStatesBothTransitionsRule1 Q1 Q2 (fst(fst(transition1))) 
-                  (fst(fst(transition2))) (snd(fst(transition1))) (snd(fst(transition2))) (snd(transition1)) 
-                  (snd(transition2))*)
                 else [].
 
     Lemma buildResultingTransitionFromSingleStateRule1Sound : forall Q1, forall Q2, forall transition1, 
@@ -815,15 +814,15 @@ Module ProductAutomata.
     names1 names2 <> [] <-> (evaluateConditionsFirstRule (transition1) (transition2) (names1) (names2)) = true.
     Proof.
     split.
-    - intros. unfold buildResultingTransitionFromSingleStateRule1 in H2. destruct equiv_dec. inversion e. reflexivity. congruence.
-    - intros. unfold buildResultingTransitionFromSingleStateRule1. rewrite H2. simpl. discriminate.
+    - intros. unfold buildResultingTransitionFromSingleStateRule1 in H3. destruct equiv_dec. inversion e. reflexivity. congruence.
+    - intros. unfold buildResultingTransitionFromSingleStateRule1. rewrite H3. simpl. discriminate.
     Defined.
 
     Check buildResultingTransitionFromSingleStateRule1.
 
-    Fixpoint buildTransitionFromMoreTransitionsRule1 (Q1: state) (Q2: state)
+    Fixpoint buildTransitionFromMoreTransitionsRule1 (Q1: state) (Q2: state2)
       (transition1: (set (name) * DC * (set(state)))) 
-      (transition2: set (set (name) * DC * (set(state)))) 
+      (transition2: set (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :=
       match transition2 with
       | [] => []
@@ -832,9 +831,9 @@ Module ProductAutomata.
       end.
     Check buildTransitionFromMoreTransitionsRule1.
 
-    Fixpoint buildTransitionFromMoreAllTransitionsSingleState (Q1: state) (Q2: state)
+    Fixpoint buildTransitionFromMoreAllTransitionsSingleState (Q1: state) (Q2: state2)
       (transition1: set (set (name) * DC * (set(state)))) 
-      (transition2: set (set (name) * DC * (set(state)))) 
+      (transition2: set (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :=
       match transition1 with
       | [] => []
@@ -844,9 +843,9 @@ Module ProductAutomata.
 
     (*iterates over a set of states of the second automaton in order to apply the transition generation rule to *)
     (* every state: we fix one state while  *)
-    Fixpoint iterateOverStatesBuildingTransitionsOne (Q1: state) (Q2: set state)
+    Fixpoint iterateOverStatesBuildingTransitionsOne (Q1: state) (Q2: set state2)
       (transition1: state -> set (set (name) * DC * (set(state)))) 
-      (transition2: state -> set (set (name) * DC * (set(state)))) 
+      (transition2: state2 -> set (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :=
       match Q2 with
       | [] => []
@@ -854,9 +853,9 @@ Module ProductAutomata.
                 (iterateOverStatesBuildingTransitionsOne Q1 t transition1 transition2 names1 names2)
       end.
 
-    Fixpoint buildAllTransitionsRule1 (Q1: set state) (Q2: set state)
+    Fixpoint buildAllTransitionsRule1 (Q1: set state) (Q2: set state2)
       (transition1: state -> set (set (name) * DC * (set(state)))) 
-      (transition2: state -> set (set (name) * DC * (set(state)))) 
+      (transition2: state2 -> set (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :=
       match Q1 with
       | [] => []
@@ -864,7 +863,7 @@ Module ProductAutomata.
                 (buildAllTransitionsRule1 t Q2 transition1 transition2 names1 names2)
     end. (* ERICK: a princípio, esse buildAllTransitionsRule1 tem o comportamento necessário *)
 
-    Definition transitionsRule1 (a1: constraintAutomata) (a2: constraintAutomata) := 
+    Definition transitionsRule1 (a1: constraintAutomata) (a2: constraintAutomata2) := 
       buildAllTransitionsRule1 (ConstraintAutomata.Q a1) (ConstraintAutomata.Q a2) 
                                (ConstraintAutomata.T a1) (ConstraintAutomata.T a2) 
                                (ConstraintAutomata.N a1) (ConstraintAutomata.N a2).
@@ -888,13 +887,13 @@ Module ProductAutomata.
       set_inter equiv_dec (fst(fst(tr))) names2 = nil.
     Proof.
     split.
-    - intros. unfold intersectionNAndNames in H2. destruct equiv_dec in H2. inversion e. reflexivity.
-      inversion H2.
-    - intros. unfold intersectionNAndNames. rewrite H2. reflexivity.
+    - intros. unfold intersectionNAndNames in H3. destruct equiv_dec in H3. inversion e. reflexivity.
+      inversion H3.
+    - intros. unfold intersectionNAndNames. rewrite H3. reflexivity.
     Defined.
 
     (* Create the corresponding states out of a set of states that are the inbound states of a transition *)
-    Fixpoint iterateOverOutboundStatesRule2  (p1: set state) (q2: state) :=
+    Fixpoint iterateOverOutboundStatesRule2  (p1: set state) (q2: state2) :=
       match p1 with
       | [] => []
       | a::t => (*set_add equiv_dec (createTransition q1 transition a) (iterateOverIncomingStates q1 transition t)*)
@@ -903,19 +902,19 @@ Module ProductAutomata.
     (*Chamar iterateOverIncomingStates 2x : para gerar o estado inbound da transição e de outbound (ou não)*)
     Check iterateOverOutboundStatesRule2.
 
-    Fixpoint iterateOverOutboundStatesRule3 (q2: state) (p1: set state) :=
-      match p1 with
+    Fixpoint iterateOverOutboundStatesRule3 (q1: state) (p2: set state2) :=
+      match p2 with
       | [] => []
       | a::t => (*set_add equiv_dec (createTransition q1 transition a) (iterateOverIncomingStates q1 transition t)*)
-                set_add equiv_dec ((q2,a))(iterateOverOutboundStatesRule3 q2 t)
+                set_add equiv_dec ((q1,a))(iterateOverOutboundStatesRule3 q1 t)
       end.
     (*Chamar iterateOverIncomingStates 2x : para gerar o estado inbound da transição e de outbound *)
     Check iterateOverOutboundStatesRule3.
 
 
     (* Builds an single resulting transition as specified by rule 2 *)
-    Fixpoint createSingleTransition (q1:state) (transition : (set (name) * DC * (set(state)))) (a2States : set state) (a2Names: set name)   
-    : set (state * state * ((set name * DC) * set (state * state))) :=
+    Fixpoint createSingleTransition (q1:state) (transition : (set (name) * DC * (set(state)))) (a2States : set state2) (a2Names: set name)   
+    : set (state * state2 * ((set name * DC) * set (state * state2))) :=
     match a2States with
     | [] => []
     | q2::t => if (intersectionNAndNames (transition) (a2Names) == true) then 
@@ -928,18 +927,18 @@ Module ProductAutomata.
       createSingleTransition q1 transition a2States a2Names <> [] <-> intersectionNAndNames (transition) (a2Names) = true /\ a2States <> [].
     Proof.
     split.
-    - intros. induction a2States. unfold createSingleTransition in H2. congruence.
-      simpl in H2. case_eq (intersectionNAndNames transition a2Names). intros. split. reflexivity. congruence.
-      intros. rewrite H3 in H2. simpl in H2. apply IHa2States in H2. destruct H2. congruence.
-    - intros. induction a2States. unfold createSingleTransition. destruct H2. congruence.
-      simpl. destruct equiv_dec. discriminate. apply IHa2States. destruct H2. congruence.
+    - intros. induction a2States. unfold createSingleTransition in H3. congruence.
+      simpl in H3. case_eq (intersectionNAndNames transition a2Names). intros. split. reflexivity. congruence.
+      intros. rewrite H4 in H3. simpl in H3. apply IHa2States in H3. destruct H3. congruence.
+    - intros. induction a2States. unfold createSingleTransition. destruct H3. congruence.
+      simpl. destruct equiv_dec. discriminate. apply IHa2States. destruct H3. congruence.
     Defined.
      
     (* Builds all resulting transitions as specified by rule2 *)
     (* q1: origin state *)
     Definition createTransitionRule2 (q1:state) : set (set (name) * DC * (set(state))) -> 
-      set state -> set name   (*a2States : estados do autômato a2. Em um primeiro momento, para um único q2 *)
-      -> set (state * state * ((set name * DC) * set (state * state))) :=
+      set state2 -> set name   (*a2States : estados do autômato a2. Em um primeiro momento, para um único q2 *)
+      -> set (state * state2 * ((set name * DC) * set (state * state2))) :=
       fix rec transitions q2 names2 (*sem necessidade do fix *):=
         match transitions with
         | [] => [] 
@@ -949,7 +948,7 @@ Module ProductAutomata.
 
     (* Iterates over a set of states of the first automaton in order to apply the second derivation rule to all of its states *)
     Fixpoint createTransitionRule2AllStates (Q1: set state) (transitions: state -> set (set (name) * DC * (set(state)))) 
-      (names2: set name) (a2States : set state) := 
+      (names2: set name) (a2States : set state2) := 
       match Q1 with
       | [] => []
       | a::t => (createTransitionRule2 a (transitions(a)) a2States names2)++(createTransitionRule2AllStates t transitions names2 a2States)
@@ -957,39 +956,51 @@ Module ProductAutomata.
     Check createTransitionRule2.
 
     (* Given two automatons, builds the resulting set of transitions for their product automaton *)
-    Definition transitionsRule2 (a1: constraintAutomata) (a2 : constraintAutomata)  :=
+    Definition transitionsRule2 (a1: constraintAutomata) (a2 : constraintAutomata2)  :=
       (createTransitionRule2AllStates (ConstraintAutomata.Q a1) (ConstraintAutomata.T a1) 
                                       (ConstraintAutomata.N a2) (ConstraintAutomata.Q a2)).
     Check transitionsRule2.
 
+    Definition intersectionNAndNames2 (tr: set (name) * DC * set(state2)) (names1: set name) :=
+      if (set_inter equiv_dec (fst(fst(tr))) names1) == nil then true else false.
+
+    Lemma intersectionNAndName2Sound : forall tr, forall names1, intersectionNAndNames2 tr names1 = true <->
+      set_inter equiv_dec (fst(fst(tr))) names1 = nil.
+    Proof.
+    split.
+    - intros. unfold intersectionNAndNames2 in H3. destruct equiv_dec in H3. inversion e. reflexivity.
+      inversion H3.
+    - intros. unfold intersectionNAndNames2. rewrite H3. reflexivity.
+    Defined.
+
     (*In order to define the above rule's symmetric, a way to organize the transitions is defined pretty much as the
       procedure developed for the second rule *)
-    Fixpoint createSingleTransitionRule3 (q2:state) (transition : (set (name) * DC * (set(state)))) (a1States : set state) (a1Names: set name)   
-    : set (state * state * ((set name * DC) * set (state * state))) :=
-    match a1States with
+    Fixpoint createSingleTransitionRule3 (q2:state2) (transition : (set (name) * DC * (set(state2)))) (a2States : set state) (a1Names: set name)   
+    : set (state * state2 * ((set name * DC) * set (state * state2))) :=
+    match a2States with
     | [] => []
-    | q1::t => if (intersectionNAndNames (transition) (a1Names) == true) then 
+    | q1::t => if (intersectionNAndNames2 (transition) (a1Names) == true) then 
                  ((q1,q2),((fst(transition)), (iterateOverOutboundStatesRule3 (q1) (snd(transition)))))::createSingleTransitionRule3 q2 transition t a1Names
                 else createSingleTransitionRule3 q2 transition t a1Names
     end.
 
     Lemma createSingleTransitionRule3Sound : forall q2, forall transition, forall a1States, forall a1Names,
     createSingleTransitionRule3 q2 transition a1States a1Names <> [] <-> 
-    intersectionNAndNames (transition) (a1Names) = true /\ a1States <> [].
+    intersectionNAndNames2 (transition) (a1Names) = true /\ a1States <> [].
     Proof.
     split. 
-    - intros. induction a1States. simpl in H2. congruence.
-    simpl in H2. destruct equiv_dec in H2. inversion e. split. reflexivity. discriminate.
-    apply IHa1States in H2. destruct H2. congruence.
-    - intros. induction a1States. destruct H2. congruence.
+    - intros. induction a1States. simpl in H3. congruence.
+    simpl in H3. destruct equiv_dec in H3. inversion e. split. reflexivity. discriminate.
+    apply IHa1States in H3. destruct H3. congruence.
+    - intros. induction a1States. destruct H3. congruence.
     simpl. destruct equiv_dec. discriminate.
-    destruct H2. congruence.
+    destruct H3. congruence.
     Defined.
   
     (* Then createSingleTransitionRule3 must be applied with all transitions that leaves a state of A_2 *)
-    Definition createTransitionRule3 (q2:state) : set (set (name) * DC * (set(state))) -> 
+    Definition createTransitionRule3 (q2:state2) : set (set (name) * DC * (set(state2))) -> 
       set state -> set name   (*a2States : estados do autômato a2. Em um primeiro momento, para um único q2 *)
-      -> set (state * state * ((set name * DC) * set (state * state))) :=
+      -> set (state * state2 * ((set name * DC) * set (state * state2))) :=
       fix rec transitions q1 names1 :=
         match transitions with
         | [] => [] 
@@ -998,7 +1009,7 @@ Module ProductAutomata.
     Check createTransitionRule3.
 
     (* Iterates over a set of states of the second automaton in order to apply the third derivation rule to all states in A_1 *)
-    Fixpoint createTransitionRule3AllStates (Q2: set state) (transitions: state -> set (set (name) * DC * (set(state)))) 
+    Fixpoint createTransitionRule3AllStates (Q2: set state2) (transitions: state2 -> set (set (name) * DC * (set(state2)))) 
       (names1: set name) (a1States : set state) := 
       match Q2 with
       | [] => []
@@ -1006,23 +1017,24 @@ Module ProductAutomata.
       end.
 
     (*Following the idea presented above, we formalize the second rule's symetric as *)
-    Definition transitionsRule3 (a1: constraintAutomata) (a2 : constraintAutomata)  :=
+    Definition transitionsRule3 (a1: constraintAutomata) (a2 : constraintAutomata2)  :=
       (createTransitionRule3AllStates (ConstraintAutomata.Q a2) (ConstraintAutomata.T a2) 
                                       (ConstraintAutomata.N a1) (ConstraintAutomata.Q a1)).
     Check transitionsRule3. 
 
     (* The following definition builds the set of states as depicted by the rules presented in Arbab(2006) *)
-    Definition buildTransitionRuleProductAutomaton (a1: constraintAutomata) (a2: constraintAutomata) :=
+    Definition buildTransitionRuleProductAutomaton (a1: constraintAutomata) (a2: constraintAutomata2) :=
       (transitionsRule1 a1 a2)++(transitionsRule2 a1 a2)++(transitionsRule3 a1 a2).
     Check buildTransitionRuleProductAutomaton.
 
     (*ERICK: provavelmente isso deve ser jogado em outra seção pra fazer state * state ser aceito como um estado *)
-    Variable a1 a2 : (constraintAutomata).
+    Variable a1 : (constraintAutomata).
+    Variable a2 : (constraintAutomata2).
 
     (*The following definition iterates over the set of transiitons of the PA in order to retrieve the 
       inbound states *)
-    Fixpoint recoverResultingStatesPA (st: (state * state)) 
-      (t:set (state * state * ((set name * DC) * set (state * state))))(*: set ((state * state)) *):=
+    Fixpoint recoverResultingStatesPA (st: (state * state2)) 
+      (t:set (state * state2 * ((set name * DC) * set (state * state2))))(*: set ((state * state)) *):=
       match t with
       | [] => []
       | a::tx => if st == fst((a)) then (snd((a))::recoverResultingStatesPA st tx)
@@ -1034,15 +1046,21 @@ Module ProductAutomata.
       exists a, In a t /\ st = fst(a).
     Proof.
     split.
-    - intros. Admitted.
+    - intros. induction t. simpl in H3. congruence.
+      simpl in H3. destruct equiv_dec in H3. inversion e. exists a. split. simpl; auto. reflexivity.
+      apply IHt in H3. destruct H3. exists x. destruct H3. split. simpl. auto. exact H4. 
+    - intros. induction t. destruct H3. destruct H3. inversion H3. 
+      simpl. destruct equiv_dec.  discriminate. apply IHt. destruct H3. destruct H3. simpl in H3. destruct H3. 
+      rewrite <- H3 in H4. congruence. exists x. split. exact H3. exact H4.
+    Defined.
 
     (*Definition buildTransitionsSetProductAutomaton (a1: constraintAutomata) (a2: constraintAutomata) :=
       buildTransitionRuleProductAutomaton a1 a2.
     Check buildTransitionsSetProductAutomaton. *)
 
     (*We may define a transition relation with the same type as required by the constraint automaton's definition *)
-    Definition transitionPA (s: (state * state)) :=
-      recoverResultingStatesPA s (buildTransitionRuleProductAutomaton a1 a2).
+    Definition transitionPA (s: (state * state2)) :=
+      recoverResultingStatesPA s (buildTransitionRuleProductAutomaton a1 a2). 
 
     Definition buildPA := ConstraintAutomata.CA 
       (resultingStatesSet a1 a2) (resultingNameSet a1 a2) (transitionPA) (resultingInitialStatesSet a1 a2). 
@@ -1451,8 +1469,12 @@ End ProductAutomata.
   Check ProductAutomata.buildPA.
 
   Definition sheila := ProductAutomata.buildPA anotherCA anotherCA. (*TODO: possibilitar estados de tipos diferentes *)
-  Eval compute in ConstraintAutomata.T sheila.
+  Eval compute in ConstraintAutomata.T sheila (qb,qb).
   Eval compute in ConstraintAutomata.run sheila [portA0;portB0] 5.
+
+  Definition sheila2 := ProductAutomata.buildPA sheila anotherCA.
+  Eval compute in ConstraintAutomata.T sheila2 ((qb,qb),qb).
+  Eval compute in ConstraintAutomata.run sheila2 [portA0;portB0] 5.
 
 
 Require Export ListSet.

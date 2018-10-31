@@ -180,21 +180,22 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
   Definition oneBoundedFIFOrel2 (s:fifoStates) 
   (*set (set (ports) * ConstraintAutomata.DC ports (option nat) * set states)*) :=
     match s with
-    | q0b => [([C], (ConstraintAutomata.dc A (Some 0)), [p0b]) ;
-              ([C], (ConstraintAutomata.dc A (Some 1)), [p1b])]
-    | p0b => [([D], (ConstraintAutomata.dc B (Some 0)), [q0b])]
-    | p1b => [([D], (ConstraintAutomata.dc B (Some 1)), [q0b])] 
+    | q0b => [([B], (ConstraintAutomata.dc B (Some 0)), [p0b]) ;
+              ([B], (ConstraintAutomata.dc B (Some 1)), [p1b])]
+    | p0b => [([C], (ConstraintAutomata.dc C (Some 0)), [q0b])]
+    | p1b => [([C], (ConstraintAutomata.dc C (Some 1)), [q0b])] 
     | q0a | p0a | p1a => []
     end.
 
   Definition oneBoundedFIFOCA2 := {|
     ConstraintAutomata.Q := [q0b;p0b;p1b];
-    ConstraintAutomata.N := [C;D];
+    ConstraintAutomata.N := [B;C];
     ConstraintAutomata.T := oneBoundedFIFOrel2;
     ConstraintAutomata.Q0 := [q0b]
   |}.
 
   Definition twoBoundedFifo := ProductAutomata.buildPA oneBoundedFIFOCA oneBoundedFIFOCA2.
 
-  Eval compute in ConstraintAutomata.T twoBoundedFifo (q0a,q0b).
+  Eval compute in ConstraintAutomata.T twoBoundedFifo (p0a, q0b).
+  Eval compute in ConstraintAutomata.Q twoBoundedFifo.
   
