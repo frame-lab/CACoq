@@ -112,7 +112,7 @@ Require Import CaMain.
         ConstraintAutomata.portCond := timeStampTestHoldsLossyB;
         ConstraintAutomata.index := 0 |}.
 
-  Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10 20. (*does not accept the TDS composed by portA and portB because
+  Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10. (*does not accept the TDS composed by portA and portB because
                                                                             B has data in theta.time, which is not comprised by the automaton's transitions *)
   
   (* FIFO CA *)
@@ -228,7 +228,7 @@ Require Import CaMain.
     ConstraintAutomata.Q0 := [q0F]
   |}.
 
-  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 10 69.
+  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 8.
 
 
   (* The product construction of them can be acheived with *)
