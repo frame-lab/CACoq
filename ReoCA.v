@@ -559,7 +559,7 @@ Inductive lossySyncStates := q0.
     | 0 => Some 0
     | 1 => Some 0
     | 2 => Some 0
-    | 3 => Some 3
+    | 3 => Some 0
     | S n => Some (1)
     end.
 
@@ -567,6 +567,8 @@ Inductive lossySyncStates := q0.
     match n with
     | 0 => Some 3
     | 1 => Some 3
+    | 2 => Some 3
+    | 3 => Some 3
     | S n => Some (4)
     end.
 
@@ -574,7 +576,7 @@ Inductive lossySyncStates := q0.
     match n with
     | 0 =>  0#1
     | 1 =>  2#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 7#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 11#1
     end.
 
    Definition timeStamptransformB (n:nat) : QArith_base.Q :=
@@ -619,8 +621,8 @@ Inductive lossySyncStates := q0.
 
   Definition transformCaBehavior (s: transformState) :=
     match s with
-    | q1T => [([AT;BT] , ConstraintAutomata.trDc trasformFunction AT BT, [q1T]);
-              ([AT] , ConstraintAutomata.negDc ( ConstraintAutomata.trDc trasformFunction AT BT), [q1T])]
+    | q1T => [([AT;BT] , ConstraintAutomata.trDc trasformFunction AT BT, [q1T])]
+             (*([AT] , ConstraintAutomata.negDc ( ConstraintAutomata.trDc trasformFunction AT BT), [q1T])]*)
     end.
 
   (* The CA itself is formalized as *)
@@ -631,6 +633,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1T]
   |}.
 
+  Eval compute in ConstraintAutomata.xamboca2 transformCA [portAT;portBT] 10.
   Eval compute in ConstraintAutomata.run transformCA [portAT;portBT] 10.
 
   (* Merger CA*)
