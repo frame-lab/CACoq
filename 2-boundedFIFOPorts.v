@@ -139,8 +139,7 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
   Lemma timeStampTestFIFOAHolds : forall n, Qle (timeStampFIFOA n) (timeStampFIFOA (S n)).
   Proof.
   induction n. 
-  + unfold timeStampTest. cbv. intros. inversion H.
-  + unfold timeStampTest. (*alguma tática de ring em cima de Q deve resolver aqui. procurar depois *)
+ (*alguma tática de ring em cima de Q deve resolver aqui. procurar depois *)
   Admitted.
 
   Lemma timeStampTestFIFOBHolds : forall n, 
@@ -229,21 +228,7 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
 
   Definition twoBoundedFifo := ProductAutomata.buildPA oneBoundedFIFOCA oneBoundedFIFOCA2.
 
-  (* Eval compute in ConstraintAutomata.T twoBoundedFifo (p0a, q0b).
-  Eval compute in ConstraintAutomata.Q twoBoundedFifo.
-  Eval compute in ConstraintAutomata.xamboca2 twoBoundedFifo realports 5.
-  Eval compute in ConstraintAutomata.run twoBoundedFifo realports 6. *)
-
-  (* Lemma productTransition : forall s, ConstraintAutomata.T twoBoundedFifo s = [([B], ConstraintAutomata.andDc (ConstraintAutomata.dc B (Some 0)) (ConstraintAutomata.dc B (Some 0)),
-        [(q0a, p0b)]);
-       ([B], ConstraintAutomata.andDc (ConstraintAutomata.dc B (Some 0)) (ConstraintAutomata.dc B (Some 1)),
-       [(q0a, p1b)])]
-        <-> s = (p0a, q0b).
-  Proof.
-  split.
-  - intros. induction s. simpl in H. simpl in H. unfold ProductAutomata.transitionPA in H. 
-    unfold oneBoundedFIFOCA in H. unfold oneBoundedFIFOCA2 in H. case_eq ((a, b) == (p0a, q0b)).
-    intros. inversion e. reflexivity.  simpl in H. *)
+  (* Ex 1 *)
 
   Definition ru6 := Eval compute in ConstraintAutomata.run twoBoundedFifo realports 6.
 
@@ -317,8 +302,6 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
   Lemma timeStampTestFIFOA2Holds : forall n, Qle (timeStampFIFOA2 n) (timeStampFIFOA2 (S n)).
   Proof.
   induction n. 
-  + unfold timeStampTest. cbv. intros. inversion H.
-  + unfold timeStampTest.
   Admitted.
 
   Lemma timeStampTestFIFOB2Holds : forall n, 
@@ -361,4 +344,3 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
   Lemma fullFifoWith0 : In [(p0a,p0b)] ru62.
   Proof. simpl; auto. Defined.
 
-  
