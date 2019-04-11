@@ -254,9 +254,6 @@ Instance alternatorPortsEq : EqDec alternatorPorts eq :=
     end.
 
    Definition timeStampSequencerA(n:nat) : QArith_base.Q :=
-   (*  if Nat.leb n 5 then Z.of_nat (S n)#1 else Z.of_nat (S n) + 7#1.
-
-    Search (Z.of_nat _ <= _)%Z. *)
     match n with
     | 0 => 1#1 
     | 1 => 5#1
@@ -335,12 +332,6 @@ Instance alternatorPortsEq : EqDec alternatorPorts eq :=
     end.
 
 
-(*  Lemma timeStampSequencerAHolds : forall n, Qle (timeStampSequencerA n) (timeStampSequencerA (S n)).
-   Proof.
-    intros. case_eq (Nat.leb n 5).
-    - intros. unfold timeStampSequencerA. rewrite H0. case_eq (Nat.leb (S n) 5).
-    + intros. apply orderZofNat. 
-  Search (Z.of_nat _ <= _)%Z. *)
   Lemma timeStampSequencerAHolds : forall n, Qle (timeStampSequencerA n) (timeStampSequencerA (S n)).
   Proof.
   intros. destruct n. unfold timeStampSequencerA. discriminate.
@@ -466,7 +457,6 @@ Instance alternatorPortsEq : EqDec alternatorPorts eq :=
         ConstraintAutomata.portCond := timeStampSequencerHHolds;
         ConstraintAutomata.index := 0 |}.
 
-  (*ERICK :Abordagem 1 - uma porta por nó do desenho  *)
   (*A FIFO E *)
   Definition aToEFIFOrel (s:alternatorStates) :=
     match s with
