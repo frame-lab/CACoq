@@ -1,5 +1,11 @@
 Require Import CaMain.
 
+Open Scope Q_scope.
+Axiom orderZofNat : forall n, forall a, Z.of_nat (S n) + a # 1 <= Z.of_nat (S (S n)) + a # 1.
+Close Scope Q_scope.
+
+(* Implementation Examples of canonical Constraint Automata as presented by Baier et al.'s paper *)
+
 (* Sync channel CA *)
   Inductive syncState := X.
   Inductive syncPorts := E | F.
@@ -23,14 +29,17 @@ Require Import CaMain.
  Definition timeStampTestSync (n:nat) : QArith_base.Q :=
     match n with
     | 0 =>  1#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 1#1 (* injecting N to Z *)
+    | S n =>  Z.of_N (N.of_nat(S n)) + 2#1 (* an example of a time stamp function, by injecting N to Z *)
     end.
 
   Lemma timeStampTestHoldsSync : forall n, 
     Qle (timeStampTestSync n) (timeStampTestSync (S n)). 
-  Proof. Admitted.
+  Proof.
+  intros. destruct n. unfold timeStampTestSync. discriminate. 
+  unfold timeStampTestSync.
+  apply orderZofNat. Defined.
 
-    Instance syncPortsEq: EqDec syncPorts eq :=
+  Instance syncPortsEq: EqDec syncPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | E,E | F,F => in_left
@@ -60,18 +69,7 @@ Require Import CaMain.
     match s with
     | X => [([E;F] , ConstraintAutomata.eqDc nat E F, [X])] 
     end.
-  (* Definition syncCaBehavior (s: syncState) :=
-    match s with
-    | X => [([E;F] , (ConstraintAutomata.orDc (ConstraintAutomata.andDc (ConstraintAutomata.dc (E) (Some 0)) 
-                                                ((ConstraintAutomata.dc (F) (Some 0))))
 
-                          (ConstraintAutomata.andDc (ConstraintAutomata.dc (E) (Some 1)) 
-                                                ((ConstraintAutomata.dc (F) (Some 1)))
-                            )
-                        ), [X])] 
-    end. *)
-
-  (* The CA itself is formalized as *)
   Definition syncCA := {|
     ConstraintAutomata.Q := [X];
     ConstraintAutomata.N := [E;F];
@@ -79,12 +77,11 @@ Require Import CaMain.
     ConstraintAutomata.Q0 := [X]
   |}.
 
-Eval compute in ConstraintAutomata.run syncCA [portE;portF] 20.
+  Eval compute in ConstraintAutomata.run syncCA [portE;portF] 20.
 
 
-(* LossySync Channel CA *)
-
-Inductive lossySyncStates := q0.
+  (* LossySync CA *)
+  Inductive lossySyncStates := q0.
 
   Inductive lossySyncPorts := A | B.
 
@@ -117,22 +114,28 @@ Inductive lossySyncStates := q0.
   Definition timeStampLossyA (n:nat) : QArith_base.Q :=
     match n with
     | 0 =>  1#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 1#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 2#1
     end.
 
   Definition timeStampLossyB (n:nat) : QArith_base.Q :=
     match n with
-    | 0 =>  4#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 1#1
+    | 0 =>  1#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 2#1
     end.
 
   Lemma timeStampTestHoldsLossyA: forall n, 
     Qle (timeStampLossyA n) (timeStampLossyA (S n)). 
-  Proof. Admitted.
+  Proof.
+  intros. destruct n. unfold timeStampLossyA. discriminate. 
+  unfold timeStampLossyA.
+  apply orderZofNat. Defined.
 
   Lemma timeStampTestHoldsLossyB: forall n, 
     Qle (timeStampLossyB n) (timeStampLossyB (S n)).
-  Proof. Admitted.
+  Proof.
+  intros. destruct n. unfold timeStampLossyB. discriminate. 
+  unfold timeStampLossyB.
+  apply orderZofNat. Defined.
 
   Definition lossySyncCaBehavior (s: lossySyncStates) :=
     match s with
@@ -140,18 +143,6 @@ Inductive lossySyncStates := q0.
              ([A], (ConstraintAutomata.tDc lossySyncPorts nat), [q0])] 
     end.
 
- (* Definition lossySyncCaBehavior (s: lossySyncStates) :=
-    match s with
-    | q0 => [([A;B] , (ConstraintAutomata.orDc (ConstraintAutomata.andDc (ConstraintAutomata.dc (A) (Some 0)) 
-                                                ((ConstraintAutomata.dc (B) (Some 0))))
-
-                          (ConstraintAutomata.andDc (ConstraintAutomata.dc (A) (Some 1)) 
-                                                ((ConstraintAutomata.dc (B) (Some 1)))
-                            )
-                        ), [q0]);([A], (ConstraintAutomata.tDc lossySyncPorts nat), [q0])] 
-    end. *)
-
-  (* The CA itself is formalized as *)
   Definition lossySyncCA := {|
     ConstraintAutomata.Q := [q0];
     ConstraintAutomata.N := [A;B];
@@ -179,8 +170,7 @@ Inductive lossySyncStates := q0.
   (* FIFO CA *)
 
   Inductive FIFOStates : Type := q0F | p0F | p1F.
-  Inductive FIFOports : Type := AF | BF. (*usar um tipo já definido se quiser *)
- (*Program não resolve aqui... eu tinha esquecido que estou usando a tática incorreta*)
+  Inductive FIFOports : Type := AF | BF.
   Instance portsEq : EqDec FIFOports eq :=
     {equiv_dec x y := 
       match x,y with
@@ -204,8 +194,6 @@ Inductive lossySyncStates := q0.
     | 0 => Some 0
     | 1 => Some (0)
     | 2 => Some 1
-    (*| 3 | 4 | 5 => Some 1
-    | 6 => None *)
     | S n => Some 1
     end.
 
@@ -217,31 +205,40 @@ Inductive lossySyncStates := q0.
     | 3 =>  7#1
     | 4 =>  9#1
     | 5 =>  11#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 1#1 
+    | S n =>  Z.of_N (N.of_nat(S n)) + 11#1 
     end.
 
   Definition timeStampFIFOB (n:nat) : QArith_base.Q :=
     match n with
-    | 0 =>  2#1 (*1#1*)
+    | 0 =>  2#1 
     | 1 =>  4#1
     | 2 => 6#1
     | 3 => 8#1
     | 4 => 10#1
     | 5 => 12#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 1#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 10#1
     end.
 
   Lemma timeStampTestFIFOAHolds : forall n, Qle (timeStampFIFOA n) (timeStampFIFOA (S n)).
   Proof.
-  induction n. 
-  + unfold timeStampTest. cbv. intros. inversion H.
-  + unfold timeStampTest. (*alguma tática de ring em cima de Q deve resolver aqui. procurar depois *)
-  Admitted.
+  intros. destruct n. unfold timeStampFIFOA. discriminate.
+  unfold timeStampFIFOA. case (n). discriminate.
+  intros n0. case (n0). discriminate.
+  intros n1. case (n1). discriminate.
+  intros n2. case (n2). discriminate.
+  intros n3. case (n3). discriminate.
+  intros n4. unfold Qle. apply orderZofNat.  Defined.
 
   Lemma timeStampTestFIFOBHolds : forall n, 
     Qle (timeStampFIFOB n) (timeStampFIFOB (S n)). 
   Proof.
-  Admitted.
+  intros. destruct n. unfold timeStampFIFOB. discriminate.
+  unfold timeStampFIFOB. case (n). discriminate.
+  intros n0. case (n0). discriminate.
+  intros n1. case (n1). discriminate.
+  intros n2. case (n2). discriminate.
+  intros n3. case (n3). discriminate.
+  intros n4. unfold Qle. apply orderZofNat.  Defined.
 
   Definition portAF := {|
         ConstraintAutomata.id := AF;
@@ -259,21 +256,7 @@ Inductive lossySyncStates := q0.
 
   Definition realports := [portAF;portBF].
 
-  (* A transition is defined as a subset of states x a set of record ports as defined by the           *)
-  (* Record port in ConstraintAutomata, a data constraint which is represented by a bool (in           *)
-  (* execution time it may always be satisfied, i.e., the data constraint needs to be true             *)
-  (* in order to the transition to be triggered.                                                       *)
-  (* Ideia: Montar a DC como um conjunto de transições associado à cada porta como um par (porta,dado).*)
-  (* Assim, basta apenas pegar a porta e o dado correspondente em thetaDelta e comparar.               *)
-  (* TODO *)
-  (* Trnasições podem ser vistas como sendo um conjunto de transições a partir do estado ver NFA-e de RGCoq  *)
-  (* Se optarmos por usar o tipo indutivo transition definido no modulo ConstraintAutomata, seria necessário *)
-  (* pegar transições como parâmetros de entrada pra função abaixo (solução 1)                         *)
-
-  (* ERICK: esse k abaixo é justamente o índice l_i tal que a(l_i) = teta.time(k), para algum l_i \in [0,1,...]*)
-  (* NOTA: k abaixo náo é dado como parâmetro, é o índice da porta a ser avaliado. *)
-  Definition oneBoundedFIFOrel (s:FIFOStates) 
-  (*set (set (ports) * ConstraintAutomata.DC ports (option nat) * set states)*) :=
+  Definition oneBoundedFIFOrel (s:FIFOStates) :=
     match s with
     | q0F => [([AF], (ConstraintAutomata.dc AF (Some 0)), [p0F]) ;
               ([AF], (ConstraintAutomata.dc AF (Some 1)), [p1F])]
@@ -281,7 +264,6 @@ Inductive lossySyncStates := q0.
     | p1F => [([BF], (ConstraintAutomata.dc BF (Some 1)), [q0F])] 
     end.
 
-  (* falta definir transição para começar a brncar com a run.                                      *)
   Definition oneBoundedFIFOCA:= {|
     ConstraintAutomata.Q := [q0F;p0F;p1F];
     ConstraintAutomata.N := [AF;BF];
@@ -320,7 +302,10 @@ Inductive lossySyncStates := q0.
 
   Lemma timeStampSyncDrainHolds : forall n, 
     Qle (timeStampSyncDrain n) (timeStampSyncDrain (S n)). 
-  Proof. Admitted.
+  Proof.
+  intros. destruct n. unfold timeStampSyncDrain. discriminate.
+  unfold timeStampSyncDrain. case (n). discriminate.
+  intros n0. unfold timeStampSyncDrain. apply orderZofNat.  Defined.
 
   Instance syncDrainPortsEq: EqDec syncDrainPorts eq :=
     {equiv_dec x y := 
@@ -352,7 +337,6 @@ Inductive lossySyncStates := q0.
     | q1D => [([AD;BD] , ConstraintAutomata.tDc syncDrainPorts nat, [q1D])] 
     end.
 
-  (* The CA itself is formalized as *)
   Definition SyncDrainCA := {|
     ConstraintAutomata.Q := [q1D];
     ConstraintAutomata.N := [AD;BD];
@@ -398,11 +382,18 @@ Inductive lossySyncStates := q0.
 
   Lemma timeStampASyncDrainHolds : forall n, 
     Qle (timeStampASyncDrainA n) (timeStampASyncDrainA (S n)). 
-  Proof. Admitted.
+  Proof.
+  intros. destruct n. unfold timeStampASyncDrainA. discriminate.
+  unfold timeStampASyncDrainA. case (n). discriminate.
+  intros n0. unfold timeStampASyncDrainA. apply orderZofNat.  Defined.
+
 
   Lemma timeStampASyncDrainBHolds : forall n, 
     Qle (timeStampASyncDrainB n) (timeStampASyncDrainB (S n)). 
-  Proof. Admitted.
+  Proof.
+  intros. destruct n. unfold timeStampASyncDrainB. discriminate.
+  unfold timeStampASyncDrainB. case (n). discriminate.
+  intros n0. unfold timeStampASyncDrainA. apply orderZofNat. Defined.
 
   Instance aSyncDrainPortsEq: EqDec aSyncDrainPorts eq :=
     {equiv_dec x y := 
@@ -435,7 +426,6 @@ Inductive lossySyncStates := q0.
               ([BA] , ConstraintAutomata.tDc aSyncDrainPorts nat, [q1A])] 
     end.
 
-  (* The CA itself is formalized as *)
   Definition aSyncDrainCA := {|
     ConstraintAutomata.Q := [q1A];
     ConstraintAutomata.N := [AA;BA];
@@ -474,19 +464,22 @@ Inductive lossySyncStates := q0.
 
    Definition timeStampfilterB (n:nat) : QArith_base.Q :=
     match n with
-    (*| 0 =>  1#1
-    | 1 => 2#1 *)
-    | 0 => 555#1
+    | 0 => 4#1
     | S n =>  Z.of_N (N.of_nat(S n)) + 20#1
     end.
 
   Lemma timeStampfilterHolds : forall n, 
-    Qle (timeStampfilterA n) (timeStampfilterA (S n)). 
-  Proof. Admitted.
+    Qle (timeStampfilterA n) (timeStampfilterA (S n)).   
+  Proof.
+  intros. destruct n. unfold timeStampASyncDrainB. discriminate.
+  unfold timeStampASyncDrainB. case (n). discriminate.
+  intros n0. unfold timeStampASyncDrainA. apply orderZofNat. Defined.
 
   Lemma timeStampfilterBHolds : forall n, 
     Qle (timeStampfilterB n) (timeStampfilterB (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStampfilterB. discriminate.
+  unfold timeStampfilterB. apply orderZofNat. Defined.
 
   Instance filterPortsEq: EqDec filterPorts eq :=
     {equiv_dec x y := 
@@ -513,7 +506,7 @@ Inductive lossySyncStates := q0.
         ConstraintAutomata.portCond := timeStampfilterBHolds;
         ConstraintAutomata.index := 0 |}.
 
-  (*suppose the expression over the data item in port A is the data should be  Some 3 *)
+  (*As an example, the filter condition over the data item in port A is the data should be  Some 3 *)
   Definition filterCaBehavior (s: filterState) :=
     match s with
     | q1F => [([C;D] , ConstraintAutomata.andDc (ConstraintAutomata.dc C (Some 3)) 
@@ -529,13 +522,11 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1F]
   |}.
 
-  Eval compute in ConstraintAutomata.run filterCA [portC;portD] 10.
+  Eval compute in ConstraintAutomata.run filterCA [portC;portD] 3.
 
 
   (* Transform CA *)
 
-  (* Definition trasformFunction := fun x => x + 1.
-  Eval compute in trasformFunction 3. *)
   Definition trasformFunction (n: option nat) :=
     match n with
     | Some x => Some (x + 3)
@@ -588,11 +579,17 @@ Inductive lossySyncStates := q0.
 
   Lemma timeStamptransformHolds : forall n, 
     Qle (timeStamptransformA n) (timeStamptransformA (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStamptransformA. discriminate.
+  unfold timeStamptransformA. case n. discriminate.
+  intros n0. apply orderZofNat. Defined.
 
   Lemma timeStamptransformBHolds : forall n, 
     Qle (timeStamptransformB n) (timeStamptransformB (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStamptransformB. discriminate.
+  unfold timeStamptransformB. case n. discriminate.
+  intros n0. apply orderZofNat. Defined.
 
   Instance transformPortsEq: EqDec transformPorts eq :=
     {equiv_dec x y := 
@@ -622,10 +619,8 @@ Inductive lossySyncStates := q0.
   Definition transformCaBehavior (s: transformState) :=
     match s with
     | q1T => [([AT;BT] , ConstraintAutomata.trDc trasformFunction AT BT, [q1T])]
-             (*([AT] , ConstraintAutomata.negDc ( ConstraintAutomata.trDc trasformFunction AT BT), [q1T])]*)
     end.
 
-  (* The CA itself is formalized as *)
   Definition transformCA := {|
     ConstraintAutomata.Q := [q1T];
     ConstraintAutomata.N := [AT;BT];
@@ -633,7 +628,6 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1T]
   |}.
 
-  Eval compute in ConstraintAutomata.xamboca2 transformCA [portAT;portBT] 10.
   Eval compute in ConstraintAutomata.run transformCA [portAT;portBT] 10.
 
   (* Merger CA*)
@@ -658,11 +652,6 @@ Inductive lossySyncStates := q0.
     end.
 
  Definition timeStampmergerA (n:nat) : QArith_base.Q :=
-    (*match n with
-    | 0 =>  0#1
-    | 1 =>  3#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 7#1
-    end. *)
     match n with
     | 0 => 1#1
     | 1 => 2#1
@@ -685,15 +674,24 @@ Inductive lossySyncStates := q0.
 
   Lemma timeStampmergerHolds : forall n, 
     Qle (timeStampmergerA n) (timeStampmergerA (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStampmergerA. discriminate.
+  unfold timeStampmergerA. case n. discriminate.
+  intros n0. apply orderZofNat. Defined.
 
   Lemma timeStampmergerBHolds : forall n, 
     Qle (timeStampmergerB n) (timeStampmergerB (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStampmergerB. discriminate.
+  unfold timeStampmergerB. case n. discriminate.
+  intros n0. apply orderZofNat. Defined.
 
   Lemma timeStampmergerCHolds : forall n, 
     Qle (timeStampmergerC n) (timeStampmergerC (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStampmergerC. discriminate.
+  unfold timeStampmergerC. case n. discriminate.
+  intros n0. apply orderZofNat. Defined.
 
   Instance mergerPortsEq: EqDec mergerPorts eq :=
     {equiv_dec x y := 
@@ -734,9 +732,6 @@ Inductive lossySyncStates := q0.
               ([BM;CM] , ConstraintAutomata.eqDc nat BM CM, [q1M])] 
     end. 
 
-    Check mergerCaBehavior.
-
-  (* The CA itself is formalized as *)
   Definition mergerCA := {|
     ConstraintAutomata.Q := [q1M];
     ConstraintAutomata.N := [AM;BM;CM];
@@ -744,8 +739,7 @@ Inductive lossySyncStates := q0.
     ConstraintAutomata.Q0 := [q1M]
   |}.
 
-  Eval compute in ConstraintAutomata.xamboca2 mergerCA [portAM;portBM;portCM] 10.
-  Eval compute in ConstraintAutomata.run mergerCA [portAM;portBM;portCM] 10. (*all of them are in theta-time *)
+  Eval compute in ConstraintAutomata.run mergerCA [portAM;portBM;portCM] 10.
 
   (* Replicator CA *)
   Inductive replicatorState := q1R.
@@ -791,15 +785,24 @@ Inductive lossySyncStates := q0.
 
   Lemma timeStampreplicatorHolds : forall n, 
     Qle (timeStampreplicatorA n) (timeStampreplicatorA (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStampreplicatorA. discriminate.
+  unfold timeStampreplicatorA. case n. discriminate.
+  intros n0. apply orderZofNat. Defined.
 
   Lemma timeStampreplicatorBHolds : forall n, 
     Qle (timeStampreplicatorB n) (timeStampreplicatorB (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStampreplicatorB. discriminate.
+  unfold timeStampreplicatorB. case n. discriminate.
+  intros n0. apply orderZofNat. Defined.
 
   Lemma timeStampreplicatorCHolds : forall n, 
     Qle (timeStampreplicatorC n) (timeStampreplicatorC (S n)). 
-  Proof. Admitted.
+  Proof.   
+  intros. destruct n. unfold timeStampreplicatorC. discriminate.
+  unfold timeStampreplicatorC. case n. discriminate.
+  intros n0. apply orderZofNat. Defined.
 
   Instance replicatorPortsEq: EqDec replicatorPorts eq :=
     {equiv_dec x y := 
@@ -840,9 +843,6 @@ Inductive lossySyncStates := q0.
                                                      (ConstraintAutomata.eqDc nat AR CR), [q1R])] 
     end.
 
-    Check replicatorCaBehavior.
-
-  (* The CA itself is formalized as *)
   Definition replicatorCA := {|
     ConstraintAutomata.Q := [q1R];
     ConstraintAutomata.N := [AR;BR;CR];
