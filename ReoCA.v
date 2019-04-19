@@ -393,7 +393,7 @@ Close Scope Q_scope.
   Proof.
   intros. destruct n. unfold timeStampASyncDrainB. discriminate.
   unfold timeStampASyncDrainB. case (n). discriminate.
-  intros n0. unfold timeStampASyncDrainA. apply orderZofNat. Defined.
+  intros n0. unfold timeStampASyncDrainB. apply orderZofNat. Defined.
 
   Instance aSyncDrainPortsEq: EqDec aSyncDrainPorts eq :=
     {equiv_dec x y := 
@@ -471,9 +471,9 @@ Close Scope Q_scope.
   Lemma timeStampfilterHolds : forall n, 
     Qle (timeStampfilterA n) (timeStampfilterA (S n)).   
   Proof.
-  intros. destruct n. unfold timeStampASyncDrainB. discriminate.
-  unfold timeStampASyncDrainB. case (n). discriminate.
-  intros n0. unfold timeStampASyncDrainA. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampfilterA. discriminate.
+  unfold timeStampfilterA. case (n). discriminate.
+  intros n0. unfold timeStampfilterA. apply orderZofNat. Defined.
 
   Lemma timeStampfilterBHolds : forall n, 
     Qle (timeStampfilterB n) (timeStampfilterB (S n)). 
@@ -721,8 +721,8 @@ Close Scope Q_scope.
   Definition portCM:= {|
         ConstraintAutomata.id := CM;
         ConstraintAutomata.dataAssignment := dataAssignmentmergerBoth;
-        ConstraintAutomata.timeStamp := timeStampmergerB;
-        ConstraintAutomata.portCond := timeStampmergerBHolds;
+        ConstraintAutomata.timeStamp := timeStampmergerC;
+        ConstraintAutomata.portCond := timeStampmergerCHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition mergerCaBehavior (s: mergerState) :
@@ -832,8 +832,8 @@ Close Scope Q_scope.
   Definition portCR:= {|
         ConstraintAutomata.id := CR;
         ConstraintAutomata.dataAssignment := dataAssignmentreplicatorBoth;
-        ConstraintAutomata.timeStamp := timeStampreplicatorB;
-        ConstraintAutomata.portCond := timeStampreplicatorBHolds;
+        ConstraintAutomata.timeStamp := timeStampreplicatorC;
+        ConstraintAutomata.portCond := timeStampreplicatorCHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition replicatorCaBehavior (s: replicatorState) :
