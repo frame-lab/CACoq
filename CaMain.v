@@ -76,21 +76,19 @@ Module ConstraintAutomata.
       id : name;
       dataAssignment : nat -> option data; 
       timeStamp : nat -> QArith_base.Q;
-      portCond : forall n:nat, Qle (timeStamp n) (timeStamp (S n));
+      portCond : forall n:nat, Qlt (timeStamp n) (timeStamp (S n));
       index : nat
 
     }.
 
     Inductive DC := 
-    | tDc : DC 
-    | dc : name -> option data -> DC 
+    | tDc : DC
+    | dc : name -> option data -> DC
     | eqDc : name -> name -> DC
     | andDc : DC -> DC -> DC
     | orDc  : DC -> DC -> DC
-    | trDc  : (option data -> option data) -> name -> name -> DC 
+    | trDc  : (option data -> option data) -> name -> name -> DC
     | negDc : DC -> DC.
-
-    Check DC.
 
     Notation "a @ b" := (andDc a b)(no associativity, at level 69).
     Notation "a $ b" := (orDc a b) (no associativity, at level 69).
@@ -225,7 +223,7 @@ Module ConstraintAutomata.
     Fixpoint returnSmallerNumber (m:QArith_base.Q) (l:set QArith_base.Q) :=
       match l with
       | [] => m
-      | a::t => if ((a <? m) == true) then 
+      | a::t => if ((a <? m)) then 
                    returnSmallerNumber a t else returnSmallerNumber m t
       end.
     Open Scope Q_scope.
@@ -238,18 +236,18 @@ Module ConstraintAutomata.
     unfold returnSmallerNumber in H2. congruence.
     simpl in H2. split.
     discriminate.
-    destruct equiv_dec in H2. inversion e. exists a. simpl; auto. 
-    apply IHl in H2. destruct H2. destruct H3. destruct H3. exists x. split. simpl. right. exact H3.
-    exact H4.
+    case_eq (a <? m). intros. rewrite H3 in H2. exists a. simpl. auto.
+    intros. rewrite H3 in H2. apply IHl in H2. destruct H2. repeat (destruct H4).
+    exists x. split. simpl. right. exact H4. exact H5.
     Defined.
 
-    Definition hasData (p:port) (k:nat) :=
-      match (dataAssignment p(k)) with
+    Definition hasData (p:port) :=
+      match (dataAssignment p(index p)) with
       | Some a => true
       | None => false
       end.
 
-    Lemma hasDataSound : forall p, forall k, hasData p k = true <-> exists data, dataAssignment p(k) = Some data.
+    Lemma hasDataSound : forall p, hasData p = true <-> exists data, dataAssignment p((index p)) = Some data.
     Proof.
     intros. split.
     - intros Ha. unfold hasData in Ha. destruct dataAssignment. exists d. reflexivity.
@@ -277,9 +275,7 @@ Module ConstraintAutomata.
     - intros. destruct s. inversion H2. inversion H3. simpl. discriminate.
     Defined.
 
-  Check getAllThetaTimes.
-
-    Definition getNextThetaTime (l: set QArith_base.Q) :=
+    Definition minimum (l: set QArith_base.Q) :=
        returnSmallerNumber (1000000#1) (l).
 
     Program Fixpoint count_into_list (n:nat) :=
@@ -288,85 +284,78 @@ Module ConstraintAutomata.
       | S n => count_into_list n ++ [S n]
       end.
 
-    Definition thetaTime (s:set port) (k:nat) :=
-      getNextThetaTime(getAllThetaTimes s).
+    Definition thetaTime (s:set port) :=
+      minimum(getAllThetaTimes s).
 
-    Definition timeStampEqThetaTime (s:set port) (k:nat) (a:port) :=
-      if ((timeStamp a(index a) =? thetaTime (s) (k)) == true) then true else false.
+    Definition timeStampEqThetaTime (s:set port) (a:port) :=
+      (timeStamp a(index a) =? thetaTime (s)).
 
-    Lemma timeStampEqThetaTimeSound : forall s, forall k, forall a, timeStampEqThetaTime s k a = true <-> 
-      ((timeStamp a(index a) =? thetaTime (s) (k)) = true).
+    Lemma timeStampEqThetaTimeSound : forall s, forall a, timeStampEqThetaTime s a = true <-> 
+      ((timeStamp a(index a) =? thetaTime (s)) = true).
     Proof.
     split.
-    - intros. unfold timeStampEqThetaTime in H2. destruct equiv_dec in H2.
-      inversion e. reflexivity.
-      inversion H2.
+    - intros. unfold timeStampEqThetaTime in H2. exact H2.
     - intros. unfold timeStampEqThetaTime. rewrite H2. reflexivity.
     Defined.
 
-    Fixpoint thetaN (ca: set port) (k:nat) (s:set port) : set name := 
-      match s with
-      | a::t => if (hasData a k == true) then
-                  if (timeStampEqThetaTime ca k a == true) then
-                     id a :: thetaN ca k t
-                   else thetaN ca k t
-                else thetaN ca k t
+    Fixpoint thetaN (tds: set port) (tds2:set port) : set name := 
+      match tds2 with
+      | a::t => if (hasData a && timeStampEqThetaTime tds a ) then
+                    id a :: thetaN tds t
+                else thetaN tds t
       | []   => []
       end.
 
-    Lemma thetaNSound : forall ca, forall k, forall s, thetaN ca k s <> [] <-> 
-    (exists a, In a s /\ hasData a(k) = true /\ timeStampEqThetaTime ca k a = true).
+    Lemma thetaNSound : forall tds, forall tds2, thetaN tds tds2 <> [] <-> 
+    (exists a, In a tds2 /\ (hasData a) = true /\ timeStampEqThetaTime tds a = true).
     Proof.
     split.
-    - intros. induction s.
+    - intros. induction tds2.
     + simpl in H2. congruence.
-    + simpl in H2. destruct equiv_dec in H2. destruct equiv_dec in H2.
-      exists a. split. simpl;auto. split. inversion e. reflexivity. inversion e0. reflexivity.
-      apply IHs in H2. destruct H2. destruct H2. destruct H3. exists x. split. simpl;auto.
-      split. exact H3. exact H4.
-      apply IHs in H2. destruct H2.  destruct H2. destruct H3. exists x. split. simpl;auto.
-      split. exact H3. exact H4. 
-    -  intros. induction s. 
+    + simpl in H2. case_eq (hasData a). case_eq (timeStampEqThetaTime tds a).
+    { intros. exists a. split. simpl;auto. split. exact H4. exact H3. }
+    { intros. rewrite H4 in H2. rewrite H3 in H2. apply IHtds2 in H2. destruct H2. destruct H2.
+      destruct H5. exists x. split. simpl;auto. split. exact H5. exact H6. }
+    { intros. rewrite H3 in H2. apply IHtds2 in H2. destruct H2. destruct H2. destruct H4.
+      exists x. split. simpl;auto. split. exact H4. exact H5. }
+    -  intros. induction tds2. 
     + destruct H2.  destruct H2. inversion H2.
-    + simpl. destruct equiv_dec. destruct equiv_dec. discriminate.
-      apply IHs. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H3. rewrite <- H2 in H4. 
-      congruence. exists x. split. exact H2. exact H3.
-      apply IHs. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H3. rewrite <- H2 in H4. 
-      congruence. exists x. split. exact H2. exact H3. Defined.
+    + simpl. case_eq (hasData a). case_eq (timeStampEqThetaTime tds a). intros. discriminate.
+      intros. apply IHtds2. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H5. rewrite <- H2 in H5. 
+      congruence. exists x. split. exact H2. exact H5.
+      intros. apply IHtds2. destruct H2. destruct H2. simpl in H2. destruct H2. rewrite <- H2 in H4. destruct H4. 
+      congruence. exists x. split. exact H2. exact H4. Defined. 
 
-    Fixpoint portsWithData (ca: set port) (k:nat) (s:set port) : set((name * option data)) := 
-      match s with
-      | a::t => if (hasData a k == true) then
-                  if (timeStampEqThetaTime ca k a == true) then
-                     ((id a) , (dataAssignment a(index(a)))) :: portsWithData ca k t
-                   else portsWithData ca k t
-                else portsWithData ca k t
+    Fixpoint portsWithData (tds: set port) (tds2:set port) : set((name * option data)) := 
+      match tds2 with
+      | a::t => if (hasData a && timeStampEqThetaTime tds a) then
+                   ((id a) , (dataAssignment a(index(a)))) :: portsWithData tds t
+                else portsWithData tds t
       | []   => []
       end.
 
-    Lemma portsWithDataSound : forall ca, forall k, forall s, portsWithData ca k s <> [] <-> 
-    (exists a, In a s /\ hasData a(k) = true /\ timeStampEqThetaTime ca k a = true).
+    Lemma portsWithDataSound : forall tds, forall tds2, portsWithData tds tds2 <> [] <-> 
+    (exists a, In a tds2 /\ (hasData a) = true /\ timeStampEqThetaTime tds a = true).
     Proof.
     split.
-    - intros. induction s.
+    - intros. induction tds2.
     + simpl in H2. congruence.
-    + simpl in H2. destruct equiv_dec in H2. destruct equiv_dec in H2.
-      exists a. split. simpl;auto. split. inversion e. reflexivity. inversion e0. reflexivity.
-      apply IHs in H2. destruct H2. destruct H2. destruct H3. exists x. split. simpl;auto.
-      split. exact H3. exact H4.
-      apply IHs in H2. destruct H2.  destruct H2. destruct H3. exists x. split. simpl;auto.
-      split. exact H3. exact H4. 
-    -  intros. induction s. 
+    + simpl in H2. case_eq (hasData a). case_eq (timeStampEqThetaTime tds a).
+    { intros. exists a. split. simpl;auto. split. exact H4. exact H3. }
+    { intros. rewrite H4 in H2. rewrite H3 in H2. apply IHtds2 in H2. destruct H2. destruct H2.
+      destruct H5. exists x. split. simpl;auto. split. exact H5. exact H6. }
+    { intros. rewrite H3 in H2. apply IHtds2 in H2. destruct H2. destruct H2. destruct H4.
+      exists x. split. simpl;auto. split. exact H4. exact H5. }
+    -  intros. induction tds2. 
     + destruct H2.  destruct H2. inversion H2.
-    + simpl. destruct equiv_dec. destruct equiv_dec. discriminate.
-      apply IHs. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H3. rewrite <- H2 in H4. 
-      congruence. exists x. split. exact H2. exact H3.
-      apply IHs. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H3. rewrite <- H2 in H4. 
-      congruence. exists x. split. exact H2. exact H3. Defined.
+    + simpl. case_eq (hasData a). case_eq (timeStampEqThetaTime tds a). intros. discriminate.
+      intros. apply IHtds2. destruct H2. destruct H2. simpl in H2. destruct H2. destruct H5. rewrite <- H2 in H5. 
+      congruence. exists x. split. exact H2. exact H5.
+      intros. apply IHtds2. destruct H2. destruct H2. simpl in H2. destruct H2. rewrite <- H2 in H4. destruct H4. 
+      congruence. exists x. split. exact H2. exact H4. Defined. 
 
-    Definition thetaDelta (k : nat) (po: set port) := 
-      portsWithData po k po.
-    Check thetaDelta.
+    Definition thetaDelta (tds: set port) := 
+      portsWithData tds tds.
 
     Close Scope Q_scope.
 
@@ -386,67 +375,64 @@ Module ConstraintAutomata.
                 else derivativePortInvolved t a
       end.
 
-    Definition allDerivativesFromPortsInvolved (names: set name) (ports:set port) : set port :=
-      flat_map (derivativePortInvolved names) ports.
+    Definition allDerivativesFromPortsInvolved (names: set name) (tds:set port) : set port :=
+      flat_map (derivativePortInvolved names) tds.
 
-    Definition portsDerivative (names: set name) (input: set port) := 
-      allDerivativesFromPortsInvolved names input. 
+    Definition portsDerivative (names: set name) (tds: set port) := 
+      allDerivativesFromPortsInvolved names tds. 
 
-    Fixpoint portsOutsideTransition (input: port) (ports : set name) :=
-      match ports with
+    Fixpoint portsOutsideTransition (p: port) (portNames : set name) :=
+      match portNames with
        | [] => true
-       | a::t => if (id input <> a) then portsOutsideTransition input t else false
+       | a::t => if (id p <> a) then portsOutsideTransition p t else false
       end.
 
-    Lemma portsOutsideTransitionSound : forall input, forall ports, portsOutsideTransition input ports = false <->
-      (exists b, In b ports /\ (id input = b)).
+    Lemma portsOutsideTransitionSound : forall p, forall portNames, portsOutsideTransition p portNames = false <->
+      (exists b, In b portNames /\ (id p = b)).
     Proof.
     split.
-    - intros. induction ports.
+    - intros. induction portNames.
     + simpl in H2. inversion H2.
-    + simpl in H2. destruct nequiv_dec in H2. apply IHports in H2.
+    + simpl in H2. destruct nequiv_dec in H2. apply IHportNames in H2.
       repeat destruct H2. exists x. split.
       simpl;auto.
       exact H3.
       inversion e. exists a.
       split. simpl;auto.
       exact H3.
-    - intros. induction ports.
+    - intros. induction portNames.
     + repeat destruct H2.
-    + simpl. destruct nequiv_dec. apply IHports. repeat destruct H2. congruence. exists x. split; assumption.
+    + simpl. destruct nequiv_dec. apply IHportNames. repeat destruct H2. congruence. exists x. split; assumption.
       reflexivity. 
     Defined.
 
 
-    Fixpoint retrievePortsOutsideTransition (input: set port) (ports : set name) :=
-      match input with
+    Fixpoint retrievePortsOutsideTransition (tds: set port) (portNames : set name) :=
+      match tds with
       | [] => []
-      | a::x => if (portsOutsideTransition a ports) == true then a::retrievePortsOutsideTransition x ports
-                else retrievePortsOutsideTransition x ports
+      | a::x => if (portsOutsideTransition a portNames) then a::retrievePortsOutsideTransition x portNames
+                else retrievePortsOutsideTransition x portNames
       end.
-    Check retrievePortsOutsideTransition.
 
-    Lemma retrievePortsOutsideTransitionSound : forall input, forall ports,
-    retrievePortsOutsideTransition input ports <> [] <-> exists a, portsOutsideTransition a ports = true /\
-    In a input.
+    Lemma retrievePortsOutsideTransitionSound : forall tds, forall portNames,
+    retrievePortsOutsideTransition tds portNames <> [] <-> exists a, portsOutsideTransition a portNames = true /\
+    In a tds.
     Proof.
     split.
-    - intros. induction input.
+    - intros. induction tds.
     + simpl in H2. congruence.
-    + simpl in H2. destruct equiv_dec in H2. inversion e.
-      exists a. split. reflexivity.  simpl;auto.
-      apply IHinput in H2. destruct H2. exists x. destruct H2.
-      split. assumption.
-      simpl;auto.
-    - intros. induction input. destruct H2. destruct H2. 
+    + simpl in H2. case_eq (portsOutsideTransition a portNames).
+      intros. exists a. split. exact H3. simpl;auto.
+      intros. rewrite H3 in H2. apply IHtds in H2. destruct H2. exists x. destruct H2.
+      split. assumption. simpl;auto.
+    - intros. induction tds. destruct H2. destruct H2. 
     + inversion H3. 
-    + simpl. destruct equiv_dec.
-      discriminate. 
-      apply IHinput. destruct H2.
-      destruct H2. simpl in H3.
-      destruct H3. rewrite <- H3 in H2. congruence.
-      exists x. split. exact H2. exact H3. Defined.
-
+    + simpl. case_eq (portsOutsideTransition a portNames). discriminate.
+      intros.
+      apply IHtds. destruct H2.
+      destruct H2. simpl in H4.
+      destruct H4. rewrite <- H4 in H2. congruence.
+      exists x. split. exact H2. exact H4. Defined. 
 
     Fixpoint hasDataInThetaDelta (p: port) (thetadelta: set (name * option data)) :=
       match thetadelta with
@@ -483,83 +469,97 @@ Module ConstraintAutomata.
        exists x. repeat split;assumption.
     Defined.
 
-    Fixpoint checkPorts (t:set port) (thetadelta: set (name * option data)) :=
-      match t with
+    Fixpoint checkPorts (tds:set port) (thetadelta: set (name * option data)) :=
+      match tds with
       | [] => true
-      | a::x => if (negb (hasDataInThetaDelta a thetadelta) == true) then checkPorts x thetadelta
+      | a::x => if (negb (hasDataInThetaDelta a thetadelta)) then checkPorts x thetadelta
                 else false
       end.
 
-    Lemma checkPortsSound : forall t, forall thetadelta, checkPorts t thetadelta = false <->
-      exists a, In a t /\ negb (hasDataInThetaDelta a thetadelta) = false.
+    Lemma checkPortsSound : forall tds, forall thetadelta, checkPorts tds thetadelta = false <->
+      exists a, In a tds /\ negb (hasDataInThetaDelta a thetadelta) = false.
     Proof.
     split.
-    - intros. induction t.
+    - intros. induction tds.
     + inversion H2.
-    + simpl in H2. destruct equiv_dec in H2. apply IHt in H2. repeat destruct H2.
-      exists x. split. simpl;auto. exact H3.
-      exists a. destruct hasDataInThetaDelta. split. simpl;auto. reflexivity. simpl in c. congruence.
-    - intros. induction t.
+    + simpl in H2. case_eq (negb (hasDataInThetaDelta a thetadelta)). 
+      intros. rewrite H3 in H2. apply IHtds in H2. repeat destruct H2.
+      exists x. split. simpl;auto. exact H4.
+      exists a. destruct hasDataInThetaDelta. split. simpl;auto. reflexivity.  simpl in H3. congruence.
+    - intros. induction tds.
     + repeat destruct H2.
-    +  simpl. destruct equiv_dec. apply IHt. destruct H2. destruct H2. simpl in H2. destruct H2.
-      inversion e. rewrite H2 in H5. congruence.
-      exists x. split. exact H2. exact H3. reflexivity.
+    + simpl. case_eq (negb (hasDataInThetaDelta a thetadelta)). intros. apply IHtds. destruct H2. destruct H2. simpl in H2. destruct H2.
+      rewrite H2 in H3. congruence.
+      exists x. split. exact H2. exact H4. reflexivity.
       Defined.
 
-    Definition onlyPortsInvolvedContainsData (ports : set name) 
-      (k : nat) (input : set port) :=
-      checkPorts (retrievePortsOutsideTransition (input) ports) (thetaDelta (k) (input)).
+    Definition onlyPortsInvolvedContainsData (portNames : set name) (tds : set port) :=
+      checkPorts (retrievePortsOutsideTransition (tds) portNames) (thetaDelta (tds)).
 
-    Definition retrievePortsFromThetaN (k : nat) (input: set port) :=
-      thetaN (input) (k) (input).
+    Definition retrievePortsFromThetaN (tds: set port) :=
+      thetaN (tds) (tds).
 
-   Check retrievePortsFromThetaN.
-
-    Fixpoint step' (k : nat) (input : set port) (ports: set name)
-     (s: set(set name * DC * set(state))) :=
-     match s with
+    Fixpoint step' (tds : set port) (portNames: set name)
+     (transitions: set(set name * DC * set(state))) :=
+     match transitions with
      | [] => []
-     | a::t => if (set_eq (ports)((fst(fst(a))))) && 
-                  (onlyPortsInvolvedContainsData (fst(fst(a))) k input)
-                   && (evalCompositeDc (input) (snd(fst(a)))) == true then snd(a)++step' k input ports t
-                   else step' k input ports t
+     | a::t => if (set_eq (portNames)((fst(fst(a))))) && 
+                  (onlyPortsInvolvedContainsData (fst(fst(a))) tds)
+                   && (evalCompositeDc (tds) (snd(fst(a)))) then snd(a)++step' tds portNames t
+                   else step' tds portNames t
      end.
-    Check step'.
 
-    Lemma step'_sound : forall k, forall input, forall ports, forall s, step' k input ports s <> [] -> exists a,
-    In a s /\ (set_eq (ports)((fst(fst(a))))) && (onlyPortsInvolvedContainsData (fst(fst(a))) k input)
-                   && (evalCompositeDc (input) (snd(fst(a)))) = true.
+    Lemma step'_sound : forall tds, forall portNames, forall transitions, step' tds portNames transitions <> [] -> exists a,
+    In a transitions /\ (set_eq (portNames)((fst(fst(a))))) && (onlyPortsInvolvedContainsData (fst(fst(a))) tds)
+                   && (evalCompositeDc (tds) (snd(fst(a)))) = true.
     Proof. 
-    - intros. induction s. simpl in H2. congruence. simpl in H2. destruct equiv_dec in H2. inversion e.
-    + exists a. split. simpl;auto. reflexivity.
-    + apply IHs in H2. destruct H2. destruct H2. exists x. split. simpl;auto. exact H3. Defined.
+    - intros. induction transitions. simpl in H2. congruence. simpl in H2. 
+    case_eq (set_eq (portNames)((fst(fst(a))))).  
+    case_eq (onlyPortsInvolvedContainsData (fst(fst(a))) tds).
+    case_eq (evalCompositeDc tds (snd (fst a))). intros.
+    + exists a. split. simpl;auto. rewrite H3. rewrite H4. rewrite H5. reflexivity.
+    + intros. rewrite H3 in H2. rewrite H4 in H2. rewrite H5 in H2. apply IHtransitions in H2.
+      destruct H2. destruct H2. exists x. split. simpl;auto. exact H6.
+    + intros. rewrite H3 in H2. rewrite H4 in H2. apply IHtransitions in H2.
+      destruct H2. destruct H2. exists x. split. simpl;auto. exact H5.
+    + intros. rewrite H3 in H2. apply IHtransitions in H2.
+      destruct H2. destruct H2. exists x. split. simpl;auto. exact H4.
+    Defined.
 
-    Definition stepAux (ca:constraintAutomata) (k : nat) (input:set port) (ports:set name) (s: state) :=
-      step' k input ports (T ca s).
+    Definition stepAux (ca:constraintAutomata) (tds:set port) (portNames:set name) (s: state) :=
+      step' tds portNames (T ca s).
 
     (* We apply the step to every state in the given configuration:                     *)
-    Definition stepa (ca:constraintAutomata) (s: set state) (k : nat) (input:set port) (ports: set name):=
-     (ports, flat_map (stepAux ca k input ports) s).
+    Definition stepa (ca:constraintAutomata) (s: set state) (tds:set port) (portNames: set name):=
+     (portNames, flat_map (stepAux ca tds portNames) s).
 
-    Check stepa.
-
-    Definition step (ca:constraintAutomata) (s: set state) (k : nat) (input:set port) :=
-      stepa ca s k input (retrievePortsFromThetaN k input).
-
+    Definition step (ca:constraintAutomata) (s: set state) (tds:set port) :=
+      stepa ca s tds (retrievePortsFromThetaN tds).
 
     Definition run' (ca:constraintAutomata)  : 
       set port -> list nat -> set state -> set (set state) -> set (set state) :=
-      fix rec input k acc resp :=
+      fix rec tds k acc resp :=
         match k with 
           | [] => resp
-          | a::t => resp ++ [snd (step ca acc a input)]
+          | a::t => resp ++ [snd (step ca acc tds)]
                     |> rec
-                      (flat_map(derivativePortInvolved(fst((step ca acc a input)))) input) t (snd (step ca acc a input))
+                      (flat_map(derivativePortInvolved(fst((step ca acc tds)))) tds) t (snd (step ca acc tds))
         end.
 
-    Definition run (ca:constraintAutomata) (input: set port) (k : nat) :=
-      run' ca input (count_into_list k) (Q0 ca) [Q0 ca].
+    Definition run (ca:constraintAutomata) (tds: set port) (k : nat) :=
+      run' ca tds (count_into_list k) (Q0 ca) [Q0 ca].
 
+  (* We define some functions to retrieve data from transitions, in order to prove *)
+  (* properties about instantiated automata's behavior                             *)
+
+  Fixpoint retrievePortsFromRespTransitions (s : set (set (name) * DC * set(state))) :=
+    match s with
+    | [] => []
+    | a::t => set_union equiv_dec (fst (fst a) ) (retrievePortsFromRespTransitions t)
+    end.
+
+  Definition retrivePortsFromSingleTransition (ca: constraintAutomata) (s : state) :=
+    retrievePortsFromRespTransitions (ConstraintAutomata.T ca s).
 
   End ConstraintAutomata.
 End ConstraintAutomata.
@@ -573,59 +573,58 @@ Module ProductAutomata.
     Definition constraintAutomata2 := ConstraintAutomata.constraintAutomata state2 name data.
     Definition DC := ConstraintAutomata.DC name data.
 
-    Definition resultingStatesSet (a1:ConstraintAutomata.constraintAutomata state name data) (a2:ConstraintAutomata.constraintAutomata state2 name data) :=
+    Definition statesSet (a1:ConstraintAutomata.constraintAutomata state name data) (a2:ConstraintAutomata.constraintAutomata state2 name data) :=
       list_prod (ConstraintAutomata.Q a1) (ConstraintAutomata.Q a2).
-    Check resultingStatesSet.
 
-    Lemma resultingStatesSetSound :forall a1,forall a2, forall a, forall b,
-      In (a,b) (resultingStatesSet a1 a2) <-> In a (ConstraintAutomata.Q a1) /\ In b (ConstraintAutomata.Q a2).
+    Lemma statesSetSound :forall a1,forall a2, forall a, forall b,
+      In (a,b) (statesSet a1 a2) <-> In a (ConstraintAutomata.Q a1) /\ In b (ConstraintAutomata.Q a2).
     Proof.
     intros. apply in_prod_iff. 
     Defined.
 
-    Definition resultingNameSet (a1:ConstraintAutomata.constraintAutomata state name data) (a2:ConstraintAutomata.constraintAutomata state2 name data) :=
+    Definition nameSet (a1:ConstraintAutomata.constraintAutomata state name data) (a2:ConstraintAutomata.constraintAutomata state2 name data) :=
       set_union equiv_dec (ConstraintAutomata.N a1) (ConstraintAutomata.N a2).
     
-    Lemma resultingNameSetSound : forall a1, forall a2, forall a,
-      In a (resultingNameSet a1 a2) <-> In a (ConstraintAutomata.N a1) \/ In a (ConstraintAutomata.N a2).
+    Lemma nameSetSound : forall a1, forall a2, forall a,
+      In a (nameSet a1 a2) <-> In a (ConstraintAutomata.N a1) \/ In a (ConstraintAutomata.N a2).
     Proof.
     intros. apply set_union_iff.
     Defined.
 
-    Definition resultingInitialStatesSet (a1: constraintAutomata) (a2: constraintAutomata2) :=
+    Definition initialStates (a1: constraintAutomata) (a2: constraintAutomata2) :=
       list_prod (ConstraintAutomata.Q0 a1) (ConstraintAutomata.Q0 a2).
 
-    Lemma resultingInitialStatesSetSound : forall a1, forall a2, forall a, forall b,
-      In (a,b) (resultingInitialStatesSet a1 a2) <-> In a (ConstraintAutomata.Q0 a1) /\ In b (ConstraintAutomata.Q0 a2).
+    Lemma initialStatesSound : forall a1, forall a2, forall a, forall b,
+      In (a,b) (initialStates a1 a2) <-> In a (ConstraintAutomata.Q0 a1) /\ In b (ConstraintAutomata.Q0 a2).
     Proof.
     intros. apply in_prod_iff. 
     Defined.
 
   
-    Definition evaluateConditionsFirstRule (t1 : ( set(name) * DC * set(state))) (t2 : (set(name) * DC * set(state2)))
+    Definition condR1 (t1 : ( set(name) * DC * set(state))) (t2 : (set(name) * DC * set(state2)))
       (names1 : set name) (names2: set name) :=
-      if set_eq (set_inter equiv_dec (names2) (fst(fst(t1)))) (set_inter equiv_dec (names1) (fst(fst(t2)))) then true else false.
+      set_eq (set_inter equiv_dec (names2) (fst(fst(t1)))) (set_inter equiv_dec (names1) (fst(fst(t2)))).
 
-    Lemma evaluateConditionsFirstRuleSound : forall t1, forall t2, forall names1, forall names2,
-    evaluateConditionsFirstRule t1 t2 names1 names2 = true <-> 
+    Lemma condR1Sound : forall t1, forall t2, forall names1, forall names2,
+    condR1 t1 t2 names1 names2 = true <-> 
     set_eq (set_inter equiv_dec (names2) (fst(fst(t1)))) (set_inter equiv_dec (names1) (fst(fst(t2)))) = true.
     Proof. 
     split. 
-    - intros. unfold evaluateConditionsFirstRule in H2. case_eq (set_eq (set_inter equiv_dec names2 (fst (fst t1)))
+    - intros. unfold condR1 in H2. case_eq (set_eq (set_inter equiv_dec names2 (fst (fst t1)))
          (set_inter equiv_dec names1 (fst (fst t2)))).
     + intros. reflexivity.
-    + intros. unfold evaluateConditionsFirstRule in H3. rewrite H4 in H3. discriminate.
-    - intros. unfold evaluateConditionsFirstRule. rewrite H3. reflexivity.
+    + intros. unfold condR1 in H3. rewrite H4 in H3. discriminate.
+    - intros. unfold condR1. rewrite H3. reflexivity.
     Defined.
 
-    Fixpoint buildResultingTransitionFromStatesRule1 (p1: state) (p2: set state2) :=
+    Fixpoint unfoldStatesR1 (p1: state) (p2: set state2) :=
       match p2 with
       | [] => []
-      | a::t => (p1,a)::
-                buildResultingTransitionFromStatesRule1 p1 t
+      | a::t => (p1,a)::unfoldStatesR1 p1 t
       end.
-    Lemma buildResultingTransitionFromStatesRule1Sound : forall p1, forall p2, 
-      buildResultingTransitionFromStatesRule1 p1 p2 <> [] <-> p2 <> [].
+
+    Lemma unfoldStatesR1Sound : forall p1, forall p2, 
+      unfoldStatesR1 p1 p2 <> [] <-> p2 <> [].
     Proof.
     split.
     - intros. destruct p2.
@@ -635,224 +634,210 @@ Module ProductAutomata.
     + congruence.
     + discriminate.
     Defined.
-    Check buildResultingTransitionFromStatesRule1.
 
-    Fixpoint buildResultingTransitionFromStatesBothTransitionsRule1 (p1: set state) (p2: set state2) :=
+    Fixpoint resultingStatesTransition (p1: set state) (p2: set state2) :=
       match p1 with
       | [] => []
-      | a::t => buildResultingTransitionFromStatesRule1 a p2++
-                buildResultingTransitionFromStatesBothTransitionsRule1 t p2
+      | a::t => unfoldStatesR1 a p2++
+                resultingStatesTransition t p2
       end.
-    Check buildResultingTransitionFromStatesBothTransitionsRule1.
 
-    Definition buildResultingTransitionFromSingleStateRule1 (Q1: state) (Q2: state2)
+    Definition singleTransitionR1 (Q1: state) (Q2: state2)
       (transition1: (set (name) * DC * (set(state)))) 
       (transition2: (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :  (set (state * state2 * ((set name * DC) * set (state * state2)))) :=
-      if (evaluateConditionsFirstRule (transition1) (transition2) (names1) (names2)) == true then
+      if (condR1 (transition1) (transition2) (names1) (names2)) then
                   [((Q1,Q2),(((set_union equiv_dec (fst(fst(transition1))) (fst(fst(transition2)))),ConstraintAutomata.andDc (snd(fst(transition1))) 
-                            (snd(fst(transition2)))),(buildResultingTransitionFromStatesBothTransitionsRule1(snd(transition1)) (snd(transition2)))))]
+                            (snd(fst(transition2)))),(resultingStatesTransition(snd(transition1)) (snd(transition2)))))]
                 else [].
 
-    Lemma buildResultingTransitionFromSingleStateRule1Sound : forall Q1, forall Q2, forall transition1, 
-    forall transition2, forall names1, forall names2, buildResultingTransitionFromSingleStateRule1 Q1 Q2 transition1 transition2
-    names1 names2 <> [] <-> (evaluateConditionsFirstRule (transition1) (transition2) (names1) (names2)) = true.
+    Lemma singleTransitionR1Sound : forall Q1, forall Q2, forall transition1, 
+    forall transition2, forall names1, forall names2, singleTransitionR1 Q1 Q2 transition1 transition2
+    names1 names2 <> [] <-> (condR1 (transition1) (transition2) (names1) (names2)) = true.
     Proof.
     split.
-    - intros. unfold buildResultingTransitionFromSingleStateRule1 in H3. destruct equiv_dec. inversion e. reflexivity. congruence.
-    - intros. unfold buildResultingTransitionFromSingleStateRule1. rewrite H3. simpl. discriminate.
+    - intros. unfold singleTransitionR1 in H3. 
+      case_eq (condR1 (transition1) (transition2) (names1) (names2)). reflexivity. 
+      intros. rewrite H4 in H3. congruence.
+    - intros. unfold singleTransitionR1. rewrite H3. discriminate.
     Defined.
 
-    Check buildResultingTransitionFromSingleStateRule1.
-
-    Fixpoint buildTransitionFromMoreTransitionsRule1 (Q1: state) (Q2: state2)
+    Fixpoint moreTransitionsR1 (Q1: state) (Q2: state2)
       (transition1: (set (name) * DC * (set(state)))) 
       (transition2: set (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :=
       match transition2 with
       | [] => []
-      | a::t => (buildResultingTransitionFromSingleStateRule1 Q1 Q2 transition1 a names1 names2)++
-                (buildTransitionFromMoreTransitionsRule1 Q1 Q2 transition1 t names1 names2)
+      | a::t => (singleTransitionR1 Q1 Q2 transition1 a names1 names2)++
+                (moreTransitionsR1 Q1 Q2 transition1 t names1 names2)
       end.
-    Check buildTransitionFromMoreTransitionsRule1.
 
-    Fixpoint buildTransitionFromMoreAllTransitionsSingleState (Q1: state) (Q2: state2)
+    Fixpoint transitionsForOneStateR1 (Q1: state) (Q2: state2)
       (transition1: set (set (name) * DC * (set(state)))) 
       (transition2: set (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :=
       match transition1 with
       | [] => []
-      | a::t => (buildTransitionFromMoreTransitionsRule1 Q1 Q2 a transition2 names1 names2)++
-                (buildTransitionFromMoreAllTransitionsSingleState Q1 Q2 t transition2 names1 names2)
+      | a::t => (moreTransitionsR1 Q1 Q2 a transition2 names1 names2)++
+                (transitionsForOneStateR1 Q1 Q2 t transition2 names1 names2)
       end.
 
-    Fixpoint iterateOverStatesBuildingTransitionsOne (Q1: state) (Q2: set state2)
+    Fixpoint iterateOverA2R1 (Q1: state) (Q2: set state2)
       (transition1: state -> set (set (name) * DC * (set(state)))) 
       (transition2: state2 -> set (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :=
       match Q2 with
       | [] => []
-      | a::t => (buildTransitionFromMoreAllTransitionsSingleState Q1 a (transition1 Q1) (transition2 a) names1 names2)++
-                (iterateOverStatesBuildingTransitionsOne Q1 t transition1 transition2 names1 names2)
+      | a::t => (transitionsForOneStateR1 Q1 a (transition1 Q1) (transition2 a) names1 names2)++
+                (iterateOverA2R1 Q1 t transition1 transition2 names1 names2)
       end.
 
-    Fixpoint buildAllTransitionsRule1 (Q1: set state) (Q2: set state2)
+    Fixpoint allTransitionsR1 (Q1: set state) (Q2: set state2)
       (transition1: state -> set (set (name) * DC * (set(state)))) 
       (transition2: state2 -> set (set (name) * DC * (set(state2)))) 
       (names1 : set name) (names2: set name) :=
       match Q1 with
       | [] => []
-      | a::t => (iterateOverStatesBuildingTransitionsOne a Q2 transition1 transition2 names1 names2)++
-                (buildAllTransitionsRule1 t Q2 transition1 transition2 names1 names2)
+      | a::t => (iterateOverA2R1 a Q2 transition1 transition2 names1 names2)++
+                (allTransitionsR1 t Q2 transition1 transition2 names1 names2)
     end. 
     Definition transitionsRule1 (a1: constraintAutomata) (a2: constraintAutomata2) := 
-      buildAllTransitionsRule1 (ConstraintAutomata.Q a1) (ConstraintAutomata.Q a2) 
-                               (ConstraintAutomata.T a1) (ConstraintAutomata.T a2) 
-                               (ConstraintAutomata.N a1) (ConstraintAutomata.N a2).
-    Check transitionsRule1.
+      allTransitionsR1 (ConstraintAutomata.Q a1) (ConstraintAutomata.Q a2) 
+                       (ConstraintAutomata.T a1) (ConstraintAutomata.T a2) 
+                       (ConstraintAutomata.N a1) (ConstraintAutomata.N a2).
 
-    Definition intersectionNAndNames (tr: set (name) * DC * set(state)) (names2: set name) :=
+    Definition condR2 (tr: set (name) * DC * set(state)) (names2: set name) :=
       if (set_inter equiv_dec (fst(fst(tr))) names2) == nil then true else false.
 
-    Lemma intersectionNAndNamesSound : forall tr, forall names2, intersectionNAndNames tr names2 = true <->
+    Lemma condR2Sound : forall tr, forall names2, condR2 tr names2 = true <->
       set_inter equiv_dec (fst(fst(tr))) names2 = nil.
     Proof.
     split.
-    - intros. unfold intersectionNAndNames in H3. destruct equiv_dec in H3. inversion e. reflexivity.
+    - intros. unfold condR2 in H3. destruct equiv_dec in H3. inversion e. reflexivity.
       inversion H3.
-    - intros. unfold intersectionNAndNames. rewrite H3. reflexivity.
+    - intros. unfold condR2. rewrite H3. reflexivity.
     Defined.
 
-    Fixpoint iterateOverOutboundStatesRule2  (p1: set state) (q2: state2) :=
+    Fixpoint outboundStatesR2  (p1: set state) (q2: state2) :=
       match p1 with
       | [] => []
-      | a::t => set_add equiv_dec ((a,q2))(iterateOverOutboundStatesRule2 t q2)
+      | a::t => set_add equiv_dec ((a,q2))(outboundStatesR2 t q2)
       end.
-    Check iterateOverOutboundStatesRule2.
 
-    Fixpoint iterateOverOutboundStatesRule3 (q1: state) (p2: set state2) :=
+    Fixpoint outboundStatesR3 (q1: state) (p2: set state2) :=
       match p2 with
       | [] => []
-      | a::t => set_add equiv_dec ((q1,a))(iterateOverOutboundStatesRule3 q1 t)
+      | a::t => set_add equiv_dec ((q1,a))(outboundStatesR3 q1 t)
       end.
-    Check iterateOverOutboundStatesRule3.
 
-    Fixpoint createSingleTransition (q1:state) (transition : (set (name) * DC * (set(state)))) (a2States : set state2) (a2Names: set name)   
+    Fixpoint singleTransitionR2 (q1:state) (transition : (set (name) * DC * (set(state)))) (a2States : set state2) (a2Names: set name)   
     : set (state * state2 * ((set name * DC) * set (state * state2))) :=
     match a2States with
     | [] => []
-    | q2::t => if (intersectionNAndNames (transition) (a2Names) == true) then 
-                 ((q1,q2),((fst(transition)), (iterateOverOutboundStatesRule2 (snd(transition)) (q2))))::createSingleTransition q1 transition t a2Names
-                else createSingleTransition q1 transition t a2Names
+    | q2::t => if (condR2 (transition) (a2Names)) then 
+                 ((q1,q2),((fst(transition)), (outboundStatesR2 (snd(transition)) (q2))))::singleTransitionR2 q1 transition t a2Names
+                else singleTransitionR2 q1 transition t a2Names
     end.
-    Check createSingleTransition.
 
-    Lemma createSingleTransitionSound : forall q1, forall transition, forall a2States, forall a2Names, 
-      createSingleTransition q1 transition a2States a2Names <> [] <-> intersectionNAndNames (transition) (a2Names) = true /\ a2States <> [].
+    Lemma singleTransitionR2Sound : forall q1, forall transition, forall a2States, forall a2Names, 
+      singleTransitionR2 q1 transition a2States a2Names <> [] <-> condR2 (transition) (a2Names) = true /\ a2States <> [].
     Proof.
     split.
-    - intros. induction a2States. unfold createSingleTransition in H3. congruence.
-      simpl in H3. case_eq (intersectionNAndNames transition a2Names). intros. split. reflexivity. congruence.
+    - intros. induction a2States. unfold singleTransitionR2 in H3. congruence.
+      simpl in H3. case_eq (condR2 transition a2Names). intros. split. reflexivity. congruence.
       intros. rewrite H4 in H3. simpl in H3. apply IHa2States in H3. destruct H3. congruence.
-    - intros. induction a2States. unfold createSingleTransition. destruct H3. congruence.
-      simpl. destruct equiv_dec. discriminate. apply IHa2States. destruct H3. congruence.
+    - intros. induction a2States. unfold singleTransitionR2. destruct H3. congruence.
+      simpl. case_eq (condR2 transition a2Names). discriminate. intros. destruct H3. congruence.
     Defined.
      
-    Definition createTransitionRule2 (q1:state) : set (set (name) * DC * (set(state))) -> 
+    Definition transitionR2 (q1:state) : set (set (name) * DC * (set(state))) -> 
       set state2 -> set name 
       -> set (state * state2 * ((set name * DC) * set (state * state2))) :=
       fix rec transitions q2 names2 :=
         match transitions with
         | [] => [] 
-        | a::t =>  (createSingleTransition q1 a q2 names2)++(rec t q2 names2)
+        | a::t =>  (singleTransitionR2 q1 a q2 names2)++(rec t q2 names2)
         end.
-    Check createTransitionRule2.
 
-    Fixpoint createTransitionRule2AllStates (Q1: set state) (transitions: state -> set (set (name) * DC * (set(state)))) 
+    Fixpoint allTransitionsR2 (Q1: set state) (transitions: state -> set (set (name) * DC * (set(state)))) 
       (names2: set name) (a2States : set state2) := 
       match Q1 with
       | [] => []
-      | a::t => (createTransitionRule2 a (transitions(a)) a2States names2)++(createTransitionRule2AllStates t transitions names2 a2States)
+      | a::t => (transitionR2 a (transitions(a)) a2States names2)++(allTransitionsR2 t transitions names2 a2States)
       end.
-    Check createTransitionRule2.
 
     Definition transitionsRule2 (a1: constraintAutomata) (a2 : constraintAutomata2)  :=
-      (createTransitionRule2AllStates (ConstraintAutomata.Q a1) (ConstraintAutomata.T a1) 
+      (allTransitionsR2 (ConstraintAutomata.Q a1) (ConstraintAutomata.T a1) 
                                       (ConstraintAutomata.N a2) (ConstraintAutomata.Q a2)).
-    Check transitionsRule2.
 
-    Definition intersectionNAndNames2 (tr: set (name) * DC * set(state2)) (names1: set name) :=
+    Definition condR3 (tr: set (name) * DC * set(state2)) (names1: set name) :=
       if (set_inter equiv_dec (fst(fst(tr))) names1) == nil then true else false.
 
-    Lemma intersectionNAndName2Sound : forall tr, forall names1, intersectionNAndNames2 tr names1 = true <->
+    Lemma condR3Sound : forall tr, forall names1, condR3 tr names1 = true <->
       set_inter equiv_dec (fst(fst(tr))) names1 = nil.
     Proof.
     split.
-    - intros. unfold intersectionNAndNames2 in H3. destruct equiv_dec in H3. inversion e. reflexivity.
+    - intros. unfold condR3 in H3. destruct equiv_dec in H3. inversion e. reflexivity.
       inversion H3.
-    - intros. unfold intersectionNAndNames2. rewrite H3. reflexivity.
+    - intros. unfold condR3. rewrite H3. reflexivity.
     Defined.
 
-    Fixpoint createSingleTransitionRule3 (q2:state2) (transition : (set (name) * DC * (set(state2)))) (a2States : set state) (a1Names: set name)   
+    Fixpoint singleTransitionR3 (q2:state2) (transition : (set (name) * DC * (set(state2)))) (a2States : set state) (a1Names: set name)   
     : set (state * state2 * ((set name * DC) * set (state * state2))) :=
     match a2States with
     | [] => []
-    | q1::t => if (intersectionNAndNames2 (transition) (a1Names) == true) then 
-                 ((q1,q2),((fst(transition)), (iterateOverOutboundStatesRule3 (q1) (snd(transition)))))::createSingleTransitionRule3 q2 transition t a1Names
-                else createSingleTransitionRule3 q2 transition t a1Names
+    | q1::t => if (condR3 (transition) (a1Names)) then 
+                 ((q1,q2),((fst(transition)), (outboundStatesR3 (q1) (snd(transition)))))::singleTransitionR3 q2 transition t a1Names
+                else singleTransitionR3 q2 transition t a1Names
     end.
 
-    Lemma createSingleTransitionRule3Sound : forall q2, forall transition, forall a1States, forall a1Names,
-    createSingleTransitionRule3 q2 transition a1States a1Names <> [] <-> 
-    intersectionNAndNames2 (transition) (a1Names) = true /\ a1States <> [].
+    Lemma singleTransitionR3Sound : forall q2, forall transition, forall a1States, forall a1Names,
+    singleTransitionR3 q2 transition a1States a1Names <> [] <-> 
+    condR3 (transition) (a1Names) = true /\ a1States <> [].
     Proof.
     split. 
     - intros. induction a1States. simpl in H3. congruence.
-    simpl in H3. destruct equiv_dec in H3. inversion e. split. reflexivity. discriminate.
-    apply IHa1States in H3. destruct H3. congruence.
+    simpl in H3. case_eq (condR3 (transition) (a1Names)). split. reflexivity. discriminate.
+    intros. rewrite H4 in H3. apply IHa1States in H3. destruct H3. congruence.
     - intros. induction a1States. destruct H3. congruence.
-    simpl. destruct equiv_dec. discriminate.
+    simpl. case_eq (condR3 (transition) (a1Names)). discriminate.
     destruct H3. congruence.
     Defined.
   
-    Definition createTransitionRule3 (q2:state2) : set (set (name) * DC * (set(state2))) -> 
+    Definition transitionR3 (q2:state2) : set (set (name) * DC * (set(state2))) -> 
       set state -> set name  
       -> set (state * state2 * ((set name * DC) * set (state * state2))) :=
       fix rec transitions q1 names1 :=
         match transitions with
         | [] => [] 
-        | a::t =>  (createSingleTransitionRule3 q2 a q1 names1)++(rec t q1 names1)
+        | a::t =>  (singleTransitionR3 q2 a q1 names1)++(rec t q1 names1)
         end.
-    Check createTransitionRule3.
 
-    Fixpoint createTransitionRule3AllStates (Q2: set state2) (transitions: state2 -> set (set (name) * DC * (set(state2)))) 
+    Fixpoint allTransitionsR3 (Q2: set state2) (transitions: state2 -> set (set (name) * DC * (set(state2)))) 
       (names1: set name) (a1States : set state) := 
       match Q2 with
       | [] => []
-      | a::t => (createTransitionRule3 a (transitions(a)) a1States names1)++(createTransitionRule3AllStates t transitions names1 a1States)
+      | a::t => (transitionR3 a (transitions(a)) a1States names1)++(allTransitionsR3 t transitions names1 a1States)
       end.
 
     Definition transitionsRule3 (a1: constraintAutomata) (a2 : constraintAutomata2)  :=
-      (createTransitionRule3AllStates (ConstraintAutomata.Q a2) (ConstraintAutomata.T a2) 
-                                      (ConstraintAutomata.N a1) (ConstraintAutomata.Q a1)).
-    Check transitionsRule3. 
+      (allTransitionsR3 (ConstraintAutomata.Q a2) (ConstraintAutomata.T a2) 
+                       (ConstraintAutomata.N a1) (ConstraintAutomata.Q a1)).
 
     Definition buildTransitionRuleProductAutomaton (a1: constraintAutomata) (a2: constraintAutomata2) :=
       (transitionsRule1 a1 a2)++(transitionsRule2 a1 a2)++(transitionsRule3 a1 a2).
-    Check buildTransitionRuleProductAutomaton.
 
   
     Variable a1 : (constraintAutomata).
     Variable a2 : (constraintAutomata2).
 
     Fixpoint recoverResultingStatesPA (st: (state * state2)) 
-      (t:set (state * state2 * ((set name * DC) * set (state * state2))))(*: set ((state * state)) *):=
+      (t:set (state * state2 * ((set name * DC) * set (state * state2)))) :=
       match t with
       | [] => []
       | a::tx => if st == fst((a)) then (snd((a))::recoverResultingStatesPA st tx)
                  else recoverResultingStatesPA st tx
       end.
-    Check recoverResultingStatesPA.
 
     Lemma recoverResultingStatesPASound : forall st, forall t, recoverResultingStatesPA st t <> [] <->
       exists a, In a t /\ st = fst(a).
@@ -867,10 +852,10 @@ Module ProductAutomata.
     Defined.
 
     Definition transitionPA (s: (state * state2)) :=
-      recoverResultingStatesPA s (buildTransitionRuleProductAutomaton a1 a2). 
+      Eval compute in recoverResultingStatesPA s (buildTransitionRuleProductAutomaton a1 a2). 
 
     Definition buildPA := ConstraintAutomata.CA 
-      (resultingStatesSet a1 a2) (resultingNameSet a1 a2) (transitionPA) (resultingInitialStatesSet a1 a2). 
+      (statesSet a1 a2) (nameSet a1 a2) (transitionPA) (initialStates a1 a2). 
 
   End ProductAutomata.
 End ProductAutomata.

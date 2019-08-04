@@ -1,7 +1,7 @@
 Require Import CaMain.
 
 Open Scope Q_scope.
-Axiom orderZofNat : forall n, forall a, Z.of_nat (S n) + a # 1 <= Z.of_nat (S (S n)) + a # 1.
+Axiom orderZofNat : forall n, forall a, Z.of_nat (S n) + a # 1 < Z.of_nat (S (S n)) + a # 1.
 Close Scope Q_scope.
 
 (* Implementation Examples of canonical Constraint Automata as presented by Baier et al.'s paper *)
@@ -33,9 +33,9 @@ Close Scope Q_scope.
     end.
 
   Lemma timeStampTestHoldsSync : forall n, 
-    Qle (timeStampTestSync n) (timeStampTestSync (S n)). 
+    Qlt (timeStampTestSync n) (timeStampTestSync (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampTestSync. discriminate. 
+  intros. destruct n. unfold timeStampTestSync. simpl. Search (Qlt). reflexivity. 
   unfold timeStampTestSync.
   apply orderZofNat. Defined.
 
@@ -64,6 +64,7 @@ Close Scope Q_scope.
         ConstraintAutomata.portCond := timeStampTestHoldsSync;
         ConstraintAutomata.index := 0 |}.
 
+  Check ConstraintAutomata.tDc.
 
   Definition syncCaBehavior (s: syncState) :=
     match s with
@@ -114,26 +115,26 @@ Close Scope Q_scope.
   Definition timeStampLossyA (n:nat) : QArith_base.Q :=
     match n with
     | 0 =>  1#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 2#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 69#1
     end.
 
   Definition timeStampLossyB (n:nat) : QArith_base.Q :=
     match n with
     | 0 =>  1#1
-    | S n =>  Z.of_N (N.of_nat(S n)) + 2#1
+    | S n =>  Z.of_N (N.of_nat(S n)) + 3#1
     end.
 
   Lemma timeStampTestHoldsLossyA: forall n, 
-    Qle (timeStampLossyA n) (timeStampLossyA (S n)). 
+    Qlt (timeStampLossyA n) (timeStampLossyA (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampLossyA. discriminate. 
+  intros. destruct n. unfold timeStampLossyA. reflexivity. 
   unfold timeStampLossyA.
   apply orderZofNat. Defined.
 
   Lemma timeStampTestHoldsLossyB: forall n, 
-    Qle (timeStampLossyB n) (timeStampLossyB (S n)).
+    Qlt (timeStampLossyB n) (timeStampLossyB (S n)).
   Proof.
-  intros. destruct n. unfold timeStampLossyB. discriminate. 
+  intros. destruct n. unfold timeStampLossyB. reflexivity. 
   unfold timeStampLossyB.
   apply orderZofNat. Defined.
 
@@ -165,7 +166,7 @@ Close Scope Q_scope.
         ConstraintAutomata.index := 0 |}.
 
   Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10. (*does not accept the TDS composed by portA and portB because
-                                                                            B has data in theta.time, which is not comprised by the automaton's transitions *)
+                                                                         only B has data in theta.time(2), which is not comprised by the automaton's transitions *)
   
   (* FIFO CA *)
 
@@ -219,26 +220,26 @@ Close Scope Q_scope.
     | S n =>  Z.of_N (N.of_nat(S n)) + 10#1
     end.
 
-  Lemma timeStampTestFIFOAHolds : forall n, Qle (timeStampFIFOA n) (timeStampFIFOA (S n)).
+  Lemma timeStampTestFIFOAHolds : forall n, Qlt (timeStampFIFOA n) (timeStampFIFOA (S n)).
   Proof.
-  intros. destruct n. unfold timeStampFIFOA. discriminate.
-  unfold timeStampFIFOA. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. unfold Qle. apply orderZofNat.  Defined.
+  intros. destruct n. unfold timeStampFIFOA. reflexivity.
+  unfold timeStampFIFOA. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. unfold Qlt. apply orderZofNat.  Defined.
 
   Lemma timeStampTestFIFOBHolds : forall n, 
-    Qle (timeStampFIFOB n) (timeStampFIFOB (S n)). 
+    Qlt (timeStampFIFOB n) (timeStampFIFOB (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampFIFOB. discriminate.
-  unfold timeStampFIFOB. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. unfold Qle. apply orderZofNat.  Defined.
+  intros. destruct n. unfold timeStampFIFOB. reflexivity.
+  unfold timeStampFIFOB. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. unfold Qlt. apply orderZofNat.  Defined.
 
   Definition portAF := {|
         ConstraintAutomata.id := AF;
@@ -271,6 +272,17 @@ Close Scope Q_scope.
     ConstraintAutomata.Q0 := [q0F]
   |}.
 
+  Lemma dataInAF: forall s, In AF (ConstraintAutomata.retrievePortsFromRespTransitions (ConstraintAutomata.T oneBoundedFIFOCA s)) <->
+    s = q0F.
+  Proof.
+  split. 
+  - intros. destruct s. 
+    + reflexivity.
+    + simpl in H. inversion H. discriminate. inversion H0.
+    + simpl in H. inversion H. discriminate. inversion H0.
+  - intros. rewrite H. simpl. left. reflexivity.
+  Defined.
+
   Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 8.
 
   (* SyncDrain CA *)
@@ -301,10 +313,10 @@ Close Scope Q_scope.
     end.
 
   Lemma timeStampSyncDrainHolds : forall n, 
-    Qle (timeStampSyncDrain n) (timeStampSyncDrain (S n)). 
+    Qlt (timeStampSyncDrain n) (timeStampSyncDrain (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSyncDrain. discriminate.
-  unfold timeStampSyncDrain. case (n). discriminate.
+  intros. destruct n. unfold timeStampSyncDrain. reflexivity.
+  unfold timeStampSyncDrain. case (n). reflexivity.
   intros n0. unfold timeStampSyncDrain. apply orderZofNat.  Defined.
 
   Instance syncDrainPortsEq: EqDec syncDrainPorts eq :=
@@ -381,18 +393,18 @@ Close Scope Q_scope.
     end.
 
   Lemma timeStampASyncDrainHolds : forall n, 
-    Qle (timeStampASyncDrainA n) (timeStampASyncDrainA (S n)). 
+    Qlt (timeStampASyncDrainA n) (timeStampASyncDrainA (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampASyncDrainA. discriminate.
-  unfold timeStampASyncDrainA. case (n). discriminate.
+  intros. destruct n. unfold timeStampASyncDrainA. reflexivity.
+  unfold timeStampASyncDrainA. case (n). reflexivity.
   intros n0. unfold timeStampASyncDrainA. apply orderZofNat.  Defined.
 
 
   Lemma timeStampASyncDrainBHolds : forall n, 
-    Qle (timeStampASyncDrainB n) (timeStampASyncDrainB (S n)). 
+    Qlt (timeStampASyncDrainB n) (timeStampASyncDrainB (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampASyncDrainB. discriminate.
-  unfold timeStampASyncDrainB. case (n). discriminate.
+  intros. destruct n. unfold timeStampASyncDrainB. reflexivity.
+  unfold timeStampASyncDrainB. case (n). reflexivity.
   intros n0. unfold timeStampASyncDrainB. apply orderZofNat. Defined.
 
   Instance aSyncDrainPortsEq: EqDec aSyncDrainPorts eq :=
@@ -469,16 +481,16 @@ Close Scope Q_scope.
     end.
 
   Lemma timeStampfilterHolds : forall n, 
-    Qle (timeStampfilterA n) (timeStampfilterA (S n)).   
+    Qlt (timeStampfilterA n) (timeStampfilterA (S n)).   
   Proof.
-  intros. destruct n. unfold timeStampfilterA. discriminate.
-  unfold timeStampfilterA. case (n). discriminate.
+  intros. destruct n. unfold timeStampfilterA. reflexivity.
+  unfold timeStampfilterA. case (n). reflexivity.
   intros n0. unfold timeStampfilterA. apply orderZofNat. Defined.
 
   Lemma timeStampfilterBHolds : forall n, 
-    Qle (timeStampfilterB n) (timeStampfilterB (S n)). 
+    Qlt (timeStampfilterB n) (timeStampfilterB (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStampfilterB. discriminate.
+  intros. destruct n. unfold timeStampfilterB. reflexivity.
   unfold timeStampfilterB. apply orderZofNat. Defined.
 
   Instance filterPortsEq: EqDec filterPorts eq :=
@@ -578,17 +590,17 @@ Close Scope Q_scope.
     end.
 
   Lemma timeStamptransformHolds : forall n, 
-    Qle (timeStamptransformA n) (timeStamptransformA (S n)). 
+    Qlt (timeStamptransformA n) (timeStamptransformA (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStamptransformA. discriminate.
-  unfold timeStamptransformA. case n. discriminate.
+  intros. destruct n. unfold timeStamptransformA. reflexivity.
+  unfold timeStamptransformA. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
   Lemma timeStamptransformBHolds : forall n, 
-    Qle (timeStamptransformB n) (timeStamptransformB (S n)). 
+    Qlt (timeStamptransformB n) (timeStamptransformB (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStamptransformB. discriminate.
-  unfold timeStamptransformB. case n. discriminate.
+  intros. destruct n. unfold timeStamptransformB. reflexivity.
+  unfold timeStamptransformB. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
   Instance transformPortsEq: EqDec transformPorts eq :=
@@ -673,24 +685,24 @@ Close Scope Q_scope.
     end.
 
   Lemma timeStampmergerHolds : forall n, 
-    Qle (timeStampmergerA n) (timeStampmergerA (S n)). 
+    Qlt (timeStampmergerA n) (timeStampmergerA (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStampmergerA. discriminate.
-  unfold timeStampmergerA. case n. discriminate.
+  intros. destruct n. unfold timeStampmergerA. reflexivity.
+  unfold timeStampmergerA. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
   Lemma timeStampmergerBHolds : forall n, 
-    Qle (timeStampmergerB n) (timeStampmergerB (S n)). 
+    Qlt (timeStampmergerB n) (timeStampmergerB (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStampmergerB. discriminate.
-  unfold timeStampmergerB. case n. discriminate.
+  intros. destruct n. unfold timeStampmergerB. reflexivity.
+  unfold timeStampmergerB. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
   Lemma timeStampmergerCHolds : forall n, 
-    Qle (timeStampmergerC n) (timeStampmergerC (S n)). 
+    Qlt (timeStampmergerC n) (timeStampmergerC (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStampmergerC. discriminate.
-  unfold timeStampmergerC. case n. discriminate.
+  intros. destruct n. unfold timeStampmergerC. reflexivity.
+  unfold timeStampmergerC. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
   Instance mergerPortsEq: EqDec mergerPorts eq :=
@@ -784,24 +796,24 @@ Close Scope Q_scope.
     end.
 
   Lemma timeStampreplicatorHolds : forall n, 
-    Qle (timeStampreplicatorA n) (timeStampreplicatorA (S n)). 
+    Qlt (timeStampreplicatorA n) (timeStampreplicatorA (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStampreplicatorA. discriminate.
-  unfold timeStampreplicatorA. case n. discriminate.
+  intros. destruct n. unfold timeStampreplicatorA. reflexivity.
+  unfold timeStampreplicatorA. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
   Lemma timeStampreplicatorBHolds : forall n, 
-    Qle (timeStampreplicatorB n) (timeStampreplicatorB (S n)). 
+    Qlt (timeStampreplicatorB n) (timeStampreplicatorB (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStampreplicatorB. discriminate.
-  unfold timeStampreplicatorB. case n. discriminate.
+  intros. destruct n. unfold timeStampreplicatorB. reflexivity.
+  unfold timeStampreplicatorB. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
   Lemma timeStampreplicatorCHolds : forall n, 
-    Qle (timeStampreplicatorC n) (timeStampreplicatorC (S n)). 
+    Qlt (timeStampreplicatorC n) (timeStampreplicatorC (S n)). 
   Proof.   
-  intros. destruct n. unfold timeStampreplicatorC. discriminate.
-  unfold timeStampreplicatorC. case n. discriminate.
+  intros. destruct n. unfold timeStampreplicatorC. reflexivity.
+  unfold timeStampreplicatorC. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
   Instance replicatorPortsEq: EqDec replicatorPorts eq :=
