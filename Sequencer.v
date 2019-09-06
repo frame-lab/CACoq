@@ -1,24 +1,9 @@
 Require Import CaMain.
-Open Scope Q_scope.
-Axiom orderZofNat : forall n, forall a, Z.of_nat (S n) + a # 1 <= Z.of_nat (S (S n)) + a # 1.
-Close Scope Q_scope.
+Require Import ReoCA.
+Inductive sequencerStates := s0 | q0a | p0a| p1a.
+Inductive sequencerPorts := A | B | C | D | E | F | G | H | I | J | K.
 
-Inductive transformState := q0ls.
-Instance transformStateEq : EqDec transformState eq := 
-	{equiv_dec x y := 
-		match x, y with 
-		| q0ls,q0ls => in_left 
-    end
-	}.
-
-   Proof.
-   all: congruence.
-   Defined.
-
-Inductive alternatorStates := s0 | q0a | p0a| p1a.
-Inductive alternatorPorts := A | B | C | D | E | F | G | H | I | J | K.
-
-Instance alternatorStatesEq : EqDec alternatorStates eq := 
+Instance sequencerStatesEq : EqDec sequencerStates eq := 
 	{equiv_dec x y := 
 		match x, y with 
 		| s0,s0 => in_left 
@@ -43,7 +28,7 @@ Instance alternatorStatesEq : EqDec alternatorStates eq :=
    all: congruence.
    Defined.
 
-Instance alternatorPortsEq : EqDec alternatorPorts eq := 
+Instance sequencerPortsEq : EqDec sequencerPorts eq := 
 	{equiv_dec x y := 
 		match x, y with 
 		| A,A => in_left 
@@ -175,82 +160,82 @@ Instance alternatorPortsEq : EqDec alternatorPorts eq :=
 
   Definition dataAssignmentA n := 
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 0
-    | S n => Some 0
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  0
+    | S n =>  0
     end.
 
   Definition dataAssignmentB n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 0
-    | S n => Some 0
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  0
+    | S n =>  0
     end.
 
   Definition dataAssignmentC n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 0
-    | S n => Some 0
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  0
+    | S n =>  0
     end.
 
   Definition dataAssignmentD n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 0
-    | S n => Some 0
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  0
+    | S n =>  0
     end.
 
   Definition dataAssignmentE n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 2
-    | S n => Some 2
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  2
+    | S n =>  2
     end.
 
   Definition dataAssignmentF n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 2
-    | S n => Some 2
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  2
+    | S n =>  2
     end.
 
   Definition dataAssignmentG n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 0
-    | S n => Some 0
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  0
+    | S n =>  0
     end.
 
   Definition dataAssignmentH n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 2
-    | S n => Some 2
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  2
+    | S n =>  2
     end.
 
   Definition dataAssignmentI n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 0
-    | S n => Some 0
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  0
+    | S n =>  0
     end.
 
   Definition dataAssignmentJ n :=
     match n with
-    | 0 => Some 1
-    | 1 => Some (1)
-    | 2 => Some 0
-    | S n => Some 0
+    | 0 =>  1
+    | 1 =>  (1)
+    | 2 =>  0
+    | S n =>  0
     end.
 
    Definition timeStampSequencerA(n:nat) : QArith_base.Q :=
@@ -331,82 +316,82 @@ Instance alternatorPortsEq : EqDec alternatorPorts eq :=
     | S n =>  Z.of_nat(S n) + 19#1
     end.
 
-
-  Lemma timeStampSequencerAHolds : forall n, Qle (timeStampSequencerA n) (timeStampSequencerA (S n)).
+  Lemma timeStampSequencerAHolds : forall n, 
+    Qlt (timeStampSequencerA n) (timeStampSequencerA (S n)).
   Proof.
-  intros. destruct n. unfold timeStampSequencerA. discriminate.
-  unfold timeStampSequencerA. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerA. reflexivity.
+  unfold timeStampSequencerA. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. unfold Qlt. apply ReoCA.orderZofNat.  Defined.
   
   Lemma timeStampSequencerBHolds : forall n, 
-    Qle (timeStampSequencerB n) (timeStampSequencerB (S n)). 
+    Qlt (timeStampSequencerB n) (timeStampSequencerB (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSequencerB. discriminate.
-  unfold timeStampSequencerB. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerB. reflexivity.
+  unfold timeStampSequencerB. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerCHolds : forall n, 
-    Qle (timeStampSequencerC n) (timeStampSequencerC (S n)). 
+    Qlt (timeStampSequencerC n) (timeStampSequencerC (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSequencerC. discriminate.
-  unfold timeStampSequencerC. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerC. reflexivity.
+  unfold timeStampSequencerC. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerDHolds : forall n, 
-    Qle (timeStampSequencerD n) (timeStampSequencerD (S n)). 
+    Qlt (timeStampSequencerD n) (timeStampSequencerD (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSequencerD. discriminate.
-  unfold timeStampSequencerD. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerD. reflexivity.
+  unfold timeStampSequencerD. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerEHolds : forall n, 
-    Qle (timeStampSequencerE n) (timeStampSequencerE (S n)). 
+    Qlt (timeStampSequencerE n) (timeStampSequencerE (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSequencerE. discriminate.
-  unfold timeStampSequencerE. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerE. reflexivity.
+  unfold timeStampSequencerE. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerGHolds : forall n, 
-    Qle (timeStampSequencerG n) (timeStampSequencerG (S n)). 
+    Qlt (timeStampSequencerG n) (timeStampSequencerG (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSequencerG. discriminate.
-  unfold timeStampSequencerG. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerG. reflexivity.
+  unfold timeStampSequencerG. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerHHolds : forall n, 
-    Qle (timeStampSequencerH n) (timeStampSequencerH (S n)). 
+    Qlt (timeStampSequencerH n) (timeStampSequencerH (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSequencerH. discriminate.
-  unfold timeStampSequencerH. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerH. reflexivity.
+  unfold timeStampSequencerH. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Definition portA := {|
         ConstraintAutomata.id := A;
@@ -458,109 +443,88 @@ Instance alternatorPortsEq : EqDec alternatorPorts eq :=
         ConstraintAutomata.index := 0 |}.
 
   (*A FIFO E *)
-  Definition aToEFIFOrel (s:alternatorStates) :=
+  Definition aToEFIFOrel (s:sequencerStates) :=
     match s with
-    | q0a => [([A], (ConstraintAutomata.dc A (Some 0)), [p0a]) ;
-              ([A], (ConstraintAutomata.dc A (Some 1)), [p1a])]
-    | p0a => [([E], (ConstraintAutomata.dc E (Some 0)), [q0a])]
-    | p1a => [([E], (ConstraintAutomata.dc E (Some 1)), [q0a])] 
+    | q0a => [([A], (ConstraintAutomata.dc A 0), p0a);
+              ([A], (ConstraintAutomata.dc A 1), p1a)]
+    | p0a => [([E], (ConstraintAutomata.dc E 0), q0a)]
+    | p1a => [([E], (ConstraintAutomata.dc E 1), q0a)] 
     | s0 => []
     end.
 
-  Definition aToEFIFOCA:= {|
-    ConstraintAutomata.Q := [q0a;p0a;p1a];
-    ConstraintAutomata.N := [A;E];
-    ConstraintAutomata.T := aToEFIFOrel;
-    ConstraintAutomata.Q0 := [q0a]
-  |}.
+  Definition aToEFIFOCA:= ReoCa.ReoCABinaryChannel A E ([q0a;p0a;p1a]) ([q0a]) (aToEFIFOrel). 
+
+  (* E Sync B *)
+  Definition syncEBCaBehavior (s: sequencerStates) :=
+    match s with
+    | s0 => [([E;B] , ConstraintAutomata.eqDc nat E B, s0)] 
+    | _ => []
+    end.
+
+  Definition EBsyncCA := ReoCa.ReoCABinaryChannel E B ([s0]) ([s0]) syncEBCaBehavior. 
 
   (*E FIFO G *)
-  Definition eToGFIFOrel (s:alternatorStates) :=
+  Definition eToGFIFOrel (s:sequencerStates) :=
     match s with
-    | q0a => [([E], (ConstraintAutomata.dc E (Some 0)), [p0a]) ;
-              ([E], (ConstraintAutomata.dc E (Some 1)), [p1a])]
-    | p0a => [([G], (ConstraintAutomata.dc G (Some 0)), [q0a])]
-    | p1a => [([G], (ConstraintAutomata.dc G (Some 1)), [q0a])] 
+    | q0a => [([E], (ConstraintAutomata.dc E ( 0)), p0a) ;
+              ([E], (ConstraintAutomata.dc E ( 1)), p1a)]
+    | p0a => [([G], (ConstraintAutomata.dc G ( 0)), q0a)]
+    | p1a => [([G], (ConstraintAutomata.dc G ( 1)), q0a)] 
     | s0 => []
     end.
 
-  Definition eToGFIFOCA:= {|
-    ConstraintAutomata.Q := [q0a;p0a;p1a];
-    ConstraintAutomata.N := [E;G];
-    ConstraintAutomata.T := eToGFIFOrel;
-    ConstraintAutomata.Q0 := [q0a]
-  |}.
+  Definition eToGFIFOCA:= ReoCa.ReoCABinaryChannel E G ([q0a;p0a;p1a]) ([q0a]) eToGFIFOrel.
+
+  (* G Sync C *)
+  Definition syncGCCaBehavior (s: sequencerStates) :=
+    match s with
+    | s0 => [([G;C] , ConstraintAutomata.eqDc nat G C, s0)] 
+    | _ => []
+    end.
+
+  Definition GCsyncCA := ReoCa.ReoCABinaryChannel G C ([s0]) ([s0]) syncGCCaBehavior.
 
   (*G FIFO H*)
-  Definition gToHFIFOrel (s:alternatorStates):=
+  Definition gToHFIFOrel (s:sequencerStates):=
     match s with
-    | q0a => [([G], (ConstraintAutomata.dc G (Some 0)), [p0a]) ;
-              ([G], (ConstraintAutomata.dc G (Some 1)), [p1a])]
-    | p0a => [([H], (ConstraintAutomata.dc H (Some 0)), [q0a])]
-    | p1a => [([H], (ConstraintAutomata.dc H (Some 1)), [q0a])] 
+    | q0a => [([G], (ConstraintAutomata.dc G ( 0)), p0a) ;
+              ([G], (ConstraintAutomata.dc G ( 1)), p1a)]
+    | p0a => [([H], (ConstraintAutomata.dc H ( 0)), q0a)]
+    | p1a => [([H], (ConstraintAutomata.dc H ( 1)), q0a)] 
     | s0 => []
     end.
 
-  Definition gToHFIFOCA:= {|
-    ConstraintAutomata.Q := [q0a;p0a;p1a];
-    ConstraintAutomata.N := [G;H];
-    ConstraintAutomata.T := gToHFIFOrel;
-    ConstraintAutomata.Q0 := [q0a]
-  |}.
+  Definition gToHFIFOCA:= ReoCa.ReoCABinaryChannel G H ([q0a;p0a;p1a]) ([q0a]) gToHFIFOrel.
 
-(* E Sync B *)
-  Definition syncEBCaBehavior (s: alternatorStates) :=
+  (* H Sync D *)
+  Definition syncHDCaBehavior (s: sequencerStates) :=
     match s with
-    | s0 => [([E;B] , ConstraintAutomata.eqDc nat E B, [s0])] 
+    | s0 => [([H;D] , ConstraintAutomata.eqDc nat H D, s0)] 
     | _ => []
     end.
 
-  Definition EBsyncCA := {|
-    ConstraintAutomata.Q := [s0];
-    ConstraintAutomata.N := [E;B];
-    ConstraintAutomata.T := syncEBCaBehavior;
-    ConstraintAutomata.Q0 := [s0]
-  |}.
+  Definition HDsyncCA := ReoCa.ReoCABinaryChannel H D ([s0]) ([s0]) syncHDCaBehavior.
 
-
-(* G Sync C *)
-  Definition syncGCCaBehavior (s: alternatorStates) :=
-    match s with
-    | s0 => [([G;C] , ConstraintAutomata.eqDc nat G C, [s0])] 
-    | _ => []
-    end.
-
-  Definition GCsyncCA := {|
-    ConstraintAutomata.Q := [s0];
-    ConstraintAutomata.N := [G;C];
-    ConstraintAutomata.T := syncGCCaBehavior;
-    ConstraintAutomata.Q0 := [s0]
-  |}.
-
-
-(* H Sync D *)
-  Definition syncHDCaBehavior (s: alternatorStates) :=
-    match s with
-    | s0 => [([H;D] , ConstraintAutomata.eqDc nat H D, [s0])] 
-    | _ => []
-    end.
-
-  Definition HDsyncCA := {|
-    ConstraintAutomata.Q := [s0];
-    ConstraintAutomata.N := [H;D];
-    ConstraintAutomata.T := syncHDCaBehavior;
-    ConstraintAutomata.Q0 := [s0]
-  |}.
-
+  (* We build the resulting product automaton *)
   Definition fifo1Product := ProductAutomata.buildPA aToEFIFOCA EBsyncCA.
   Definition fifo2Product := ProductAutomata.buildPA fifo1Product eToGFIFOCA.
   Definition fifo3Product := ProductAutomata.buildPA fifo2Product GCsyncCA.
   Definition fifo4Product := ProductAutomata.buildPA fifo3Product gToHFIFOCA.
   Definition resultingSequencerProduct := ProductAutomata.buildPA fifo4Product HDsyncCA.
 
-  Definition singleExecInput := [portA;portB;portC;portD;portE;portG;portH].
+  Eval vm_compute in ConstraintAutomata.Q resultingSequencerProduct.
 
-  Eval compute in ConstraintAutomata.Q resultingSequencerProduct.
+  Eval vm_compute in ConstraintAutomata.T resultingSequencerProduct (p1a, s0, q0a, s0, p0a, s0).
+
+  (*The automaton changes its initial configuration only if there are data in ports A*)
+  Eval vm_compute in ConstraintAutomata.portsOfTransition resultingSequencerProduct 
+    (q0a, s0, q0a, s0, q0a, s0).
+
+  Lemma firstPortToHavaDataIsA : ConstraintAutomata.portsOfTransition resultingSequencerProduct 
+    (q0a, s0, q0a, s0, q0a, s0) = [A].
+  Proof. vm_compute. reflexivity. Defined.
+
+  Definition singleExecInput := [portA;portB;portC;portD;portE;portG;portH].
 
   Definition run1 := Eval vm_compute in ConstraintAutomata.run resultingSequencerProduct singleExecInput 4.
   Print run1.
@@ -678,85 +642,85 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
     end.
 
   Lemma timeStampSequencerA2Holds : forall n, 
-    Qle (timeStampSequencerA2 n) (timeStampSequencerA2 (S n)). 
+    Qlt (timeStampSequencerA2 n) (timeStampSequencerA2 (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSequencerA2. discriminate.
-  unfold timeStampSequencerA2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerA2. reflexivity.
+  unfold timeStampSequencerA2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerB2Holds : forall n, 
-    Qle (timeStampSequencerB2 n) (timeStampSequencerB2 (S n)). 
+    Qlt (timeStampSequencerB2 n) (timeStampSequencerB2 (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampSequencerB2. discriminate.
-  unfold timeStampSequencerB2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerB2. reflexivity.
+  unfold timeStampSequencerB2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
   Lemma timeStampSequencerC2Holds : forall n, 
-    Qle (timeStampSequencerC2 n) (timeStampSequencerC2 (S n)). 
+    Qlt (timeStampSequencerC2 n) (timeStampSequencerC2 (S n)). 
   Proof.
   Proof.
-  intros. destruct n. unfold timeStampSequencerC2. discriminate.
-  unfold timeStampSequencerC2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerC2. reflexivity.
+  unfold timeStampSequencerC2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerD2Holds : forall n, 
-    Qle (timeStampSequencerD2 n) (timeStampSequencerD2 (S n)). 
+    Qlt (timeStampSequencerD2 n) (timeStampSequencerD2 (S n)). 
   Proof.
   Proof.
-  intros. destruct n. unfold timeStampSequencerD2. discriminate.
-  unfold timeStampSequencerD2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerD2. reflexivity.
+  unfold timeStampSequencerD2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerE2Holds : forall n, 
-    Qle (timeStampSequencerE2 n) (timeStampSequencerB2 (S n)). 
+    Qlt (timeStampSequencerE2 n) (timeStampSequencerB2 (S n)). 
   Proof.
   Proof.
-  intros. destruct n. unfold timeStampSequencerE2. discriminate.
-  unfold timeStampSequencerE2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerE2. reflexivity.
+  unfold timeStampSequencerE2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerG2Holds : forall n, 
-    Qle (timeStampSequencerG2 n) (timeStampSequencerG2 (S n)). 
+    Qlt (timeStampSequencerG2 n) (timeStampSequencerG2 (S n)). 
   Proof.
   Proof.
-  intros. destruct n. unfold timeStampSequencerG2. discriminate.
-  unfold timeStampSequencerG2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerG2. reflexivity.
+  unfold timeStampSequencerG2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Lemma timeStampSequencerH2Holds : forall n, 
-    Qle (timeStampSequencerH2 n) (timeStampSequencerH2 (S n)). 
+    Qlt (timeStampSequencerH2 n) (timeStampSequencerH2 (S n)). 
   Proof.
   Proof.
-  intros. destruct n. unfold timeStampSequencerH2. discriminate.
-  unfold timeStampSequencerH2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampSequencerH2. reflexivity.
+  unfold timeStampSequencerH2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. apply ReoCA.orderZofNat. Defined.
 
   Definition portA2 := {|
         ConstraintAutomata.id := A;
@@ -815,6 +779,9 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   Lemma nonAcceptingRun : In [] (run2).
   Proof.
   simpl. auto. Defined.
+
+  (* An accepting run must start with a data item over A *)
+  erick: fazer essa propriedade.
 
   Require Extraction.
   Extraction Language Haskell.

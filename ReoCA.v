@@ -1,19 +1,64 @@
 Require Import CaMain.
+Require Import Coq.micromega.Lia.
+
+Set Implicit Arguments.
+Set Maximal Implicit Insertion.
 
 Open Scope Q_scope.
-Axiom orderZofNat : forall n, forall a, Z.of_nat (S n) + a # 1 < Z.of_nat (S (S n)) + a # 1.
+
+(* The following lemma was formalized thanks to anonymous reviewers' contribution *)
+Lemma orderZofNat : forall n, forall a, (Z.of_nat (S n) + a) # 1 < Z.of_nat (S (S n)) + a # 1.
+Proof.
+intros.
+assert (forall z, z # 1 < (z + 1) # 1).
++ intros. assert (inject_Z z < inject_Z (z + 1)). rewrite <- Zlt_Qlt. 
+  omega. unfold inject_Z in H. exact H.
++ assert (forall b, forall a, (b + a) # 1 < ((b + 1) + a) # 1).
+  intros. rewrite <- Z.add_assoc. rewrite (Z.add_comm 1).
+  rewrite Z.add_assoc. apply H.
+  assert (forall n, Z.of_nat (S n) = ((Z.of_nat n) + 1)%Z).
+  intro. simpl. lia. rewrite (H1 ((S n))). apply H0. Defined.
+
 Close Scope Q_scope.
 
-(* Implementation Examples of canonical Constraint Automata as presented by Baier et al.'s paper *)
+Module ReoCa.
+  Section ReoCa.
 
+  (* Parametric construction of constraint automata of Reo channels *) 
+
+  Variable name state data: Set. 
+  Definition ReoCABinaryChannel (a b: name) (states: set state) (initialStates : set state) 
+  (transitionRelation : state -> set (set name * ConstraintAutomata.DC name data * state)):=
+      {|
+      ConstraintAutomata.Q := states;
+      ConstraintAutomata.N := [a;b];
+      ConstraintAutomata.T := transitionRelation;
+      ConstraintAutomata.Q0 := initialStates
+      |}.
+
+
+  (* Definition to build CA for Replicator and Merger channels *)
+  Definition ReoCATernaryChannel (a b c: name) (states: set state) (initialStates : set state) 
+  (transitionRelation: state -> set (set name * ConstraintAutomata.DC name data * state)) :=
+       {|
+      ConstraintAutomata.Q := states;
+      ConstraintAutomata.N := [a;b;c];
+      ConstraintAutomata.T := transitionRelation;
+      ConstraintAutomata.Q0 := initialStates
+      |}.
+
+  End ReoCa.
+End ReoCa.
+
+(* Implementation Examples of canonical Constraint Automata as presented by Baier et al.'s paper *)
 (* Sync channel CA *)
-  Inductive syncState := X.
+  Inductive syncState := q0s.
   Inductive syncPorts := E | F.
 
   Instance syncStateEq: EqDec syncState eq :=
     {equiv_dec x y := 
       match x,y with
-      | X,X => in_left
+      | q0s,q0s => in_left
       end }.
    Proof.
    all: congruence.
@@ -21,9 +66,9 @@ Close Scope Q_scope.
 
   Definition dataAssignmentBoth n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 455
-    | S n => Some (1)
+    | 0 =>  0
+    | 1 =>  455
+    | S n =>  (1)
     end.
 
  Definition timeStampTestSync (n:nat) : QArith_base.Q :=
@@ -35,7 +80,7 @@ Close Scope Q_scope.
   Lemma timeStampTestHoldsSync : forall n, 
     Qlt (timeStampTestSync n) (timeStampTestSync (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampTestSync. simpl. Search (Qlt). reflexivity. 
+  intros. destruct n. unfold timeStampTestSync. simpl. reflexivity. 
   unfold timeStampTestSync.
   apply orderZofNat. Defined.
 
@@ -64,22 +109,32 @@ Close Scope Q_scope.
         ConstraintAutomata.portCond := timeStampTestHoldsSync;
         ConstraintAutomata.index := 0 |}.
 
-  Check ConstraintAutomata.tDc.
-
-  Definition syncCaBehavior (s: syncState) :=
+  Definition syncCaBehavior (s: syncState) : 
+  set (set syncPorts * ConstraintAutomata.DC syncPorts nat * syncState) :=
     match s with
-    | X => [([E;F] , ConstraintAutomata.eqDc nat E F, [X])] 
+    | q0s => [([E;F] , ConstraintAutomata.eqDc nat E F, q0s)] 
     end.
 
-  Definition syncCA := {|
-    ConstraintAutomata.Q := [X];
+  Definition syncCA :=  {|
+    ConstraintAutomata.Q := [q0s];
     ConstraintAutomata.N := [E;F];
     ConstraintAutomata.T := syncCaBehavior;
-    ConstraintAutomata.Q0 := [X]
+    ConstraintAutomata.Q0 := [q0s]
   |}.
 
-  Eval compute in ConstraintAutomata.run syncCA [portE;portF] 20.
+  Definition paramSync := ReoCa.ReoCABinaryChannel E F [q0s] [q0s] syncCaBehavior.
 
+  Eval compute in ConstraintAutomata.run syncCA [portE;portF] 200.
+  Lemma accepting : forall n, ~ In [] (ConstraintAutomata.run syncCA [portE;portF] n).
+  Proof. intros.
+  induction n.
+  + unfold not. intros. simpl in H. destruct H. inversion H. exact H.
+  (* a prop indutiva vai ser pra mexer com H. *)
+  (* ideia: escrevela como (quando o k-esimo passo é valido?*)
+  + unfold not. intros. unfold ConstraintAutomata.run in H. 
+    unfold ConstraintAutomata.run' in H. Admitted. 
+  (*ERICK: exemplo infinito. Talvez uma outra definição de run que compreenda runs infinitas
+  exatamente como Baier?*)
 
   (* LossySync CA *)
   Inductive lossySyncStates := q0.
@@ -107,9 +162,9 @@ Close Scope Q_scope.
 
    Definition dataAssignmentLossySyncBoth n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 1
-    | S n => Some (1)
+    | 0 =>  0
+    | 1 =>  1
+    | S n =>  (1)
     end.
 
   Definition timeStampLossyA (n:nat) : QArith_base.Q :=
@@ -138,10 +193,11 @@ Close Scope Q_scope.
   unfold timeStampLossyB.
   apply orderZofNat. Defined.
 
-  Definition lossySyncCaBehavior (s: lossySyncStates) :=
+  Definition lossySyncCaBehavior (s: lossySyncStates) :
+  set (set lossySyncPorts * ConstraintAutomata.DC lossySyncPorts nat * lossySyncStates):=
     match s with
-    | q0 => [([A;B] , ConstraintAutomata.eqDc nat A B, [q0]);
-             ([A], (ConstraintAutomata.tDc lossySyncPorts nat), [q0])] 
+    | q0 => [([A;B] , ConstraintAutomata.eqDc nat A B, q0);
+             ([A], (ConstraintAutomata.tDc lossySyncPorts nat), q0)] 
     end.
 
   Definition lossySyncCA := {|
@@ -167,7 +223,7 @@ Close Scope Q_scope.
 
   Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10. (*does not accept the TDS composed by portA and portB because
                                                                          only B has data in theta.time(2), which is not comprised by the automaton's transitions *)
-  
+  Definition paramLossySync := ReoCa.ReoCABinaryChannel A B [q0] [q0] lossySyncCaBehavior.
   (* FIFO CA *)
 
   Inductive FIFOStates : Type := q0F | p0F | p1F.
@@ -184,18 +240,18 @@ Close Scope Q_scope.
 
   Definition dataAssignmentA n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 0
-    | 2 => Some 1 
-    | S n => Some (1)
+    | 0 =>  0
+    | 1 =>  0
+    | 2 =>  1 
+    | S n =>  (1)
     end.
 
   Definition dataAssignmentB n :=
     match n with
-    | 0 => Some 0
-    | 1 => Some (0)
-    | 2 => Some 1
-    | S n => Some 1
+    | 0 =>  0
+    | 1 =>  (0)
+    | 2 =>  1
+    | S n =>  1
     end.
 
   Definition timeStampFIFOA(n:nat) : QArith_base.Q :=
@@ -257,12 +313,13 @@ Close Scope Q_scope.
 
   Definition realports := [portAF;portBF].
 
-  Definition oneBoundedFIFOrel (s:FIFOStates) :=
+  Definition oneBoundedFIFOrel (s:FIFOStates) :
+  set (set FIFOports * ConstraintAutomata.DC FIFOports nat * FIFOStates) :=
     match s with
-    | q0F => [([AF], (ConstraintAutomata.dc AF (Some 0)), [p0F]) ;
-              ([AF], (ConstraintAutomata.dc AF (Some 1)), [p1F])]
-    | p0F => [([BF], (ConstraintAutomata.dc BF (Some 0)), [q0F])]
-    | p1F => [([BF], (ConstraintAutomata.dc BF (Some 1)), [q0F])] 
+    | q0F => [([AF], (ConstraintAutomata.dc AF 0), p0F);
+              ([AF], (ConstraintAutomata.dc AF 1), p1F)]
+    | p0F => [([BF], (ConstraintAutomata.dc BF 0), q0F)]
+    | p1F => [([BF], (ConstraintAutomata.dc BF 1), q0F)] 
     end.
 
   Definition oneBoundedFIFOCA:= {|
@@ -271,6 +328,8 @@ Close Scope Q_scope.
     ConstraintAutomata.T := oneBoundedFIFOrel;
     ConstraintAutomata.Q0 := [q0F]
   |}.
+
+  Definition paramFIFO1 := ReoCa.ReoCABinaryChannel AF BF [q0F;p0F;p1F] [q0F] oneBoundedFIFOrel.
 
   Lemma dataInAF: forall s, In AF (ConstraintAutomata.retrievePortsFromRespTransitions (ConstraintAutomata.T oneBoundedFIFOCA s)) <->
     s = q0F.
@@ -301,9 +360,9 @@ Close Scope Q_scope.
 
   Definition dataAssignmentSyncDrainBoth n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 69
-    | S n => Some (1)
+    | 0 =>  0
+    | 1 =>  69
+    | S n =>  (1)
     end.
 
  Definition timeStampSyncDrain (n:nat) : QArith_base.Q :=
@@ -344,9 +403,10 @@ Close Scope Q_scope.
         ConstraintAutomata.portCond := timeStampSyncDrainHolds;
         ConstraintAutomata.index := 0 |}.
 
-  Definition syncDrainCaBehavior (s: syncDrainState) :=
+  Definition syncDrainCaBehavior (s: syncDrainState) : set
+  (set syncDrainPorts * ConstraintAutomata.DC syncDrainPorts nat * syncDrainState) :=
     match s with
-    | q1D => [([AD;BD] , ConstraintAutomata.tDc syncDrainPorts nat, [q1D])] 
+    | q1D => [([AD;BD] , ConstraintAutomata.tDc syncDrainPorts nat, q1D)] 
     end.
 
   Definition SyncDrainCA := {|
@@ -357,6 +417,10 @@ Close Scope Q_scope.
   |}.
 
   Eval compute in ConstraintAutomata.run SyncDrainCA [portAD;portBD] 15.
+
+  Definition paramSyncDrain := ReoCa.ReoCABinaryChannel AD BD [q1D] [q1D] syncDrainCaBehavior.
+
+  Check paramSyncDrain.
 
   (* AsyncDrain *)
   Inductive aSyncDrainState := q1A.
@@ -373,9 +437,9 @@ Close Scope Q_scope.
 
   Definition dataAssignmentASyncDrainBoth n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 0
-    | S n => Some (1)
+    | 0 =>  0
+    | 1 =>  0
+    | S n =>  (1)
     end.
 
  Definition timeStampASyncDrainA (n:nat) : QArith_base.Q :=
@@ -432,10 +496,11 @@ Close Scope Q_scope.
         ConstraintAutomata.portCond := timeStampASyncDrainBHolds;
         ConstraintAutomata.index := 0 |}.
 
-  Definition aSyncDrainCaBehavior (s: aSyncDrainState) :=
+  Definition aSyncDrainCaBehavior (s: aSyncDrainState): set
+  (set aSyncDrainPorts * ConstraintAutomata.DC aSyncDrainPorts nat * aSyncDrainState) :=
     match s with
-    | q1A => [([AA] , ConstraintAutomata.tDc aSyncDrainPorts nat, [q1A]);
-              ([BA] , ConstraintAutomata.tDc aSyncDrainPorts nat, [q1A])] 
+    | q1A => [([AA] , ConstraintAutomata.tDc aSyncDrainPorts nat, q1A);
+              ([BA] , ConstraintAutomata.tDc aSyncDrainPorts nat, q1A)] 
     end.
 
   Definition aSyncDrainCA := {|
@@ -446,6 +511,8 @@ Close Scope Q_scope.
   |}.
 
   Eval compute in ConstraintAutomata.run aSyncDrainCA  [portAA;portBA] 10.
+
+  Definition paramAsyncDrain := ReoCa.ReoCABinaryChannel AA BA [q1A] [q1A] aSyncDrainCaBehavior.
 
   (* Filter CA *)
   Inductive filterState := q1F.
@@ -462,9 +529,9 @@ Close Scope Q_scope.
 
   Definition dataAssignmentfilterBoth n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 0
-    | S n => Some (1)
+    | 0 =>  0
+    | 1 =>  0
+    | S n =>  (1)
     end.
 
  Definition timeStampfilterA (n:nat) : QArith_base.Q :=
@@ -518,12 +585,13 @@ Close Scope Q_scope.
         ConstraintAutomata.portCond := timeStampfilterBHolds;
         ConstraintAutomata.index := 0 |}.
 
-  (*As an example, the filter condition over the data item in port A is the data should be  Some 3 *)
-  Definition filterCaBehavior (s: filterState) :=
+  (*As an example, the filter condition over the data item in port A is the data should be 3 *)
+  Definition filterCaBehavior (s: filterState) : set
+  (set filterPorts * ConstraintAutomata.DC filterPorts nat * filterState) :=
     match s with
-    | q1F => [([C;D] , ConstraintAutomata.andDc (ConstraintAutomata.dc C (Some 3)) 
-                                                 (ConstraintAutomata.eqDc nat C D), [q1F]);
-              ([C] , ConstraintAutomata.negDc (ConstraintAutomata.dc C (Some 3)), [q1F]) ]
+    | q1F => [([C;D] , ConstraintAutomata.andDc (ConstraintAutomata.dc C (3)) 
+                                                 (ConstraintAutomata.eqDc nat C D), q1F);
+              ([C] , ConstraintAutomata.negDc (ConstraintAutomata.dc C (3)), q1F)]
     end.
 
   (* The CA itself is formalized as *)
@@ -536,14 +604,12 @@ Close Scope Q_scope.
 
   Eval compute in ConstraintAutomata.run filterCA [portC;portD] 3.
 
+  Definition paramFilter := ReoCa.ReoCABinaryChannel C D [q1F] [q1F] filterCaBehavior.
+
 
   (* Transform CA *)
 
-  Definition trasformFunction (n: option nat) :=
-    match n with
-    | Some x => Some (x + 3)
-    | None   => None
-    end.
+  Definition trasformFunction (n: nat) := n + 3.
 
   Inductive transformState := q1T.
   Inductive transformPorts :=  AT | BT.
@@ -559,20 +625,20 @@ Close Scope Q_scope.
 
   Definition dataAssignmenttransformAF n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 0
-    | 2 => Some 0
-    | 3 => Some 0
-    | S n => Some (1)
+    | 0 =>  0
+    | 1 =>  0
+    | 2 =>  0
+    | 3 =>  0
+    | S n =>  (1)
     end.
 
   Definition dataAssignmenttransformBF n := 
     match n with
-    | 0 => Some 3
-    | 1 => Some 3
-    | 2 => Some 3
-    | 3 => Some 3
-    | S n => Some (4)
+    | 0 =>  3
+    | 1 =>  3
+    | 2 =>  3
+    | 3 =>  3
+    | S n =>  (4)
     end.
 
  Definition timeStamptransformA (n:nat) : QArith_base.Q :=
@@ -628,9 +694,10 @@ Close Scope Q_scope.
         ConstraintAutomata.portCond := timeStamptransformBHolds;
         ConstraintAutomata.index := 0 |}.
 
-  Definition transformCaBehavior (s: transformState) :=
+  Definition transformCaBehavior (s: transformState) : set
+  (set transformPorts * ConstraintAutomata.DC transformPorts nat * transformState) :=
     match s with
-    | q1T => [([AT;BT] , ConstraintAutomata.trDc trasformFunction AT BT, [q1T])]
+    | q1T => [([AT;BT] , ConstraintAutomata.trDc trasformFunction AT BT, q1T)]
     end.
 
   Definition transformCA := {|
@@ -641,6 +708,9 @@ Close Scope Q_scope.
   |}.
 
   Eval compute in ConstraintAutomata.run transformCA [portAT;portBT] 10.
+
+ Definition paramTransform := ReoCa.ReoCABinaryChannel AT BT [q1T] [q1T] transformCaBehavior.
+
 
   (* Merger CA*)
   Inductive mergerState := q1M.
@@ -657,10 +727,10 @@ Close Scope Q_scope.
 
   Definition dataAssignmentmergerBoth n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 555
-    | 3 => Some 69
-    | S n => Some (1)
+    | 0 =>  0
+    | 1 =>  555
+    | 3 =>  69
+    | S n =>  (1)
     end.
 
  Definition timeStampmergerA (n:nat) : QArith_base.Q :=
@@ -737,11 +807,11 @@ Close Scope Q_scope.
         ConstraintAutomata.portCond := timeStampmergerCHolds;
         ConstraintAutomata.index := 0 |}.
 
-  Definition mergerCaBehavior (s: mergerState) :
-    set (set mergerPorts * ConstraintAutomata.DC mergerPorts nat * set mergerState) :=
+  Definition mergerCaBehavior (s: mergerState) : set
+  (set mergerPorts * ConstraintAutomata.DC mergerPorts nat * mergerState) :=
     match s with
-    | q1M => [([AM;CM] , ConstraintAutomata.eqDc nat AM CM, [q1M]);
-              ([BM;CM] , ConstraintAutomata.eqDc nat BM CM, [q1M])] 
+    | q1M => [([AM;CM] , ConstraintAutomata.eqDc nat AM CM, q1M);
+              ([BM;CM] , ConstraintAutomata.eqDc nat BM CM, q1M)] 
     end. 
 
   Definition mergerCA := {|
@@ -752,6 +822,8 @@ Close Scope Q_scope.
   |}.
 
   Eval compute in ConstraintAutomata.run mergerCA [portAM;portBM;portCM] 10.
+
+  Definition paramMerger := ReoCa.ReoCATernaryChannel AM BM CM [q1M] [q1M] mergerCaBehavior.
 
   (* Replicator CA *)
   Inductive replicatorState := q1R.
@@ -768,10 +840,10 @@ Close Scope Q_scope.
 
   Definition dataAssignmentreplicatorBoth n := 
     match n with
-    | 0 => Some 0
-    | 1 => Some 1
-    | 3 => Some 2
-    | S n => Some (1 + S n)
+    | 0 =>  0
+    | 1 =>  1
+    | 3 =>  2
+    | S n =>  (1 + S n)
     end.
 
  Definition timeStampreplicatorA (n:nat) : QArith_base.Q :=
@@ -848,11 +920,11 @@ Close Scope Q_scope.
         ConstraintAutomata.portCond := timeStampreplicatorCHolds;
         ConstraintAutomata.index := 0 |}.
 
-  Definition replicatorCaBehavior (s: replicatorState) :
-    set (set replicatorPorts * ConstraintAutomata.DC replicatorPorts nat * set replicatorState) :=
+  Definition replicatorCaBehavior (s: replicatorState) : set
+  (set replicatorPorts * ConstraintAutomata.DC replicatorPorts nat * replicatorState) :=
     match s with
     | q1R => [([AR;BR;CR] , ConstraintAutomata.andDc (ConstraintAutomata.eqDc nat AR BR) 
-                                                     (ConstraintAutomata.eqDc nat AR CR), [q1R])] 
+                                                     (ConstraintAutomata.eqDc nat AR CR), q1R)] 
     end.
 
   Definition replicatorCA := {|
@@ -864,6 +936,4 @@ Close Scope Q_scope.
 
   Eval compute in ConstraintAutomata.run replicatorCA [portAR;portBR;portCR] 11.
 
-
-
-
+  Definition paramReplicator := ReoCa.ReoCATernaryChannel AR BR CR [q1R] [q1R] replicatorCaBehavior.
