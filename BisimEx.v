@@ -100,7 +100,7 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. unfold Qlt. apply ReoCA.orderZofNat.  Defined.
+  intros n4. unfold Qlt. apply orderZofNat.  Defined.
   
   Lemma timeStampAutomatonBHolds : forall n, 
     Qlt (timeStampAutomatonB n) (timeStampAutomatonB (S n)). 
@@ -111,7 +111,7 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
 
   Definition portA := {|
@@ -157,17 +157,12 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   Definition secondAutomaton := ConstraintAutomata.CA ([q2;p2;p2';r2]) ([A;B;C]) (automaton2Transition 0) 
   ([q2]). 
 
+
   Eval compute in ConstraintAutomata.bisimulation firstAutomaton secondAutomaton.
 
-  Eval compute in ConstraintAutomata.areBisimilar firstAutomaton secondAutomaton.
+  Eval compute in ConstraintAutomata.languageEquivalent firstAutomaton secondAutomaton.
 
-  (*Lemma isBisim: ConstraintAutomata.bisimulationProp firstAutomaton secondAutomaton.
-  Proof.
-  unfold ConstraintAutomata.bisimulationProp. intros.
-  destruct state1. destruct state2.
-  - simpl in H. destruct H. simpl in H0. destruct H0. destruct H0. destruct H2. inversion H2.
-  - *)
-(* We also implement the non bisimilar automaton provided in the aforementioned example *)
+  (* We also implement the non bisimilar automaton provided in the aforementioned example *)
 
   Definition automaton3Transition (n:nat) (s:automatonStates) :
   set (set automatonPorts * ConstraintAutomata.DC automatonPorts nat * automatonStates) :=
@@ -183,6 +178,6 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
 
   Eval compute in ConstraintAutomata.bisimulation firstAutomaton thirdAutomaton.
 
-  Eval compute in ConstraintAutomata.areBisimilar firstAutomaton thirdAutomaton.
+  Eval compute in ConstraintAutomata.languageEquivalent firstAutomaton thirdAutomaton.
   
 

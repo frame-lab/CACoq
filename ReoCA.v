@@ -1,25 +1,7 @@
 Require Import CaMain.
-Require Import Coq.micromega.Lia.
 
 Set Implicit Arguments.
 Set Maximal Implicit Insertion.
-
-Open Scope Q_scope.
-
-(* The following lemma was formalized thanks to anonymous reviewers' contribution *)
-Lemma orderZofNat : forall n, forall a, (Z.of_nat (S n) + a) # 1 < Z.of_nat (S (S n)) + a # 1.
-Proof.
-intros.
-assert (forall z, z # 1 < (z + 1) # 1).
-+ intros. assert (inject_Z z < inject_Z (z + 1)). rewrite <- Zlt_Qlt. 
-  omega. unfold inject_Z in H. exact H.
-+ assert (forall b, forall a, (b + a) # 1 < ((b + 1) + a) # 1).
-  intros. rewrite <- Z.add_assoc. rewrite (Z.add_comm 1).
-  rewrite Z.add_assoc. apply H.
-  assert (forall n, Z.of_nat (S n) = ((Z.of_nat n) + 1)%Z).
-  intro. simpl. lia. rewrite (H1 ((S n))). apply H0. Defined.
-
-Close Scope Q_scope.
 
 Module ReoCa.
   Section ReoCa.
@@ -125,16 +107,6 @@ End ReoCa.
   Definition paramSync := ReoCa.ReoCABinaryChannel E F [q0s] [q0s] syncCaBehavior.
 
   Eval compute in ConstraintAutomata.run syncCA [portE;portF] 200.
-  Lemma accepting : forall n, ~ In [] (ConstraintAutomata.run syncCA [portE;portF] n).
-  Proof. intros.
-  induction n.
-  + unfold not. intros. simpl in H. destruct H. inversion H. exact H.
-  (* a prop indutiva vai ser pra mexer com H. *)
-  (* ideia: escrevela como (quando o k-esimo passo é valido?*)
-  + unfold not. intros. unfold ConstraintAutomata.run in H. 
-    unfold ConstraintAutomata.run' in H. Admitted. 
-  (*ERICK: exemplo infinito. Talvez uma outra definição de run que compreenda runs infinitas
-  exatamente como Baier?*)
 
   (* LossySync CA *)
   Inductive lossySyncStates := q0.

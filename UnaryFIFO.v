@@ -78,7 +78,7 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. unfold Qlt. apply ReoCA.orderZofNat.  Defined.
+  intros n4. unfold Qlt. apply orderZofNat.  Defined.
   
   Lemma timeStampAutomatonBHolds : forall n, 
     Qlt (timeStampAutomatonB n) (timeStampAutomatonB (S n)). 
@@ -89,7 +89,7 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
 
   Definition portA := {|
@@ -137,13 +137,9 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
                            In (snd(t)) (ConstraintAutomata.Q0 unaryFIFO).
   Proof.
   intros. destruct H. rewrite H in H0. simpl in H0. destruct H0.
-  - rewrite <- H0. split. reflexivity. reflexivity. split. reflexivity. simpl. left. reflexivity.
+  - rewrite <- H0. split. reflexivity. split. reflexivity. simpl. left. reflexivity.
   - inversion H0.
   Qed.
 
 
   Eval compute in ConstraintAutomata.run unaryFIFO [portA;portB] 11.
-
-  (*Require Extraction.
-  Extraction Language Haskell.
-  Extraction "AutomatonCertified" resultingAutomatonProduct. *)

@@ -1,7 +1,7 @@
 Require Import CaMain.
 Require Import ReoCA.
 Inductive sequencerStates := s0 | q0a | p0a| p1a.
-Inductive sequencerPorts := A | B | C | D | E | F | G | H | I | J | K.
+Inductive sequencerPorts := A | B | C | D | E | F | G | H | I | J.
 
 Instance sequencerStatesEq : EqDec sequencerStates eq := 
 	{equiv_dec x y := 
@@ -41,7 +41,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| H,H => in_left 
 		| I,I => in_left 
 		| J,J => in_left 
-		| K,K => in_left 
 		| A,B => in_right 
 		| A,C => in_right 
 		| A,D => in_right 
@@ -51,7 +50,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| A,H => in_right 
 		| A,I => in_right 
 		| A,J => in_right 
-		| A,K => in_right 
 		| B,A => in_right 
 		| B,C => in_right 
 		| B,D => in_right 
@@ -61,7 +59,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| B,H => in_right 
 		| B,I => in_right 
 		| B,J => in_right 
-		| B,K => in_right 
 		| C,A => in_right 
 		| C,B => in_right 
 		| C,D => in_right 
@@ -71,7 +68,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| C,H => in_right 
 		| C,I => in_right 
 		| C,J => in_right 
-		| C,K => in_right 
 		| D,A => in_right 
 		| D,B => in_right 
 		| D,C => in_right 
@@ -81,7 +77,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| D,H => in_right 
 		| D,I => in_right 
 		| D,J => in_right 
-		| D,K => in_right 
 		| E,A => in_right 
 		| E,B => in_right 
 		| E,C => in_right 
@@ -91,7 +86,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| E,H => in_right 
 		| E,I => in_right 
 		| E,J => in_right 
-		| E,K => in_right 
 		| F,A => in_right 
 		| F,B => in_right 
 		| F,C => in_right 
@@ -101,7 +95,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| F,H => in_right 
 		| F,I => in_right 
 		| F,J => in_right 
-		| F,K => in_right 
 		| G,A => in_right 
 		| G,B => in_right 
 		| G,C => in_right 
@@ -111,7 +104,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| G,H => in_right 
 		| G,I => in_right 
 		| G,J => in_right 
-		| G,K => in_right 
 		| H,A => in_right 
 		| H,B => in_right 
 		| H,C => in_right 
@@ -121,7 +113,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| H,G => in_right 
 		| H,I => in_right 
 		| H,J => in_right 
-		| H,K => in_right 
 		| I,A => in_right 
 		| I,B => in_right 
 		| I,C => in_right 
@@ -131,7 +122,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| I,G => in_right 
 		| I,H => in_right 
 		| I,J => in_right 
-		| I,K => in_right 
 		| J,A => in_right 
 		| J,B => in_right 
 		| J,C => in_right 
@@ -141,17 +131,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 		| J,G => in_right 
 		| J,H => in_right 
 		| J,I => in_right 
-		| J,K => in_right 
-		| K,A => in_right 
-		| K,B => in_right 
-		| K,C => in_right 
-		| K,D => in_right 
-		| K,E => in_right 
-		| K,F => in_right 
-		| K,G => in_right 
-		| K,H => in_right 
-		| K,I => in_right 
-		| K,J => in_right 
 		end 
 	}.
   Proof.
@@ -230,26 +209,8 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
     | S n =>  0
     end.
 
-  Definition dataAssignmentJ n :=
-    match n with
-    | 0 =>  1
-    | 1 =>  (1)
-    | 2 =>  0
-    | S n =>  0
-    end.
 
    Definition timeStampSequencerA(n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 1#1 
-    | 1 => 5#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>  Z.of_nat (S n) + 16#1 
-    end.
-
-  Definition timeStampSequencerB (n:nat) : QArith_base.Q :=
     match n with
     | 0 => 2#1
     | 1 => 6#1
@@ -260,8 +221,7 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
     | S n =>  Z.of_nat(S n) + 17#1
     end.
 
-
-  Definition timeStampSequencerC (n:nat) : QArith_base.Q :=
+  Definition timeStampSequencerB (n:nat) : QArith_base.Q :=
     match n with
     | 0 => 3#1
     | 1 => 6#1
@@ -272,7 +232,8 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
     | S n =>  Z.of_nat(S n) + 18#1
     end.
 
-  Definition timeStampSequencerD (n:nat) : QArith_base.Q :=
+
+  Definition timeStampSequencerC (n:nat) : QArith_base.Q :=
     match n with
     | 0 => 4#1
     | 1 => 6#1
@@ -281,6 +242,17 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
     | 4 => 14#1
     | 5 => 17#1
     | S n =>  Z.of_nat(S n) + 19#1
+    end.
+
+  Definition timeStampSequencerD (n:nat) : QArith_base.Q :=
+    match n with
+    | 0 => 1#1 
+    | 1 => 5#1
+    | 2 => 8#1
+    | 3 => 11#1
+    | 4 => 14#1
+    | 5 => 17#1
+    | S n =>  Z.of_nat (S n) + 16#1 
     end.
 
   Definition timeStampSequencerE (n:nat) : QArith_base.Q :=
@@ -316,6 +288,17 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
     | S n =>  Z.of_nat(S n) + 19#1
     end.
 
+   Definition timeStampSequencerI(n:nat) : QArith_base.Q :=
+    match n with
+    | 0 => 1#1 
+    | 1 => 5#1
+    | 2 => 8#1
+    | 3 => 11#1
+    | 4 => 14#1
+    | 5 => 17#1
+    | S n =>  Z.of_nat (S n) + 16#1 
+    end.
+
   Lemma timeStampSequencerAHolds : forall n, 
     Qlt (timeStampSequencerA n) (timeStampSequencerA (S n)).
   Proof.
@@ -325,7 +308,7 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. unfold Qlt. apply ReoCA.orderZofNat.  Defined.
+  intros n4. unfold Qlt. apply orderZofNat.  Defined.
   
   Lemma timeStampSequencerBHolds : forall n, 
     Qlt (timeStampSequencerB n) (timeStampSequencerB (S n)). 
@@ -336,7 +319,7 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerCHolds : forall n, 
     Qlt (timeStampSequencerC n) (timeStampSequencerC (S n)). 
@@ -347,7 +330,7 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerDHolds : forall n, 
     Qlt (timeStampSequencerD n) (timeStampSequencerD (S n)). 
@@ -358,7 +341,7 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerEHolds : forall n, 
     Qlt (timeStampSequencerE n) (timeStampSequencerE (S n)). 
@@ -369,7 +352,7 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerGHolds : forall n, 
     Qlt (timeStampSequencerG n) (timeStampSequencerG (S n)). 
@@ -380,7 +363,7 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerHHolds : forall n, 
     Qlt (timeStampSequencerH n) (timeStampSequencerH (S n)). 
@@ -391,7 +374,18 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
+
+  Lemma timeStampSequencerJHolds : forall n, 
+    Qlt (timeStampSequencerA n) (timeStampSequencerA (S n)).
+  Proof.
+  intros. destruct n. unfold timeStampSequencerA. reflexivity.
+  unfold timeStampSequencerA. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. unfold Qlt. apply orderZofNat.  Defined.
 
   Definition portA := {|
         ConstraintAutomata.id := A;
@@ -442,26 +436,28 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
         ConstraintAutomata.portCond := timeStampSequencerHHolds;
         ConstraintAutomata.index := 0 |}.
 
-  (*A FIFO E *)
-  Definition aToEFIFOrel (s:sequencerStates) :=
+
+  (*D FIFO E *)
+  Definition dToEFIFOrel (s:sequencerStates) :=
     match s with
-    | q0a => [([A], (ConstraintAutomata.dc A 0), p0a);
-              ([A], (ConstraintAutomata.dc A 1), p1a)]
+    | q0a => [([D], (ConstraintAutomata.dc D 0), p0a);
+              ([D], (ConstraintAutomata.dc D 1), p1a)]
     | p0a => [([E], (ConstraintAutomata.dc E 0), q0a)]
     | p1a => [([E], (ConstraintAutomata.dc E 1), q0a)] 
     | s0 => []
     end.
 
-  Definition aToEFIFOCA:= ReoCa.ReoCABinaryChannel A E ([q0a;p0a;p1a]) ([q0a]) (aToEFIFOrel). 
+  (* This FIFO starts with a data item; the value denoted by 0 is in it, as the initial state denotes *)
+  Definition dToEFIFOCA:= ReoCa.ReoCABinaryChannel D E ([q0a;p0a;p1a]) ([q0a]) (dToEFIFOrel). 
 
-  (* E Sync B *)
-  Definition syncEBCaBehavior (s: sequencerStates) :=
+  (* E Sync A *)
+  Definition syncEACaBehavior (s: sequencerStates) :=
     match s with
-    | s0 => [([E;B] , ConstraintAutomata.eqDc nat E B, s0)] 
+    | s0 => [([E;A] , ConstraintAutomata.eqDc nat E A, s0)] 
     | _ => []
     end.
 
-  Definition EBsyncCA := ReoCa.ReoCABinaryChannel E B ([s0]) ([s0]) syncEBCaBehavior. 
+  Definition EAsyncCA := ReoCa.ReoCABinaryChannel E A ([s0]) ([s0]) syncEACaBehavior. 
 
   (*E FIFO G *)
   Definition eToGFIFOrel (s:sequencerStates) :=
@@ -475,14 +471,14 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 
   Definition eToGFIFOCA:= ReoCa.ReoCABinaryChannel E G ([q0a;p0a;p1a]) ([q0a]) eToGFIFOrel.
 
-  (* G Sync C *)
-  Definition syncGCCaBehavior (s: sequencerStates) :=
+  (* G Sync B *)
+  Definition syncGBCaBehavior (s: sequencerStates) :=
     match s with
-    | s0 => [([G;C] , ConstraintAutomata.eqDc nat G C, s0)] 
+    | s0 => [([G;B] , ConstraintAutomata.eqDc nat G B, s0)] 
     | _ => []
     end.
 
-  Definition GCsyncCA := ReoCa.ReoCABinaryChannel G C ([s0]) ([s0]) syncGCCaBehavior.
+  Definition GBsyncCA := ReoCa.ReoCABinaryChannel G B ([s0]) ([s0]) syncGBCaBehavior.
 
   (*G FIFO H*)
   Definition gToHFIFOrel (s:sequencerStates):=
@@ -496,34 +492,44 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 
   Definition gToHFIFOCA:= ReoCa.ReoCABinaryChannel G H ([q0a;p0a;p1a]) ([q0a]) gToHFIFOrel.
 
-  (* H Sync D *)
-  Definition syncHDCaBehavior (s: sequencerStates) :=
+  (* H Sync C *)
+  Definition syncHCCaBehavior (s: sequencerStates) :=
     match s with
-    | s0 => [([H;D] , ConstraintAutomata.eqDc nat H D, s0)] 
+    | s0 => [([H;C] , ConstraintAutomata.eqDc nat H C, s0)] 
     | _ => []
     end.
 
-  Definition HDsyncCA := ReoCa.ReoCABinaryChannel H D ([s0]) ([s0]) syncHDCaBehavior.
+  Definition HCsyncCA := ReoCa.ReoCABinaryChannel H C ([s0]) ([s0]) syncHCCaBehavior.
 
   (* We build the resulting product automaton *)
-  Definition fifo1Product := ProductAutomata.buildPA aToEFIFOCA EBsyncCA.
+  Definition fifo1Product := ProductAutomata.buildPA dToEFIFOCA EAsyncCA.
   Definition fifo2Product := ProductAutomata.buildPA fifo1Product eToGFIFOCA.
-  Definition fifo3Product := ProductAutomata.buildPA fifo2Product GCsyncCA.
+  Definition fifo3Product := ProductAutomata.buildPA fifo2Product GBsyncCA.
   Definition fifo4Product := ProductAutomata.buildPA fifo3Product gToHFIFOCA.
-  Definition resultingSequencerProduct := ProductAutomata.buildPA fifo4Product HDsyncCA.
+  Definition resultingSequencerProduct := ProductAutomata.buildPA fifo4Product HCsyncCA.
 
-  Eval vm_compute in ConstraintAutomata.Q resultingSequencerProduct.
-
-  Eval vm_compute in ConstraintAutomata.T resultingSequencerProduct (p1a, s0, q0a, s0, p0a, s0).
-
-  (*The automaton changes its initial configuration only if there are data in ports A*)
+  (*The automaton changes its initial configuration only if there are data in ports D*)
   Eval vm_compute in ConstraintAutomata.portsOfTransition resultingSequencerProduct 
     (q0a, s0, q0a, s0, q0a, s0).
 
-  Lemma firstPortToHavaDataIsA : ConstraintAutomata.portsOfTransition resultingSequencerProduct 
-    (q0a, s0, q0a, s0, q0a, s0) = [A].
-  Proof. vm_compute. reflexivity. Defined.
-
+  (* The only states in which only D has data is the initial states of the automaton (i.e,
+      it will be the case that only in the beginning of the automaton, D will be the only port 
+      observing data) *)
+  Lemma firstPortToHavaDataIsD : forall state, 
+    In (state) (ConstraintAutomata.Q0 resultingSequencerProduct) <-> 
+    In (state) (ConstraintAutomata.Q resultingSequencerProduct) /\
+    ConstraintAutomata.portsOfTransition resultingSequencerProduct state = [D].
+  Proof.
+  split.
+  - intros. simpl in H0. destruct H0.
+  + rewrite <- H0. vm_compute. split. left. reflexivity. reflexivity.
+  + inversion H0.
+  - intros. simpl in H0. destruct H0. destruct H0.
+    rewrite <- H0. simpl. left. reflexivity.
+    repeat (destruct H0). 
+    all: (vm_compute in H1; inversion H1).
+  Qed.
+ 
   Definition singleExecInput := [portA;portB;portC;portD;portE;portG;portH].
 
   Definition run1 := Eval vm_compute in ConstraintAutomata.run resultingSequencerProduct singleExecInput 4.
@@ -630,17 +636,6 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
     | S n =>   Z.of_nat (S n) + 16#1
     end.
 
-  Definition timeStampSequencerJ2 (n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 4#1
-    | 1 => 6#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>   Z.of_nat (S n) + 16#1
-    end.
-
   Lemma timeStampSequencerA2Holds : forall n, 
     Qlt (timeStampSequencerA2 n) (timeStampSequencerA2 (S n)). 
   Proof.
@@ -650,7 +645,7 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerB2Holds : forall n, 
     Qlt (timeStampSequencerB2 n) (timeStampSequencerB2 (S n)). 
@@ -661,7 +656,7 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
   Lemma timeStampSequencerC2Holds : forall n, 
     Qlt (timeStampSequencerC2 n) (timeStampSequencerC2 (S n)). 
   Proof.
@@ -672,7 +667,7 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerD2Holds : forall n, 
     Qlt (timeStampSequencerD2 n) (timeStampSequencerD2 (S n)). 
@@ -684,7 +679,7 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerE2Holds : forall n, 
     Qlt (timeStampSequencerE2 n) (timeStampSequencerB2 (S n)). 
@@ -696,7 +691,7 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerG2Holds : forall n, 
     Qlt (timeStampSequencerG2 n) (timeStampSequencerG2 (S n)). 
@@ -708,7 +703,7 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampSequencerH2Holds : forall n, 
     Qlt (timeStampSequencerH2 n) (timeStampSequencerH2 (S n)). 
@@ -720,7 +715,7 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   intros n1. case (n1). reflexivity.
   intros n2. case (n2). reflexivity.
   intros n3. case (n3). reflexivity.
-  intros n4. apply ReoCA.orderZofNat. Defined.
+  intros n4. apply orderZofNat. Defined.
 
   Definition portA2 := {|
         ConstraintAutomata.id := A;
@@ -780,8 +775,6 @@ Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
   Proof.
   simpl. auto. Defined.
 
-  (* An accepting run must start with a data item over A *)
-  erick: fazer essa propriedade.
 
   Require Extraction.
   Extraction Language Haskell.

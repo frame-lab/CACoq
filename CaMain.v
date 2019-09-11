@@ -4,7 +4,22 @@ Require Import Classes.EquivDec.
 Require Import Coq.Program.Program.
 Require Import QArith.
 Require Import Coq.Numbers.BinNums.
+Require Import Coq.micromega.Lia.
 
+Open Scope Q_scope.
+
+(* The following lemma was formalized thanks to anonymous reviewers' contribution *)
+Lemma orderZofNat : forall n, forall a, (Z.of_nat (S n) + a) # 1 < Z.of_nat (S (S n)) + a # 1.
+Proof.
+intros.
+assert (forall z, z # 1 < (z + 1) # 1).
++ intros. assert (inject_Z z < inject_Z (z + 1)). rewrite <- Zlt_Qlt. 
+  omega. unfold inject_Z in H. exact H.
++ assert (forall b, forall a, (b + a) # 1 < ((b + 1) + a) # 1).
+  intros. rewrite <- Z.add_assoc. rewrite (Z.add_comm 1).
+  rewrite Z.add_assoc. apply H.
+  assert (forall n, Z.of_nat (S n) = ((Z.of_nat n) + 1)%Z).
+  intro. simpl. lia. rewrite (H1 ((S n))). apply H0. Defined.
 
 Close Scope Q_scope.
 
@@ -127,6 +142,7 @@ Module ConstraintAutomata.
     - intros. destruct H2. destruct H2. rewrite H2. unfold evalDC. rewrite H3. destruct equiv_dec.
       reflexivity. congruence.
     Defined.
+
 
     (* The following definition searches for a port in a set of tds, returning it if it exists and None otherwise *)
     Fixpoint retrievePortFromInput (s:set port) (n: name) :=
@@ -466,7 +482,6 @@ Module ConstraintAutomata.
   Definition portsOfTransition (ca: constraintAutomata) (s : state) :=
     retrievePortsFromRespTransitions (ConstraintAutomata.T ca s).
 
- 
   (* Bisimulation as boolean verification *)
 
   (* We filter the transition to be compared with a transition that contains the same name set *)
@@ -474,7 +489,7 @@ Module ConstraintAutomata.
     match t2 with
     | [] => [] 
     | a::t => if (set_eq portNames (fst(fst(a)))) then a::getTransition portNames t else getTransition portNames t
-    end.
+    end. 
 
   (* We need to evalate whether the next reached states are also equivalent. Then, we need to store *)
   (* pairs of states to be evaluated *)
@@ -485,7 +500,6 @@ Module ConstraintAutomata.
     end.
 
   (* Check whether exists a transition with port names equal to the port name of a single transition of A1 *)
-
   Fixpoint iterateTransitionsQ1A1 (ca1: constraintAutomata) (ca2: constraintAutomata) (q1: state) (q2: state) 
     (setT1 : set (set(name) * DC name data * state)) (setT2: set (set(name) * DC name data * state)) 
     (acc: set (state * state)) :=
@@ -537,7 +551,7 @@ Module ConstraintAutomata.
     (acc: set (state * state)) :=
     match q2 with
     | [] => acc
-    | a::t => evaluateObtainedStates ca1 ca2 (length(ConstraintAutomata.Q(ca1))) (*q1 a*)acc [(q1,a)]  
+    | a::t => evaluateObtainedStates ca1 ca2 (length(ConstraintAutomata.Q(ca1))) acc [(q1,a)]  
               ++ iterateOverA2States ca1 ca2 q1 t acc
     end.  
 
@@ -548,21 +562,122 @@ Module ConstraintAutomata.
     | a::t => iterateOverA2States ca1 ca2 a q2 acc ++ iterateOverA1States ca1 ca2 t q2 acc
     end.
 
-  Fixpoint containsSymmetric (setPairs : set (state * state)) :=
+  Fixpoint containsSymmetric (setPairs : set (state * state)) (setPairsFull: set (state * state)):=
     match setPairs with
     | [] => []
     | a::t => match a with
               | (q1,q2) => if existsb (fun x : (state * state) => match x with
-                                       |(a,b) => (equiv_decb a q2) && (equiv_decb b q1)  end) (setPairs) then (q1,q2)::containsSymmetric t
-                           else containsSymmetric t
+                                       |(a,b) => (equiv_decb a q2) && (equiv_decb b q1)  end) (setPairsFull) then (q1,q2)::containsSymmetric t setPairsFull
+                           else containsSymmetric t setPairsFull
               end
     end.
 
-  Definition bisimulation (ca1: constraintAutomata) (ca2: constraintAutomata) :=
+  Fixpoint isSymmetricAux (setPairs : set (state * state)) (setPairsFull: set (state * state)) :=
+    set_eq (setPairs) (containsSymmetric (setPairs) setPairsFull).
+
+  Definition bisimulationAux (ca1: constraintAutomata) (ca2: constraintAutomata) :=
     (iterateOverA1States ca1 ca2 (ConstraintAutomata.Q0 ca1) (ConstraintAutomata.Q0 ca2) []) ++ 
     (iterateOverA1States ca2 ca1 (ConstraintAutomata.Q0 ca2) (ConstraintAutomata.Q0 ca1) []).
 
-  (* We define a function that returns true if two automata are bisimilar, and false otherwise *)
+  Definition isEquivalent (setPairs : set (state * state)) :=
+    if isSymmetricAux (setPairs) (setPairs) then setPairs else [].
+    
+
+  Definition bisimulation (ca1: constraintAutomata) (ca2: constraintAutomata) :=
+    isEquivalent (bisimulationAux ca1 ca2).
+
+
+  (* We calculate the partition Q / R *)
+  Fixpoint mountSubsetFromPairs (pairStates : state) (setPairs : set (state * state)) :=
+    match setPairs with
+    | [] => [pairStates]
+    | a::t => if (fst(a) == pairStates) then set_add equiv_dec (snd(a)) (mountSubsetFromPairs pairStates t)
+              else mountSubsetFromPairs pairStates t
+    end.
+
+  Fixpoint getQrelR (setRel : set (state * state)) :=
+    match setRel with
+    | [] => []
+    | a::t =>  set_add equiv_dec (mountSubsetFromPairs (fst(a)) (setRel)) (getQrelR t)
+    end.
+
+
+  (* We define the Notation 3.8, DC_A(q,N,P) as Baier et al. define for bisimulation as dcBisim *)
+
+  Fixpoint getReachedDcs (t: set (set name * DC name data * state)) (setStates: set state) :=
+    match t with
+    | [] => []
+    | a::t => if set_mem equiv_dec (snd(a)) (setStates)
+              then (snd(fst(a)))::(getReachedDcs t setStates)(*set_add equiv_dec (snd(a))(getReachedStates t)*)
+              else (getReachedDcs t setStates)
+    end.
+
+  (* Then we build the conjunctions of all dcs of a single transition that reaches a state in P *)
+  Fixpoint conjunctionOfDcs (setDcs : set(DC name data))  :=
+    match setDcs with
+    | [] => ConstraintAutomata.negDc(ConstraintAutomata.tDc name data)
+    | a::t => (ConstraintAutomata.orDc (a) (conjunctionOfDcs t))
+    end.
+
+  Definition dcBisim (ca: constraintAutomata) (q: state) (portNames : set name) (P: set state) :=
+    conjunctionOfDcs((getReachedDcs (getTransition (portNames) (ConstraintAutomata.T ca q))) (P)).
+
+  (*Program Instance function_eqdec A `(EqDec A eq) : ! EqDec (A -> A) eq :=
+    { equiv_dec f g :=
+      if f data == g data then
+        if f data == g data then in_left
+        else in_right
+      else in_right
+    }. *) 
+
+  (* We define equivalence of DCs *)
+  Fixpoint areEquivalent (dc1 : DC name data) (dc2: DC name data) :=
+    match dc1, dc2 with
+    | tDc _ _, tDc _ _ => true
+    | dc a b, dc c d => (equiv_decb (a) (c)) && (equiv_decb (b) (d))
+    | eqDc _ a b, eqDc _ c d => (equiv_decb (a) (b)) && (equiv_decb (b) (d))
+    | negDc a, negDc b => areEquivalent a b
+    | orDc a b, orDc c d => areEquivalent a c && areEquivalent b d
+    | andDc a b, andDc c d => areEquivalent a c && areEquivalent b d
+    | trDc tr a b, trDc tr2 c d => (equiv_decb (a) (c)) && (equiv_decb (b) (d)) 
+    | _, _ => true
+    end.
+                       
+
+  (*We define the powerset's construction, in order to verify all possible port names' labels for transitions *)
+  Fixpoint powerset (s: set name) :=
+    match s with 
+    | [] => []
+    | a::t => concat (map (fun f => [a::f;f]) (powerset t))
+    end.
+
+  (* The comparison of dcBisim for all port names of both automata *)
+  Fixpoint compareDcBisimPortName (ca1: constraintAutomata) (ca2: constraintAutomata) (q1: state)
+  (q2: state) (P: set state) (setNames: set (set name)) :=
+    match setNames with
+    | [] => true
+    | a::t => areEquivalent((dcBisim (ca1) (q1) a P)) ((dcBisim (ca2) (q2) a P)) && 
+              (compareDcBisimPortName ca1 ca2 q1 q2 P t)
+    end.
+
+  (* Now we want to know if compareDcBisimPortName holds for every P \in Q / R as elements of the bisimulation relation *)
+  Fixpoint compareDcBisimPartition (ca1: constraintAutomata) (ca2: constraintAutomata) (q1: state)
+  (q2: state) (setNames: set (set name)) (qMinusR : set (set state)):=
+    match qMinusR with
+    | [] => true
+    | a::t => (compareDcBisimPortName ca1 ca2 q1 q2 a setNames) && (compareDcBisimPartition ca1 ca2 q1 q2 setNames t)
+    end.
+
+  (* We need to check if the above condition holds for every pair of states (q1,q2) \in R as the bisim. relation *)
+  Fixpoint compareDcBisimStates (ca1: constraintAutomata) (ca2: constraintAutomata) 
+  (setNames: set (set name)) (qMinusR : set (set state)) (pairStates : set (state * state)) :=
+    match pairStates with
+    | [] => true
+    | a::t =>  (compareDcBisimPartition ca1 ca2 (fst(a)) (snd(a)) setNames qMinusR) &&
+               (compareDcBisimStates ca1 ca2 setNames qMinusR t)
+    end.
+
+  (* We have to ensure that all states of both CA have been comprehended by the obtained bisimulation relation *)
 
   Fixpoint statesA1InSetPairStates (setPairStates: set (state * state)) : set state:=
     match setPairStates with
@@ -578,23 +693,15 @@ Module ConstraintAutomata.
 
   Definition containsAllStatesOfBothCa (setQ1 : set state) (setQ2 : set state) (setBisim : set (state * state)) :=
     (s1_in_s2 (setQ1) (statesA1InSetPairStates setBisim)) && (s1_in_s2 (setQ2) (statesA2InSetPairStates setBisim)).
-
-  (*We extract the states of the initial state, so the algorithm returns true 
-    iff all states of both automaton are in the obtained relation*)
-  Definition areBisimilar (ca1: constraintAutomata) (ca2: constraintAutomata) := 
-    containsAllStatesOfBothCa (ConstraintAutomata.Q ca1) (ConstraintAutomata.Q ca2) (containsSymmetric (bisimulation ca1 ca2)).
-
-
-  (* Bisimulation as Proposition *)
-
-  Definition stateComparison (ca1: constraintAutomata) (ca2: constraintAutomata) (state1: state) (state2: state) : Prop :=
-   forall t1 t2, In t1 (ConstraintAutomata.T ca1 state1) /\ In t2 (ConstraintAutomata.T ca2 state2) ->
-      (fst(fst(t1))) = (fst(fst(t2))).
-
-  Definition bisimulationProp (ca1: constraintAutomata) (ca2: constraintAutomata) : Prop :=
-    forall state1 state2, In state1 (ConstraintAutomata.Q0 ca1) /\ In state2 (ConstraintAutomata.Q0 ca2)
-    -> forall t1 t2, In t1 (ConstraintAutomata.T ca1 state1) /\ In t2 (ConstraintAutomata.T ca2 state2) ->
-       (fst(fst(t1))) = (fst(fst(t2))) /\ stateComparison ca1 ca2 (snd(t1)) (snd(t2)).
+  
+  Definition areBisimilar (ca1: constraintAutomata) (ca2: constraintAutomata) (bisimRelation : set (state * state)) :=
+    if (set_eq (ConstraintAutomata.N ca1) (ConstraintAutomata.N ca2)) then  
+    compareDcBisimStates ca1 ca2 (powerset (ConstraintAutomata.N ca1)) (getQrelR (bisimRelation)) (bisimRelation)  &&
+    containsAllStatesOfBothCa (ConstraintAutomata.Q ca1) (ConstraintAutomata.Q ca2) (containsSymmetric (bisimRelation) (bisimRelation))
+    else false.
+    
+  Definition languageEquivalent (ca1: constraintAutomata) (ca2: constraintAutomata) :=
+    areBisimilar ca1 ca2 (bisimulation ca1 ca2).
 
   End ConstraintAutomata.
 End ConstraintAutomata.
@@ -735,7 +842,7 @@ Module ProductAutomata.
     match a2States with
     | [] => []
     | q2::t => if (condR2 (transition) (a2Names)) then 
-                 ((q1,q2),((fst(transition)), ((*outboundStatesR2*) (snd(transition)), (q2))))::singleTransitionR2 q1 transition t a2Names
+                 ((q1,q2),((fst(transition)), ((snd(transition)), (q2))))::singleTransitionR2 q1 transition t a2Names
                 else singleTransitionR2 q1 transition t a2Names
     end.
 
