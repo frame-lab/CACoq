@@ -512,22 +512,16 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   Eval vm_compute in ConstraintAutomata.portsOfTransition resultingSequencerProduct 
     (q0a, s0, q0a, s0, q0a, s0).
 
-  (* The only states in which only D has data is the initial states of the automaton (i.e,
-      it will be the case that only in the beginning of the automaton, D will be the only port 
-      observing data) *)
+  (*  If the automaton is in its starting state, D will be the only port 
+      observing data *)
   Lemma firstPortToHavaDataIsD : forall state, 
-    In (state) (ConstraintAutomata.Q0 resultingSequencerProduct) <-> 
+    In (state) (ConstraintAutomata.Q0 resultingSequencerProduct) -> 
     In (state) (ConstraintAutomata.Q resultingSequencerProduct) /\
     ConstraintAutomata.portsOfTransition resultingSequencerProduct state = [D].
   Proof.
-  split.
   - intros. simpl in H0. destruct H0.
   + rewrite <- H0. vm_compute. split. left. reflexivity. reflexivity.
   + inversion H0.
-  - intros. simpl in H0. destruct H0. destruct H0.
-    rewrite <- H0. simpl. left. reflexivity.
-    repeat (destruct H0). 
-    all: (vm_compute in H1; inversion H1).
   Qed.
  
   Definition singleExecInput := [portA;portB;portC;portD;portE;portG;portH].

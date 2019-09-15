@@ -157,9 +157,10 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   Definition secondAutomaton := ConstraintAutomata.CA ([q2;p2;p2';r2]) ([A;B;C]) (automaton2Transition 0) 
   ([q2]). 
 
-
+  (* firstAutomaton and secondAutomaton are bisimilar *)
   Eval compute in ConstraintAutomata.bisimulation firstAutomaton secondAutomaton.
 
+  (* Therefore, they are language equivalent *)
   Eval compute in ConstraintAutomata.languageEquivalent firstAutomaton secondAutomaton.
 
   (* We also implement the non bisimilar automaton provided in the aforementioned example *)
@@ -179,5 +180,4 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   Eval compute in ConstraintAutomata.bisimulation firstAutomaton thirdAutomaton.
 
   Eval compute in ConstraintAutomata.languageEquivalent firstAutomaton thirdAutomaton.
-  
 

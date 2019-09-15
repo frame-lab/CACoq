@@ -459,17 +459,6 @@ Module ConstraintAutomata.
     Definition run (ca:constraintAutomata) (tds: set port) (k : nat) :=
       run' ca tds k (Q0 ca) [Q0 ca].
 
-  (* We define infinite accepting runs as an proposition which translates the notion of infinite runs as proposed by Baier *)
-
-  (* Inductive valid_step (ca: constraintAutomaton) : set port -> nat : Prop :=
-    | step : *)
-
-  (* Definition infiniteRun (ca: constraintAutomata) (tds: set port) :=
-    (* initial condition *)
-    exists q0, In q0 (ConstraintAutomata.Q0) /\ exists t, In t (ConstraintAutomata.T ca q0) 
-    /\ set_eq (fst(fst t)) (retrievePortsFromThetaN tds) /\ evalCompositeDc (fst(snd(t)) (tds) = true -> (* e agora? *)
-  *)
-
   (* We define some functions to retrieve data from transitions, in order to prove *)
   (* properties about behavior of automata                                         *)
 
@@ -579,9 +568,20 @@ Module ConstraintAutomata.
     (iterateOverA1States ca1 ca2 (ConstraintAutomata.Q0 ca1) (ConstraintAutomata.Q0 ca2) []) ++ 
     (iterateOverA1States ca2 ca1 (ConstraintAutomata.Q0 ca2) (ConstraintAutomata.Q0 ca1) []).
 
+  (* bisimulation is commutative *)
+  Lemma bisimulationAuxCommutative : forall ca1, forall ca2, forall a, 
+   (In a (bisimulationAux ca1 ca2)) <-> (In a (bisimulationAux ca2 ca1)).
+  Proof.
+  intros.
+  split.
+  - intros. unfold bisimulationAux. unfold bisimulationAux in H2. apply in_or_app.
+    apply in_app_or in H2. destruct H2. right. exact H2. left. exact H2.
+  - intros. unfold bisimulationAux. unfold bisimulationAux in H2. apply in_or_app.
+    apply in_app_or in H2. destruct H2. right. exact H2. left. exact H2.
+  Defined.
+
   Definition isEquivalent (setPairs : set (state * state)) :=
     if isSymmetricAux (setPairs) (setPairs) then setPairs else [].
-    
 
   Definition bisimulation (ca1: constraintAutomata) (ca2: constraintAutomata) :=
     isEquivalent (bisimulationAux ca1 ca2).
@@ -608,41 +608,111 @@ Module ConstraintAutomata.
     match t with
     | [] => []
     | a::t => if set_mem equiv_dec (snd(a)) (setStates)
-              then (snd(fst(a)))::(getReachedDcs t setStates)(*set_add equiv_dec (snd(a))(getReachedStates t)*)
+              then (snd(fst(a)))::(getReachedDcs t setStates)
               else (getReachedDcs t setStates)
+    end.
+
+  Fixpoint orDcs (dc : DC name data) :=
+    match dc with
+    | andDc a b => ConstraintAutomata.orDc (ConstraintAutomata.negDc (orDcs a)) (ConstraintAutomata.negDc(orDcs b))
+    | _ => dc
     end.
 
   (* Then we build the conjunctions of all dcs of a single transition that reaches a state in P *)
   Fixpoint conjunctionOfDcs (setDcs : set(DC name data))  :=
     match setDcs with
     | [] => ConstraintAutomata.negDc(ConstraintAutomata.tDc name data)
-    | a::t => (ConstraintAutomata.orDc (a) (conjunctionOfDcs t))
+    | a::t => match a with
+              | andDc x y => (ConstraintAutomata.orDc (orDcs a) (conjunctionOfDcs t)) 
+              | _ => (ConstraintAutomata.orDc (a) (conjunctionOfDcs t))
+              end
     end.
 
-  Definition dcBisim (ca: constraintAutomata) (q: state) (portNames : set name) (P: set state) :=
+   Definition dcBisim (ca: constraintAutomata) (q: state) (portNames : set name) (P: set state) :=
     conjunctionOfDcs((getReachedDcs (getTransition (portNames) (ConstraintAutomata.T ca q))) (P)).
 
-  (*Program Instance function_eqdec A `(EqDec A eq) : ! EqDec (A -> A) eq :=
-    { equiv_dec f g :=
-      if f data == g data then
-        if f data == g data then in_left
-        else in_right
-      else in_right
-    }. *) 
+  (* Equivalence for DCs. Requires that an equality relation to be defined for functions data -> data *)
+  Context `{EqDec (data -> data) eq}.
+  
+  Instance dc_eqDec `(EqDec name eq) `(EqDec data eq)  : EqDec (DC name data) eq :=
+    { equiv_dec := fix rec dc1 dc2 :=
+      match dc1,dc2 with
+       | tDc _ _, tDc _ _ => in_left
+       | dc a b, dc c d => if a == c then if b == d then in_left else in_right else in_right
+       | eqDc _ a b, eqDc _ c d => if a == c then if b == d then in_left else in_right else in_right
+       | andDc a b, andDc c d => if rec a c then if rec b d then in_left else in_right else in_right
+       | orDc a b, orDc c d => if rec a c then if rec b d then in_left else in_right else in_right
+       | negDc a, negDc b => if rec a b then in_left else in_right
+       | trDc f a b, trDc g c d => if f == g then if a == c then if b == d then in_left else in_right else in_right else in_right
+       | _, _ => in_right
+      end
+    }.
+    Proof. 
+    all : congruence.
+    Defined.
 
-  (* We define equivalence of DCs *)
-  Fixpoint areEquivalent (dc1 : DC name data) (dc2: DC name data) :=
-    match dc1, dc2 with
-    | tDc _ _, tDc _ _ => true
-    | dc a b, dc c d => (equiv_decb (a) (c)) && (equiv_decb (b) (d))
-    | eqDc _ a b, eqDc _ c d => (equiv_decb (a) (b)) && (equiv_decb (b) (d))
-    | negDc a, negDc b => areEquivalent a b
-    | orDc a b, orDc c d => areEquivalent a c && areEquivalent b d
-    | andDc a b, andDc c d => areEquivalent a c && areEquivalent b d
-    | trDc tr a b, trDc tr2 c d => (equiv_decb (a) (c)) && (equiv_decb (b) (d)) 
-    | _, _ => true
+  (* After reconstructing a DC as Notation 3.8 from a set of possible data constraints of transitions q -> P *)
+  (* We need to evaluate whether they are equivalent or not                                                  *)
+  Fixpoint dismantleDc (dc: DC name data) :=
+    match dc with
+    | tDc _ _ => [tDc _ _]
+    | eqDc _ a b => [eqDc _ a b]
+    | dc a b => [dc]
+    | negDc a => [negDc a]
+    | trDc f a b => [trDc f a b]
+    | orDc a b | andDc a b => set_union equiv_dec (dismantleDc a) (dismantleDc b)
     end.
-                       
+
+  (* We search for conditions !A \/ A in a single DC, which makes it always true *)
+
+  Fixpoint existsComplementOrTrue (setDc : set (DC name data)) :=
+    match setDc with
+    | [] => false
+    | a::t => match a with
+              | tDc _ _ => true
+              | _ => if (set_mem equiv_dec (negDc(a)) (setDc)) then true else (existsComplementOrTrue t)
+              end
+    end.
+
+  Lemma existsComplementOrTrueSound  : forall setDc,
+    existsComplementOrTrue setDc = true -> In (tDc _ _) setDc \/ (exists a, In (a) (setDc) /\ In (negDc(a)) (setDc)).
+  Proof.
+  - intros. induction setDc. inversion H3. simpl in H3. destruct a. left. simpl;auto.
+  + destruct equiv_dec in H3. inversion e. destruct set_mem eqn:ha in H3. apply set_mem_correct1 in ha. unfold set_In in ha. 
+    right. exists (dc n d). split. simpl;auto. simpl. right. exact ha. apply IHsetDc in H3.
+    destruct H3. left. simpl;auto. destruct H3. destruct H3. right. exists x. split.
+    simpl. right. assumption. simpl. right. assumption. 
+  + destruct equiv_dec in H3. inversion e. destruct set_mem eqn:ha in H3. apply set_mem_correct1 in ha. unfold set_In in ha. 
+    right. exists (eqDc data n n0). split. simpl;auto. simpl. right. exact ha. apply IHsetDc in H3.
+    destruct H3. left. simpl;auto. destruct H3. destruct H3. right. exists x. split.
+    simpl. right. assumption. simpl. right. assumption. 
+  + destruct equiv_dec in H3. inversion e. destruct set_mem eqn:ha in H3. apply set_mem_correct1 in ha. unfold set_In in ha. 
+    right. exists (a1 @ a2). split. simpl;auto. simpl. right. exact ha. apply IHsetDc in H3.
+    destruct H3. left. simpl;auto. destruct H3. destruct H3. right. exists x. split.
+    simpl. right. assumption. simpl. right. assumption. 
+  + destruct equiv_dec in H3. inversion e. destruct set_mem eqn:ha in H3. apply set_mem_correct1 in ha. unfold set_In in ha. 
+    right. exists (a1 $ a2) . split. simpl;auto. simpl. right. exact ha. apply IHsetDc in H3.
+    destruct H3. left. simpl;auto. destruct H3. destruct H3. right. exists x. split.
+    simpl. right. assumption. simpl. right. assumption. 
+  + destruct equiv_dec in H3. inversion e. destruct set_mem eqn:ha in H3. apply set_mem_correct1 in ha. unfold set_In in ha. 
+    right. exists (trDc d n n0). split. simpl;auto. simpl. right. exact ha. apply IHsetDc in H3.
+    destruct H3. left. simpl;auto. destruct H3. destruct H3. right. exists x. split.
+    simpl. right. assumption. simpl. right. assumption. 
+  + destruct equiv_dec in H3. inversion e.
+    right. exists (negDc a). split. simpl;auto. simpl. left. reflexivity. destruct set_mem eqn:ha in H3. apply set_mem_correct1 in ha. unfold set_In in ha. 
+    right. exists (negDc a). split. simpl;auto. simpl. right. exact ha. apply IHsetDc in H3.
+    destruct H3. left. simpl;auto. destruct H3. destruct H3. right. exists x. split.
+    simpl. right. assumption. simpl. right. assumption. 
+    Qed.
+    
+
+  Definition areEquivalentAux (dc1 : set (DC name data)) (dc2: set (DC name data)) :=
+    set_eq ((dc1)) ((dc2)) || 
+      ((existsComplementOrTrue dc1) && (existsComplementOrTrue dc2)).
+
+  (* We define equivalence of DCs as defined by Notation 3.8 (aforementioned) *)
+  Fixpoint areEquivalent (dc1 : DC name data) (dc2: DC name data) :=
+    areEquivalentAux (dismantleDc dc1) (dismantleDc dc2).
 
   (*We define the powerset's construction, in order to verify all possible port names' labels for transitions *)
   Fixpoint powerset (s: set name) :=
@@ -960,7 +1030,6 @@ Module ProductAutomata.
     Definition buildPA (a1: constraintAutomata) (a2:constraintAutomata2) := 
       ConstraintAutomata.CA (statesSet a1 a2) (nameSet a1 a2) (transitionPA a1 a2) (initialStates a1 a2).
 
-  Check buildPA.
   End ProductAutomata.
 End ProductAutomata.
 
