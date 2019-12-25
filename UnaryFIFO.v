@@ -96,14 +96,14 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
         ConstraintAutomata.id := A;
         ConstraintAutomata.dataAssignment := dataAssignmentA;
         ConstraintAutomata.timeStamp := timeStampAutomatonA;
-        ConstraintAutomata.portCond := timeStampAutomatonAHolds;
+        ConstraintAutomata.tdsCond := timeStampAutomatonAHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portB := {|
         ConstraintAutomata.id := B;
         ConstraintAutomata.dataAssignment := dataAssignmentB;
         ConstraintAutomata.timeStamp := timeStampAutomatonB;
-        ConstraintAutomata.portCond := timeStampAutomatonBHolds;
+        ConstraintAutomata.tdsCond := timeStampAutomatonBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition automatonTransition (s:automatonStates):=
@@ -113,7 +113,19 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
    
     end.
 
+  Definition theta := [portA;portB].
+
   Definition unaryFIFO := ReoCa.ReoCABinaryChannel A B [q0;q1] [q0] automatonTransition.
+
+  Eval compute in ConstraintAutomata.tdsDerivate unaryFIFO [portA;portB] 10 (ConstraintAutomata.Q unaryFIFO).
+
+  Theorem vai : ConstraintAutomata.accepting unaryFIFO [portA;portB].
+  Proof.
+  unfold ConstraintAutomata.accepting.
+  intros. induction k.
+  - simpl. destruct final. exists q1. simpl. auto.
+    simpl in H. inversion H. inversion H0. inversion H0.
+  - simpl. Admitted.
 
   (* Structural Properties *) 
 

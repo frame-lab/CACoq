@@ -81,14 +81,14 @@ End ReoCa.
         ConstraintAutomata.id := E;
         ConstraintAutomata.dataAssignment := dataAssignmentBoth;
         ConstraintAutomata.timeStamp := timeStampTestSync;
-        ConstraintAutomata.portCond := timeStampTestHoldsSync;
+        ConstraintAutomata.tdsCond := timeStampTestHoldsSync;
         ConstraintAutomata.index := 0 |}.
 
   Definition portF:= {|
         ConstraintAutomata.id := F;
         ConstraintAutomata.dataAssignment := dataAssignmentBoth;
         ConstraintAutomata.timeStamp := timeStampTestSync;
-        ConstraintAutomata.portCond := timeStampTestHoldsSync;
+        ConstraintAutomata.tdsCond := timeStampTestHoldsSync;
         ConstraintAutomata.index := 0 |}.
 
   Definition syncCaBehavior (s: syncState) : 
@@ -183,14 +183,14 @@ End ReoCa.
         ConstraintAutomata.id := A;
         ConstraintAutomata.dataAssignment := dataAssignmentLossySyncBoth;
         ConstraintAutomata.timeStamp := timeStampLossyA;
-        ConstraintAutomata.portCond := timeStampTestHoldsLossyA;
+        ConstraintAutomata.tdsCond := timeStampTestHoldsLossyA;
         ConstraintAutomata.index := 0 |}.
 
   Definition portB:= {|
         ConstraintAutomata.id := B;
         ConstraintAutomata.dataAssignment := dataAssignmentLossySyncBoth;
         ConstraintAutomata.timeStamp := timeStampLossyB;
-        ConstraintAutomata.portCond := timeStampTestHoldsLossyB;
+        ConstraintAutomata.tdsCond := timeStampTestHoldsLossyB;
         ConstraintAutomata.index := 0 |}.
 
   Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10. (*does not accept the TDS composed by portA and portB because
@@ -273,14 +273,14 @@ End ReoCa.
         ConstraintAutomata.id := AF;
         ConstraintAutomata.dataAssignment := dataAssignmentA;
         ConstraintAutomata.timeStamp := timeStampFIFOA;
-        ConstraintAutomata.portCond := timeStampTestFIFOAHolds;
+        ConstraintAutomata.tdsCond := timeStampTestFIFOAHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portBF := {|
         ConstraintAutomata.id := BF;
         ConstraintAutomata.dataAssignment := dataAssignmentB;
         ConstraintAutomata.timeStamp := timeStampFIFOB;
-        ConstraintAutomata.portCond := timeStampTestFIFOBHolds;
+        ConstraintAutomata.tdsCond := timeStampTestFIFOBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition realports := [portAF;portBF].
@@ -365,14 +365,14 @@ End ReoCa.
         ConstraintAutomata.id := AD;
         ConstraintAutomata.dataAssignment := dataAssignmentSyncDrainBoth;
         ConstraintAutomata.timeStamp := timeStampSyncDrain;
-        ConstraintAutomata.portCond := timeStampSyncDrainHolds;
+        ConstraintAutomata.tdsCond := timeStampSyncDrainHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portBD:= {|
         ConstraintAutomata.id := BD;
         ConstraintAutomata.dataAssignment := dataAssignmentSyncDrainBoth;
         ConstraintAutomata.timeStamp := timeStampSyncDrain;
-        ConstraintAutomata.portCond := timeStampSyncDrainHolds;
+        ConstraintAutomata.tdsCond := timeStampSyncDrainHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition syncDrainCaBehavior (s: syncDrainState) : set
@@ -458,14 +458,14 @@ End ReoCa.
         ConstraintAutomata.id := AA;
         ConstraintAutomata.dataAssignment := dataAssignmentASyncDrainBoth;
         ConstraintAutomata.timeStamp := timeStampASyncDrainA;
-        ConstraintAutomata.portCond := timeStampASyncDrainHolds;
+        ConstraintAutomata.tdsCond := timeStampASyncDrainHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portBA:= {|
         ConstraintAutomata.id := BA;
         ConstraintAutomata.dataAssignment := dataAssignmentASyncDrainBoth;
         ConstraintAutomata.timeStamp := timeStampASyncDrainB;
-        ConstraintAutomata.portCond := timeStampASyncDrainBHolds;
+        ConstraintAutomata.tdsCond := timeStampASyncDrainBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition aSyncDrainCaBehavior (s: aSyncDrainState): set
@@ -547,14 +547,14 @@ End ReoCa.
         ConstraintAutomata.id := C;
         ConstraintAutomata.dataAssignment := dataAssignmentfilterBoth;
         ConstraintAutomata.timeStamp := timeStampfilterA;
-        ConstraintAutomata.portCond := timeStampfilterHolds;
+        ConstraintAutomata.tdsCond := timeStampfilterHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portD:= {|
         ConstraintAutomata.id := D;
         ConstraintAutomata.dataAssignment := dataAssignmentfilterBoth;
         ConstraintAutomata.timeStamp := timeStampfilterB;
-        ConstraintAutomata.portCond := timeStampfilterBHolds;
+        ConstraintAutomata.tdsCond := timeStampfilterBHolds;
         ConstraintAutomata.index := 0 |}.
 
   (*As an example, the filter condition over the data item in port A is the data should be 3 *)
@@ -656,14 +656,14 @@ End ReoCa.
         ConstraintAutomata.id := AT;
         ConstraintAutomata.dataAssignment := dataAssignmenttransformAF;
         ConstraintAutomata.timeStamp := timeStamptransformA;
-        ConstraintAutomata.portCond := timeStamptransformHolds;
+        ConstraintAutomata.tdsCond := timeStamptransformHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portBT:= {|
         ConstraintAutomata.id := BT;
         ConstraintAutomata.dataAssignment := dataAssignmenttransformBF;
         ConstraintAutomata.timeStamp := timeStamptransformB;
-        ConstraintAutomata.portCond := timeStamptransformBHolds;
+        ConstraintAutomata.tdsCond := timeStamptransformBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition transformCaBehavior (s: transformState) : set
@@ -762,21 +762,21 @@ End ReoCa.
         ConstraintAutomata.id := AM;
         ConstraintAutomata.dataAssignment := dataAssignmentmergerBoth;
         ConstraintAutomata.timeStamp := timeStampmergerA;
-        ConstraintAutomata.portCond := timeStampmergerHolds;
+        ConstraintAutomata.tdsCond := timeStampmergerHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portBM:= {|
         ConstraintAutomata.id := BM;
         ConstraintAutomata.dataAssignment := dataAssignmentmergerBoth;
         ConstraintAutomata.timeStamp := timeStampmergerB;
-        ConstraintAutomata.portCond := timeStampmergerBHolds;
+        ConstraintAutomata.tdsCond := timeStampmergerBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portCM:= {|
         ConstraintAutomata.id := CM;
         ConstraintAutomata.dataAssignment := dataAssignmentmergerBoth;
         ConstraintAutomata.timeStamp := timeStampmergerC;
-        ConstraintAutomata.portCond := timeStampmergerCHolds;
+        ConstraintAutomata.tdsCond := timeStampmergerCHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition mergerCaBehavior (s: mergerState) : set
@@ -875,21 +875,21 @@ End ReoCa.
         ConstraintAutomata.id := AR;
         ConstraintAutomata.dataAssignment := dataAssignmentreplicatorBoth;
         ConstraintAutomata.timeStamp := timeStampreplicatorA;
-        ConstraintAutomata.portCond := timeStampreplicatorHolds;
+        ConstraintAutomata.tdsCond := timeStampreplicatorHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portBR:= {|
         ConstraintAutomata.id := BR;
         ConstraintAutomata.dataAssignment := dataAssignmentreplicatorBoth;
         ConstraintAutomata.timeStamp := timeStampreplicatorB;
-        ConstraintAutomata.portCond := timeStampreplicatorBHolds;
+        ConstraintAutomata.tdsCond := timeStampreplicatorBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portCR:= {|
         ConstraintAutomata.id := CR;
         ConstraintAutomata.dataAssignment := dataAssignmentreplicatorBoth;
         ConstraintAutomata.timeStamp := timeStampreplicatorC;
-        ConstraintAutomata.portCond := timeStampreplicatorCHolds;
+        ConstraintAutomata.tdsCond := timeStampreplicatorCHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition replicatorCaBehavior (s: replicatorState) : set

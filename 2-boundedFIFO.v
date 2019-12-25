@@ -4,9 +4,6 @@ Require Import CaMain.
 (* a single Reo channel which is a FIFO channel with capacity two. This is done by for-*)
 (* malizing Constraint Automata of both channels with capacity one and then, by means  *)
 (* of the product operation, the corresponding product automaton is built.             *)
-Open Scope Q_scope.
-Axiom orderZofNat : forall n, forall a, Z.of_nat (S n) + a # 1 <= Z.of_nat (S (S  n)) + a # 1.
-Close Scope Q_scope.
 
 Inductive fifoStates := q0a | p0a | p1a | q0b | p0b | p1b.
 Inductive fifoPorts := A | B | C | D.
@@ -138,71 +135,76 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
     | S n =>  Z.of_N (N.of_nat(S n)) + 17#1 
     end.
 
-  Lemma timeStampTestFIFOAHolds : forall n, Qle (timeStampFIFOA n) (timeStampFIFOA (S n)).
+  Lemma timeStampTestFIFOAHolds : forall n, 
+    Qlt (timeStampFIFOA n) (timeStampFIFOA (S n)).
   Proof.
-  intros. destruct n. unfold timeStampFIFOA. discriminate.
-  unfold timeStampFIFOA. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
-  intros n4. unfold Qle. apply orderZofNat. Defined.
+  intros. destruct n. unfold timeStampFIFOA. reflexivity.
+  unfold timeStampFIFOA. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
+  intros n4. unfold Qlt. apply orderZofNat. Defined.
 
   Lemma timeStampTestFIFOBHolds : forall n, 
-    Qle (timeStampFIFOB n) (timeStampFIFOB (S n)). 
+    Qlt (timeStampFIFOB n) (timeStampFIFOB (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampFIFOB. discriminate.
-  unfold timeStampFIFOB. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
+  intros. destruct n. unfold timeStampFIFOB. reflexivity.
+  unfold timeStampFIFOB. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
   intros n4. unfold Qle. apply orderZofNat. Defined.
 
   Lemma timeStampTestFIFOCHolds : forall n, 
-    Qle (timeStampFIFOC n) (timeStampFIFOC (S n)). 
+    Qlt (timeStampFIFOC n) (timeStampFIFOC (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampFIFOC. discriminate.
-  unfold timeStampFIFOC. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
+  intros. destruct n. unfold timeStampFIFOC. reflexivity.
+  unfold timeStampFIFOC. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
   intros n4. unfold Qle. apply orderZofNat. Defined.
 
   Definition portAF := {|
         ConstraintAutomata.id := A;
         ConstraintAutomata.dataAssignment := dataAssignmentA;
         ConstraintAutomata.timeStamp := timeStampFIFOA;
-        ConstraintAutomata.portCond := timeStampTestFIFOAHolds;
+        ConstraintAutomata.tdsCond := timeStampTestFIFOAHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portBF := {|
         ConstraintAutomata.id := B;
         ConstraintAutomata.dataAssignment := dataAssignmentB;
         ConstraintAutomata.timeStamp := timeStampFIFOB;
-        ConstraintAutomata.portCond := timeStampTestFIFOBHolds;
+        ConstraintAutomata.tdsCond := timeStampTestFIFOBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portCF := {|
         ConstraintAutomata.id := C;
         ConstraintAutomata.dataAssignment := dataAssignmentC;
         ConstraintAutomata.timeStamp := timeStampFIFOC;
-        ConstraintAutomata.portCond := timeStampTestFIFOCHolds;
+        ConstraintAutomata.tdsCond := timeStampTestFIFOCHolds;
         ConstraintAutomata.index := 0 |}.
 
   (* realports is an input theta \in TDS^names given as input for constraint automata. *)
   (* Therefore, realports is an accepting data flow for runs that lasts 6 steps        *)
   Definition realports := [portAF;portBF;portCF].
 
-  Definition oneBoundedFIFOrel (s:fifoStates) :=
+  Definition oneBoundedFIFOrel (s:fifoStates) :
+    set (set fifoPorts * ConstraintAutomata.DC fifoPorts (option nat) *
+          fifoStates) :=
     match s with
-    | q0a => [([A], (ConstraintAutomata.dc A (Some 0)), [p0a]) ;
-              ([A], (ConstraintAutomata.dc A (Some 1)), [p1a])]
-    | p0a => [([B], (ConstraintAutomata.dc B (Some 0)), [q0a])]
-    | p1a => [([B], (ConstraintAutomata.dc B (Some 1)), [q0a])] 
+    | q0a => [([A], (ConstraintAutomata.dc A (Some 0)), p0a) ;
+              ([A], (ConstraintAutomata.dc A (Some 1)), p1a)]
+    | p0a => [([B], (ConstraintAutomata.dc B (Some 0)), q0a)]
+    | p1a => [([B], (ConstraintAutomata.dc B (Some 1)), q0a)] 
     | q0b | p0b | p1b => []
     end.
+
+Check oneBoundedFIFOrel.
 
   Definition oneBoundedFIFOCA:= {|
     ConstraintAutomata.Q := [q0a;p0a;p1a];
@@ -215,10 +217,10 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
 
   Definition oneBoundedFIFOrel2 (s:fifoStates) :=
     match s with
-    | q0b => [([B], (ConstraintAutomata.dc B (Some 0)), [p0b]) ;
-              ([B], (ConstraintAutomata.dc B (Some 1)), [p1b])]
-    | p0b => [([C], (ConstraintAutomata.dc C (Some 0)), [q0b])]
-    | p1b => [([C], (ConstraintAutomata.dc C (Some 1)), [q0b])] 
+    | q0b => [([B], (ConstraintAutomata.dc B (Some 0)), p0b) ;
+              ([B], (ConstraintAutomata.dc B (Some 1)), p1b)]
+    | p0b => [([C], (ConstraintAutomata.dc C (Some 0)), q0b)]
+    | p1b => [([C], (ConstraintAutomata.dc C (Some 1)), q0b)] 
     | q0a | p0a | p1a => []
     end.
 
@@ -302,57 +304,58 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
     | S n =>  Z.of_N (N.of_nat(S n)) + 15#1 
     end.
 
-  Lemma timeStampTestFIFOA2Holds : forall n, Qle (timeStampFIFOA2 n) (timeStampFIFOA2 (S n)).
+  Lemma timeStampTestFIFOA2Holds : forall n, 
+    Qlt (timeStampFIFOA2 n) (timeStampFIFOA2 (S n)).
   Proof.
-  intros. destruct n. unfold timeStampFIFOA2. discriminate.
-  unfold timeStampFIFOA2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
+  intros. destruct n. unfold timeStampFIFOA2. reflexivity.
+  unfold timeStampFIFOA2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
   intros n4. apply orderZofNat. Defined.
 
   Lemma timeStampTestFIFOB2Holds : forall n, 
-    Qle (timeStampFIFOB2 n) (timeStampFIFOB2 (S n)). 
+    Qlt (timeStampFIFOB2 n) (timeStampFIFOB2 (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampFIFOB2. discriminate.
-  unfold timeStampFIFOB2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
+  intros. destruct n. unfold timeStampFIFOB2. reflexivity.
+  unfold timeStampFIFOB2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
   intros n4. unfold Qle. apply orderZofNat. Defined.
 
   Lemma timeStampTestFIFOC2Holds : forall n, 
-    Qle (timeStampFIFOC2 n) (timeStampFIFOC2 (S n)). 
+    Qlt (timeStampFIFOC2 n) (timeStampFIFOC2 (S n)). 
   Proof.
-  intros. destruct n. unfold timeStampFIFOC2. discriminate.
-  unfold timeStampFIFOC2. case (n). discriminate.
-  intros n0. case (n0). discriminate.
-  intros n1. case (n1). discriminate.
-  intros n2. case (n2). discriminate.
-  intros n3. case (n3). discriminate.
+  intros. destruct n. unfold timeStampFIFOC2. reflexivity.
+  unfold timeStampFIFOC2. case (n). reflexivity.
+  intros n0. case (n0). reflexivity.
+  intros n1. case (n1). reflexivity.
+  intros n2. case (n2). reflexivity.
+  intros n3. case (n3). reflexivity.
   intros n4. unfold Qle. apply orderZofNat. Defined.
 
   Definition portA2 := {|
         ConstraintAutomata.id := A;
         ConstraintAutomata.dataAssignment := dataAssignmentA2;
         ConstraintAutomata.timeStamp := timeStampFIFOA2;
-        ConstraintAutomata.portCond := timeStampTestFIFOA2Holds;
+        ConstraintAutomata.tdsCond := timeStampTestFIFOA2Holds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portB2 := {|
         ConstraintAutomata.id := B;
         ConstraintAutomata.dataAssignment := dataAssignmentB2;
         ConstraintAutomata.timeStamp := timeStampFIFOB2;
-        ConstraintAutomata.portCond := timeStampTestFIFOB2Holds;
+        ConstraintAutomata.tdsCond := timeStampTestFIFOB2Holds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portC2 := {|
         ConstraintAutomata.id := C;
         ConstraintAutomata.dataAssignment := dataAssignmentC2;
         ConstraintAutomata.timeStamp := timeStampFIFOC2;
-        ConstraintAutomata.portCond := timeStampTestFIFOC2Holds;
+        ConstraintAutomata.tdsCond := timeStampTestFIFOC2Holds;
         ConstraintAutomata.index := 0 |}.
 
   Definition ru62 := Eval compute in ConstraintAutomata.run twoBoundedFifo [portA2;portB2;portC2] 8.

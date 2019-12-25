@@ -246,12 +246,12 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 
   Definition timeStampSequencerD (n:nat) : QArith_base.Q :=
     match n with
-    | 0 => 1#1 
-    | 1 => 5#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
+    | 0 => 5#1 
+    | 1 => 7#1
+    | 2 => 9#1
+    | 3 => 12#1
+    | 4 => 13#1
+    | 5 => 18#1
     | S n =>  Z.of_nat (S n) + 16#1 
     end.
 
@@ -391,49 +391,42 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
         ConstraintAutomata.id := A;
         ConstraintAutomata.dataAssignment := dataAssignmentA;
         ConstraintAutomata.timeStamp := timeStampSequencerA;
-        ConstraintAutomata.portCond := timeStampSequencerAHolds;
+        ConstraintAutomata.tdsCond := timeStampSequencerAHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portB := {|
         ConstraintAutomata.id := B;
         ConstraintAutomata.dataAssignment := dataAssignmentB;
         ConstraintAutomata.timeStamp := timeStampSequencerB;
-        ConstraintAutomata.portCond := timeStampSequencerBHolds;
+        ConstraintAutomata.tdsCond := timeStampSequencerBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portC := {|
         ConstraintAutomata.id := C;
         ConstraintAutomata.dataAssignment := dataAssignmentC;
         ConstraintAutomata.timeStamp := timeStampSequencerC;
-        ConstraintAutomata.portCond := timeStampSequencerCHolds;
+        ConstraintAutomata.tdsCond := timeStampSequencerCHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portD := {|
         ConstraintAutomata.id := D;
         ConstraintAutomata.dataAssignment := dataAssignmentD;
         ConstraintAutomata.timeStamp := timeStampSequencerD;
-        ConstraintAutomata.portCond := timeStampSequencerDHolds;
+        ConstraintAutomata.tdsCond := timeStampSequencerDHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portE := {|
         ConstraintAutomata.id := E;
         ConstraintAutomata.dataAssignment := dataAssignmentE;
         ConstraintAutomata.timeStamp := timeStampSequencerE;
-        ConstraintAutomata.portCond := timeStampSequencerEHolds;
+        ConstraintAutomata.tdsCond := timeStampSequencerEHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portG := {|
         ConstraintAutomata.id := G;
         ConstraintAutomata.dataAssignment := dataAssignmentG;
         ConstraintAutomata.timeStamp := timeStampSequencerG;
-        ConstraintAutomata.portCond := timeStampSequencerGHolds;
-        ConstraintAutomata.index := 0 |}.
-
-  Definition portH := {|
-        ConstraintAutomata.id := H;
-        ConstraintAutomata.dataAssignment := dataAssignmentH;
-        ConstraintAutomata.timeStamp := timeStampSequencerH;
-        ConstraintAutomata.portCond := timeStampSequencerHHolds;
+        ConstraintAutomata.tdsCond := timeStampSequencerGHolds;
         ConstraintAutomata.index := 0 |}.
 
 
@@ -459,54 +452,54 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
 
   Definition EAsyncCA := ReoCa.ReoCABinaryChannel E A ([s0]) ([s0]) syncEACaBehavior. 
 
-  (*E FIFO G *)
-  Definition eToGFIFOrel (s:sequencerStates) :=
+  (*E FIFO F *)
+  Definition eToFFIFOrel (s:sequencerStates) :=
     match s with
     | q0a => [([E], (ConstraintAutomata.dc E ( 0)), p0a) ;
               ([E], (ConstraintAutomata.dc E ( 1)), p1a)]
+    | p0a => [([F], (ConstraintAutomata.dc F ( 0)), q0a)]
+    | p1a => [([F], (ConstraintAutomata.dc F ( 1)), q0a)] 
+    | s0 => []
+    end.
+
+  Definition eToFFIFOCA:= ReoCa.ReoCABinaryChannel E F ([q0a;p0a;p1a]) ([q0a]) eToFFIFOrel.
+
+  (* F Sync B *)
+  Definition syncFBCaBehavior (s: sequencerStates) :=
+    match s with
+    | s0 => [([F;B] , ConstraintAutomata.eqDc nat F B, s0)] 
+    | _ => []
+    end.
+
+  Definition FBsyncCA := ReoCa.ReoCABinaryChannel F B ([s0]) ([s0]) syncFBCaBehavior.
+
+  (*F FIFO G*)
+  Definition fToGFIFOrel (s:sequencerStates):=
+    match s with
+    | q0a => [([F], (ConstraintAutomata.dc F ( 0)), p0a) ;
+              ([F], (ConstraintAutomata.dc F ( 1)), p1a)]
     | p0a => [([G], (ConstraintAutomata.dc G ( 0)), q0a)]
     | p1a => [([G], (ConstraintAutomata.dc G ( 1)), q0a)] 
     | s0 => []
     end.
 
-  Definition eToGFIFOCA:= ReoCa.ReoCABinaryChannel E G ([q0a;p0a;p1a]) ([q0a]) eToGFIFOrel.
+  Definition fToGFIFOCA:= ReoCa.ReoCABinaryChannel F G ([q0a;p0a;p1a]) ([q0a]) fToGFIFOrel.
 
-  (* G Sync B *)
-  Definition syncGBCaBehavior (s: sequencerStates) :=
+  (* G Sync C *)
+  Definition syncGCCaBehavior (s: sequencerStates) :=
     match s with
-    | s0 => [([G;B] , ConstraintAutomata.eqDc nat G B, s0)] 
+    | s0 => [([G;C] , ConstraintAutomata.eqDc nat G C, s0)] 
     | _ => []
     end.
 
-  Definition GBsyncCA := ReoCa.ReoCABinaryChannel G B ([s0]) ([s0]) syncGBCaBehavior.
-
-  (*G FIFO H*)
-  Definition gToHFIFOrel (s:sequencerStates):=
-    match s with
-    | q0a => [([G], (ConstraintAutomata.dc G ( 0)), p0a) ;
-              ([G], (ConstraintAutomata.dc G ( 1)), p1a)]
-    | p0a => [([H], (ConstraintAutomata.dc H ( 0)), q0a)]
-    | p1a => [([H], (ConstraintAutomata.dc H ( 1)), q0a)] 
-    | s0 => []
-    end.
-
-  Definition gToHFIFOCA:= ReoCa.ReoCABinaryChannel G H ([q0a;p0a;p1a]) ([q0a]) gToHFIFOrel.
-
-  (* H Sync C *)
-  Definition syncHCCaBehavior (s: sequencerStates) :=
-    match s with
-    | s0 => [([H;C] , ConstraintAutomata.eqDc nat H C, s0)] 
-    | _ => []
-    end.
-
-  Definition HCsyncCA := ReoCa.ReoCABinaryChannel H C ([s0]) ([s0]) syncHCCaBehavior.
+  Definition GCsyncCA := ReoCa.ReoCABinaryChannel G C ([s0]) ([s0]) syncGCCaBehavior.
 
   (* We build the resulting product automaton *)
   Definition fifo1Product := ProductAutomata.buildPA dToEFIFOCA EAsyncCA.
-  Definition fifo2Product := ProductAutomata.buildPA fifo1Product eToGFIFOCA.
-  Definition fifo3Product := ProductAutomata.buildPA fifo2Product GBsyncCA.
-  Definition fifo4Product := ProductAutomata.buildPA fifo3Product gToHFIFOCA.
-  Definition resultingSequencerProduct := ProductAutomata.buildPA fifo4Product HCsyncCA.
+  Definition fifo2Product := ProductAutomata.buildPA fifo1Product eToFFIFOCA.
+  Definition fifo3Product := ProductAutomata.buildPA fifo2Product FBsyncCA.
+  Definition fifo4Product := ProductAutomata.buildPA fifo3Product fToGFIFOCA.
+  Definition resultingSequencerProduct := ProductAutomata.buildPA fifo4Product GCsyncCA.
 
   (*The automaton changes its initial configuration only if there are data in ports D*)
   Eval vm_compute in ConstraintAutomata.portsOfTransition resultingSequencerProduct 
@@ -524,7 +517,7 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   + inversion H0.
   Qed.
  
-  Definition singleExecInput := [portA;portB;portC;portD;portE;portG;portH].
+  Definition singleExecInput := [portA;portB;portC;portD;portE;portG].
 
   Definition run1 := Eval vm_compute in ConstraintAutomata.run resultingSequencerProduct singleExecInput 4.
   Print run1.
@@ -540,234 +533,6 @@ Instance sequencerPortsEq : EqDec sequencerPorts eq :=
   Defined.
 
 (* Ex 2 *)
-Definition timeStampSequencerA2(n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 1#1 
-    | 1 => 5#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>  Z.of_nat (S n) + 16#1
-    end.
-
-  Definition timeStampSequencerB2 (n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 1#1
-    | 1 => 6#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>  Z.of_nat (S n) + 16#1
-    end.
-
-
-  Definition timeStampSequencerC2 (n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 3#1
-    | 1 => 6#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>  Z.of_nat (S n) + 16#1
-    end.
-
-  Definition timeStampSequencerD2 (n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 4#1
-    | 1 => 6#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>  Z.of_nat (S n) + 16#1
-    end.
-
-  Definition timeStampSequencerE2 (n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 2#1
-    | 1 => 6#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>   Z.of_nat (S n) + 16#1
-    end.
-
-  Definition timeStampSequencerG2 (n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 3#1
-    | 1 => 6#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>   Z.of_nat (S n) + 16#1
-    end.
-
-  Definition timeStampSequencerH2 (n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 4#1
-    | 1 => 6#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>   Z.of_nat (S n) + 16#1
-    end.
-
-
-  Definition timeStampSequencerI2 (n:nat) : QArith_base.Q :=
-    match n with
-    | 0 => 4#1
-    | 1 => 6#1
-    | 2 => 8#1
-    | 3 => 11#1
-    | 4 => 14#1
-    | 5 => 17#1
-    | S n =>   Z.of_nat (S n) + 16#1
-    end.
-
-  Lemma timeStampSequencerA2Holds : forall n, 
-    Qlt (timeStampSequencerA2 n) (timeStampSequencerA2 (S n)). 
-  Proof.
-  intros. destruct n. unfold timeStampSequencerA2. reflexivity.
-  unfold timeStampSequencerA2. case (n). reflexivity.
-  intros n0. case (n0). reflexivity.
-  intros n1. case (n1). reflexivity.
-  intros n2. case (n2). reflexivity.
-  intros n3. case (n3). reflexivity.
-  intros n4. apply orderZofNat. Defined.
-
-  Lemma timeStampSequencerB2Holds : forall n, 
-    Qlt (timeStampSequencerB2 n) (timeStampSequencerB2 (S n)). 
-  Proof.
-  intros. destruct n. unfold timeStampSequencerB2. reflexivity.
-  unfold timeStampSequencerB2. case (n). reflexivity.
-  intros n0. case (n0). reflexivity.
-  intros n1. case (n1). reflexivity.
-  intros n2. case (n2). reflexivity.
-  intros n3. case (n3). reflexivity.
-  intros n4. apply orderZofNat. Defined.
-  Lemma timeStampSequencerC2Holds : forall n, 
-    Qlt (timeStampSequencerC2 n) (timeStampSequencerC2 (S n)). 
-  Proof.
-  Proof.
-  intros. destruct n. unfold timeStampSequencerC2. reflexivity.
-  unfold timeStampSequencerC2. case (n). reflexivity.
-  intros n0. case (n0). reflexivity.
-  intros n1. case (n1). reflexivity.
-  intros n2. case (n2). reflexivity.
-  intros n3. case (n3). reflexivity.
-  intros n4. apply orderZofNat. Defined.
-
-  Lemma timeStampSequencerD2Holds : forall n, 
-    Qlt (timeStampSequencerD2 n) (timeStampSequencerD2 (S n)). 
-  Proof.
-  Proof.
-  intros. destruct n. unfold timeStampSequencerD2. reflexivity.
-  unfold timeStampSequencerD2. case (n). reflexivity.
-  intros n0. case (n0). reflexivity.
-  intros n1. case (n1). reflexivity.
-  intros n2. case (n2). reflexivity.
-  intros n3. case (n3). reflexivity.
-  intros n4. apply orderZofNat. Defined.
-
-  Lemma timeStampSequencerE2Holds : forall n, 
-    Qlt (timeStampSequencerE2 n) (timeStampSequencerB2 (S n)). 
-  Proof.
-  Proof.
-  intros. destruct n. unfold timeStampSequencerE2. reflexivity.
-  unfold timeStampSequencerE2. case (n). reflexivity.
-  intros n0. case (n0). reflexivity.
-  intros n1. case (n1). reflexivity.
-  intros n2. case (n2). reflexivity.
-  intros n3. case (n3). reflexivity.
-  intros n4. apply orderZofNat. Defined.
-
-  Lemma timeStampSequencerG2Holds : forall n, 
-    Qlt (timeStampSequencerG2 n) (timeStampSequencerG2 (S n)). 
-  Proof.
-  Proof.
-  intros. destruct n. unfold timeStampSequencerG2. reflexivity.
-  unfold timeStampSequencerG2. case (n). reflexivity.
-  intros n0. case (n0). reflexivity.
-  intros n1. case (n1). reflexivity.
-  intros n2. case (n2). reflexivity.
-  intros n3. case (n3). reflexivity.
-  intros n4. apply orderZofNat. Defined.
-
-  Lemma timeStampSequencerH2Holds : forall n, 
-    Qlt (timeStampSequencerH2 n) (timeStampSequencerH2 (S n)). 
-  Proof.
-  Proof.
-  intros. destruct n. unfold timeStampSequencerH2. reflexivity.
-  unfold timeStampSequencerH2. case (n). reflexivity.
-  intros n0. case (n0). reflexivity.
-  intros n1. case (n1). reflexivity.
-  intros n2. case (n2). reflexivity.
-  intros n3. case (n3). reflexivity.
-  intros n4. apply orderZofNat. Defined.
-
-  Definition portA2 := {|
-        ConstraintAutomata.id := A;
-        ConstraintAutomata.dataAssignment := dataAssignmentA;
-        ConstraintAutomata.timeStamp := timeStampSequencerA2;
-        ConstraintAutomata.portCond := timeStampSequencerA2Holds;
-        ConstraintAutomata.index := 0 |}.
-
-  Definition portB2 := {|
-        ConstraintAutomata.id := B;
-        ConstraintAutomata.dataAssignment := dataAssignmentB;
-        ConstraintAutomata.timeStamp := timeStampSequencerB2;
-        ConstraintAutomata.portCond := timeStampSequencerB2Holds;
-        ConstraintAutomata.index := 0 |}.
-
-  Definition portC2 := {|
-        ConstraintAutomata.id := C;
-        ConstraintAutomata.dataAssignment := dataAssignmentC;
-        ConstraintAutomata.timeStamp := timeStampSequencerC2;
-        ConstraintAutomata.portCond := timeStampSequencerC2Holds;
-        ConstraintAutomata.index := 0 |}.
-
-  Definition portD2 := {|
-        ConstraintAutomata.id := D;
-        ConstraintAutomata.dataAssignment := dataAssignmentD;
-        ConstraintAutomata.timeStamp := timeStampSequencerD2;
-        ConstraintAutomata.portCond := timeStampSequencerD2Holds;
-        ConstraintAutomata.index := 0 |}.
-
-  Definition portE2 := {|
-        ConstraintAutomata.id := E;
-        ConstraintAutomata.dataAssignment := dataAssignmentE;
-        ConstraintAutomata.timeStamp := timeStampSequencerE2;
-        ConstraintAutomata.portCond := timeStampSequencerE2Holds;
-        ConstraintAutomata.index := 0 |}.
-
-  Definition portG2 := {|
-        ConstraintAutomata.id := G;
-        ConstraintAutomata.dataAssignment := dataAssignmentG;
-        ConstraintAutomata.timeStamp := timeStampSequencerG2;
-        ConstraintAutomata.portCond := timeStampSequencerG2Holds;
-        ConstraintAutomata.index := 0 |}.
-
-  Definition portH2 := {|
-        ConstraintAutomata.id := H;
-        ConstraintAutomata.dataAssignment := dataAssignmentH;
-        ConstraintAutomata.timeStamp := timeStampSequencerH2;
-        ConstraintAutomata.portCond := timeStampSequencerH2Holds;
-        ConstraintAutomata.index := 0 |}.
-
-  Definition secondExInput := [portA2;portB2;portC2;portD2;portE2;portG2;portH2].
-
-  Definition run2 := Eval vm_compute in ConstraintAutomata.run resultingSequencerProduct secondExInput 7.
-  Print run2.
-
-  Lemma nonAcceptingRun : In [] (run2).
-  Proof.
-  simpl. auto. Defined.
 
 
   Require Extraction.
