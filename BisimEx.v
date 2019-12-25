@@ -118,14 +118,14 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
         ConstraintAutomata.id := A;
         ConstraintAutomata.dataAssignment := dataAssignmentA;
         ConstraintAutomata.timeStamp := timeStampAutomatonA;
-        ConstraintAutomata.portCond := timeStampAutomatonAHolds;
+        ConstraintAutomata.tdsCond := timeStampAutomatonAHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition portB := {|
         ConstraintAutomata.id := B;
         ConstraintAutomata.dataAssignment := dataAssignmentB;
         ConstraintAutomata.timeStamp := timeStampAutomatonB;
-        ConstraintAutomata.portCond := timeStampAutomatonBHolds;
+        ConstraintAutomata.tdsCond := timeStampAutomatonBHolds;
         ConstraintAutomata.index := 0 |}.
 
   Definition automaton1Transition (s:automatonStates):=
@@ -161,7 +161,7 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   Eval compute in ConstraintAutomata.bisimulation firstAutomaton secondAutomaton.
 
   (* Therefore, they are language equivalent *)
-  Eval compute in ConstraintAutomata.languageEquivalent firstAutomaton secondAutomaton.
+  Eval compute in ConstraintAutomata.areBisimilar firstAutomaton secondAutomaton.
 
   (* We also implement the non bisimilar automaton provided in the aforementioned example *)
 
@@ -177,7 +177,17 @@ Instance automatonPortsEq : EqDec automatonPorts eq :=
   Definition thirdAutomaton := ConstraintAutomata.CA ([q3;u3]) ([A;B;C]) (automaton3Transition 0) 
   ([q3]). 
 
+  (* And we may verify that they are not bisimilar *)
   Eval compute in ConstraintAutomata.bisimulation firstAutomaton thirdAutomaton.
 
-  Eval compute in ConstraintAutomata.languageEquivalent firstAutomaton thirdAutomaton.
+  Eval compute in ConstraintAutomata.areBisimilar firstAutomaton thirdAutomaton.
+    
+
+
+  
+
+
+
+
+
 
