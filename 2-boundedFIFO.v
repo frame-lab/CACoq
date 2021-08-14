@@ -1,4 +1,7 @@
 Require Import CaMain.
+Import ListNotations.
+
+Obligation Tactic := program_simpl; congruence.
 
 (* This example consists on using two FIFO channels of capacity one in order to build  *)
 (* a single Reo channel which is a FIFO channel with capacity two. This is done by for-*)
@@ -8,7 +11,7 @@ Require Import CaMain.
 Inductive fifoStates := q0a | p0a | p1a | q0b | p0b | p1b.
 Inductive fifoPorts := A | B | C | D.
 
-Instance fifoStatesEq : EqDec fifoStates eq := 
+Program Instance fifoStatesEq : EqDec fifoStates eq := 
 	{equiv_dec x y := 
 		match x, y with 
 		| q0a,q0a => in_left 
@@ -49,11 +52,8 @@ Instance fifoStatesEq : EqDec fifoStates eq :=
 		| p1b,p0b => in_right 
 		end 
 	}.
-   Proof.
-   all: congruence.
-   Defined.
 
-Instance fifoPortsEq : EqDec fifoPorts eq := 
+Program Instance fifoPortsEq : EqDec fifoPorts eq := 
 	{equiv_dec x y := 
 		match x, y with 
 		| A,A => in_left 
@@ -74,9 +74,8 @@ Instance fifoPortsEq : EqDec fifoPorts eq :=
 		| D,C => in_right 
 		end 
 	}.
-  Proof.
-  all:congruence.
-  Defined.
+
+Close Scope Q_scope.
 
   Definition dataAssignmentA n := 
     match n with
@@ -369,4 +368,35 @@ Check oneBoundedFIFOrel.
   (* This is denoted by fullFifoWith0*)
   Lemma fullFifoWith0 : In [(p0a,p0b)] ru62.
   Proof. simpl; auto. Defined.
+
+  (* The following model is the 2 bounded FIFO declared as a whole connector, not employing Product:*) 
+
+  Definition twoBoundedFIFOrel (s:(fifoStates * fifoStates)) :
+    set (set fifoPorts * ConstraintAutomata.DC fifoPorts (option nat) *
+          (fifoStates * fifoStates)) :=
+    match s with
+    | (q0a, q0a) => [([A], (ConstraintAutomata.dc A (Some 0)), (p0a,p0a));
+                     ([A], (ConstraintAutomata.dc A (Some 1)), (p1a,p1a))]
+    | (p0a,p0a) => [([B], (ConstraintAutomata.dc B (Some 0)), (q0b,q0b))]
+    | (p1a,p1a) => [([B], (ConstraintAutomata.dc B (Some 1)), (q0b,q0b))] 
+    | (q0b,q0b) => [([B], (ConstraintAutomata.dc B (Some 0)), (p0b,p0b));
+                    ([B], (ConstraintAutomata.dc B (Some 1)), (p1b,p1b))]
+    | (p0b,p0b) => [([C], (ConstraintAutomata.dc C (Some 0)), (q0b,q0b))]
+    | (p1b,p1b) => [([C], (ConstraintAutomata.dc C (Some 1)), (q0b,q0b))] 
+    | _ => []
+    end.
+
+  Definition twoBoundedFIFOCA:= {|
+    ConstraintAutomata.Q := [(q0a,q0a);(p0a,p0a);(p1a,p1a);(q0b,q0b);(p0b,p0b);(p1b,p1b)];
+    ConstraintAutomata.N := [A;B;C];
+    ConstraintAutomata.T := twoBoundedFIFOrel;
+    ConstraintAutomata.Q0 := [(q0a,q0a)]
+  |}.
+
+ (* We may verify that the 2-fifo built from the product of two 1-bounded FIFO yields
+    the same result as the 2-bounded-fifo-connector. *)
+  Eval compute in ConstraintAutomata.areBisimilar twoBoundedFifo twoBoundedFIFOCA.
+
+
+
 

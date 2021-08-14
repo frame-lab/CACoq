@@ -1,7 +1,10 @@
 Require Import CaMain.
+Import ListNotations.
 
 Set Implicit Arguments.
 Set Maximal Implicit Insertion.
+
+Obligation Tactic := program_simpl; congruence.
 
 Module ReoCa.
   Section ReoCa.
@@ -37,20 +40,19 @@ End ReoCa.
   Inductive syncState := q0s.
   Inductive syncPorts := E | F.
 
-  Instance syncStateEq: EqDec syncState eq :=
+  Program Instance syncStateEq: EqDec syncState eq :=
     {equiv_dec x y := 
       match x,y with
       | q0s,q0s => in_left
       end }.
-   Proof.
-   all: congruence.
-   Defined.
+
+  Close Scope Q_scope.
 
   Definition dataAssignmentBoth n := 
     match n with
     | 0 =>  0
     | 1 =>  455
-    | S n =>  (1)
+    | Datatypes.S n =>  (1)
     end.
 
  Definition timeStampTestSync (n:nat) : QArith_base.Q :=
@@ -66,15 +68,12 @@ End ReoCa.
   unfold timeStampTestSync.
   apply orderZofNat. Defined.
 
-  Instance syncPortsEq: EqDec syncPorts eq :=
+  Program Instance syncPortsEq: EqDec syncPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | E,E | F,F => in_left
       | E,F | F,E => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
 
   Definition portE := {|
@@ -113,24 +112,18 @@ End ReoCa.
 
   Inductive lossySyncPorts := A | B.
 
-  Instance lossySyncStateEq: EqDec lossySyncStates eq :=
+  Program Instance lossySyncStateEq: EqDec lossySyncStates eq :=
     {equiv_dec x y := 
       match x,y with
       | q0, q0 => in_left
       end }.
-   Proof.
-   reflexivity.
-   Defined.
 
-   Instance LossySyncPortsEq: EqDec lossySyncPorts eq :=
+   Program Instance LossySyncPortsEq: EqDec lossySyncPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | A,A | B,B => in_left
       | A,B | B,A => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
    Definition dataAssignmentLossySyncBoth n := 
     match n with
@@ -200,15 +193,12 @@ End ReoCa.
 
   Inductive FIFOStates : Type := q0F | p0F | p1F.
   Inductive FIFOports : Type := AF | BF.
-  Instance portsEq : EqDec FIFOports eq :=
+  Program Instance portsEq : EqDec FIFOports eq :=
     {equiv_dec x y := 
       match x,y with
       | AF,AF | BF,BF => in_left
       | AF,BF | BF,AF => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
   Definition dataAssignmentA n := 
     match n with
@@ -321,14 +311,11 @@ End ReoCa.
   Inductive syncDrainState := q1D.
   Inductive syncDrainPorts :=  AD | BD.
 
-  Instance syncDrainStateEq: EqDec syncDrainState eq :=
+  Program Instance syncDrainStateEq: EqDec syncDrainState eq :=
     {equiv_dec x y := 
       match x,y with
       | q1D, q1D => in_left
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
   Definition dataAssignmentSyncDrainBoth n := 
     match n with
@@ -350,15 +337,12 @@ End ReoCa.
   unfold timeStampSyncDrain. case (n). reflexivity.
   intros n0. unfold timeStampSyncDrain. apply orderZofNat.  Defined.
 
-  Instance syncDrainPortsEq: EqDec syncDrainPorts eq :=
+  Program Instance syncDrainPortsEq: EqDec syncDrainPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | AD,AD | BD,BD => in_left
       | AD,BD | BD,AD => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
 
   Definition portAD := {|
@@ -398,14 +382,11 @@ End ReoCa.
   Inductive aSyncDrainState := q1A.
   Inductive aSyncDrainPorts :=  AA | BA.
 
-  Instance aSyncDrainStateEq: EqDec aSyncDrainState eq :=
+  Program Instance aSyncDrainStateEq: EqDec aSyncDrainState eq :=
     {equiv_dec x y := 
       match x,y with
       | q1A, q1A => in_left
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
   Definition dataAssignmentASyncDrainBoth n := 
     match n with
@@ -443,15 +424,12 @@ End ReoCa.
   unfold timeStampASyncDrainB. case (n). reflexivity.
   intros n0. unfold timeStampASyncDrainB. apply orderZofNat. Defined.
 
-  Instance aSyncDrainPortsEq: EqDec aSyncDrainPorts eq :=
+  Program Instance aSyncDrainPortsEq: EqDec aSyncDrainPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | AA,AA | BA,BA => in_left
       | AA,BA | BA,AA => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
 
   Definition portAA := {|
@@ -490,14 +468,11 @@ End ReoCa.
   Inductive filterState := q1F.
   Inductive filterPorts :=  C | D.
 
-  Instance filterStateEq: EqDec filterState eq :=
+  Program Instance filterStateEq: EqDec filterState eq :=
     {equiv_dec x y := 
       match x,y with
       | q1F, q1F => in_left
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
   Definition dataAssignmentfilterBoth n := 
     match n with
@@ -532,15 +507,12 @@ End ReoCa.
   intros. destruct n. unfold timeStampfilterB. reflexivity.
   unfold timeStampfilterB. apply orderZofNat. Defined.
 
-  Instance filterPortsEq: EqDec filterPorts eq :=
+  Program Instance filterPortsEq: EqDec filterPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | C,C | D,D => in_left
       | C,D | D,C => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
 
   Definition portC := {|
@@ -586,14 +558,11 @@ End ReoCa.
   Inductive transformState := q1T.
   Inductive transformPorts :=  AT | BT.
 
-  Instance transformStateEq: EqDec transformState eq :=
+  Program Instance transformStateEq: EqDec transformState eq :=
     {equiv_dec x y := 
       match x,y with
       | q1T, q1T => in_left
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
   Definition dataAssignmenttransformAF n := 
     match n with
@@ -641,15 +610,12 @@ End ReoCa.
   unfold timeStamptransformB. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
-  Instance transformPortsEq: EqDec transformPorts eq :=
+  Program Instance transformPortsEq: EqDec transformPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | AT,AT | BT,BT => in_left
       | AT,BT | BT,AT => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
 
   Definition portAT := {|
@@ -688,14 +654,11 @@ End ReoCa.
   Inductive mergerState := q1M.
   Inductive mergerPorts :=  AM | BM | CM.
 
-  Instance mergerStateEq: EqDec mergerState eq :=
+  Program Instance mergerStateEq: EqDec mergerState eq :=
     {equiv_dec x y := 
       match x,y with
       | q1M, q1M => in_left
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
   Definition dataAssignmentmergerBoth n := 
     match n with
@@ -747,15 +710,12 @@ End ReoCa.
   unfold timeStampmergerC. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
-  Instance mergerPortsEq: EqDec mergerPorts eq :=
+  Program Instance mergerPortsEq: EqDec mergerPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | AM,AM | BM,BM  | CM, CM => in_left
       | AM,BM | AM,CM | BM,AM | BM,CM | CM, AM | CM, BM => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
 
   Definition portAM := {|
@@ -801,14 +761,11 @@ End ReoCa.
   Inductive replicatorState := q1R.
   Inductive replicatorPorts :=  AR | BR | CR.
 
-  Instance replicatorStateEq: EqDec replicatorState eq :=
+  Program Instance replicatorStateEq: EqDec replicatorState eq :=
     {equiv_dec x y := 
       match x,y with
       | q1R, q1R => in_left
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
   Definition dataAssignmentreplicatorBoth n := 
     match n with
@@ -860,15 +817,12 @@ End ReoCa.
   unfold timeStampreplicatorC. case n. reflexivity.
   intros n0. apply orderZofNat. Defined.
 
-  Instance replicatorPortsEq: EqDec replicatorPorts eq :=
+  Program Instance replicatorPortsEq: EqDec replicatorPorts eq :=
     {equiv_dec x y := 
       match x,y with
       | AR,AR | BR,BR  | CR, CR => in_left
       | AR,BR | AR,CR | BR,AR | BR,CR | CR, AR | CR, BR => in_right
       end }.
-   Proof.
-   all: congruence.
-   Defined.
 
 
   Definition portAR := {|
