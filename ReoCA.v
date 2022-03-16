@@ -863,3 +863,158 @@ End ReoCa.
   Eval compute in ConstraintAutomata.run replicatorCA [portAR;portBR;portCR] 11.
 
   Definition paramReplicator := ReoCa.ReoCATernaryChannel AR BR CR [q1R] [q1R] replicatorCaBehavior.
+
+    (* DELAY *)
+
+    Inductive delayStates : Type := d0 | d1.
+    Inductive delayPorts : Type := DA | DB.
+    (* Instance portsEq : EqDec delayPorts eq :=
+      {equiv_dec x y := 
+        match x,y with
+        | DA,DA | DB,DB => in_left
+        | DA,DB | DB,DA => in_right
+        end }.
+      Proof.
+      all: congruence.
+      Defined. *)
+  
+    Definition dataAssignmentDA n := 
+      match n with
+      | 0 =>  1
+      | 1 =>  1
+      | 2 =>  1 
+      | 3 =>  1
+      | 4 =>  0
+      | S n =>  (1)
+      end.
+  
+    Definition dataAssignmentDB n :=
+      match n with
+      | 0 =>  0
+      | 1 =>  0
+      | 2 =>  0
+      | 3 =>  0
+      | 4 =>  1
+      | S n =>  0
+      end.
+  
+    Definition timeStampDelayA(n:nat) : QArith_base.Q :=
+      match n with
+      | 0 =>  1#1
+      | 1 =>  3#1
+      | 2 =>  5#1
+      | 3 =>  7#1
+      | 4 =>  9#1
+      | 5 =>  11#1
+      | S n =>  Z.of_N (N.of_nat(S n)) + 11#1 
+      end.
+  
+    Definition timeStampDelayB (n:nat) : QArith_base.Q :=
+      match n with
+      | 0 =>  2#1 
+      | 1 =>  4#1
+      | 2 => 6#1
+      | 3 => 8#1
+      | 4 => 10#1
+      | 5 => 12#1
+      | S n =>  Z.of_N (N.of_nat(S n)) + 10#1
+      end.
+  
+    Lemma timeStampTestDelayAHolds : forall n, Qlt (timeStampDelayA n) (timeStampDelayA (S n)).
+    Proof.
+    intros. destruct n. unfold timeStampDelayA. reflexivity.
+    unfold timeStampDelayA. case (n). reflexivity.
+    intros n0. case (n0). reflexivity.
+    intros n1. case (n1). reflexivity.
+    intros n2. case (n2). reflexivity.
+    intros n3. case (n3). reflexivity.
+    intros n4. unfold Qlt. apply orderZofNat.  Defined.
+  
+    Lemma timeStampTestDelayBHolds : forall n, 
+      Qlt (timeStampDelayB n) (timeStampDelayB (S n)). 
+    Proof.
+    intros. destruct n. unfold timeStampDelayB. reflexivity.
+    unfold timeStampDelayB. case (n). reflexivity.
+    intros n0. case (n0). reflexivity.
+    intros n1. case (n1). reflexivity.
+    intros n2. case (n2). reflexivity.
+    intros n3. case (n3). reflexivity.
+    intros n4. unfold Qlt. apply orderZofNat.  Defined.
+  
+    Definition portDA := {|
+          ConstraintAutomata.id := DA;
+          ConstraintAutomata.dataAssignment := dataAssignmentDA;
+          ConstraintAutomata.timeStamp := timeStampDelayA;
+          ConstraintAutomata.tdsCond := timeStampTestDelayAHolds;
+          ConstraintAutomata.index := 0 |}.
+  
+    Definition portDB := {|
+          ConstraintAutomata.id := DB;
+          ConstraintAutomata.dataAssignment := dataAssignmentDB;
+          ConstraintAutomata.timeStamp := timeStampDelayB;
+          ConstraintAutomata.tdsCond := timeStampTestDelayBHolds;
+          ConstraintAutomata.index := 0 |}.
+  
+    Definition realDelayPorts := [portDA;portDB].
+  
+    
+  
+    
+  
+    (*Eval compute in ConstraintAutomata.run delayCA realDelayPorts 8.*)
+
+    (*Implementação constraint automata*)
+    (*Atribuir um sistema dinâmico para cada estado do automato:*)
+
+    Record DinamicSystem : Type := DS {
+      I : nat;
+      FUNC : nat -> nat;
+      CurrentValue : nat;
+    }.
+
+      (* Definition delayCA:= {|
+      ConstraintAutomata.Q := [d0;d1];
+      ConstraintAutomata.N := [DA;DB];
+      ConstraintAutomata.T := delayRel;
+      ConstraintAutomata.Q0 := [d0]
+    |}. *)
+
+    Inductive delayStates : Type := d0 | d1.
+    Inductive delayPorts : Type := DA | DB.
+
+    Definition d0DS := {|
+        I := 0;
+        FUNC := d0Function;
+        CurrentValue := 0;
+    |}.
+
+    Definition d1DS := {|
+        I := 5;
+        FUNC := d1Function;
+        CurrentValue := 5;
+    |}.
+
+    Definition d0Function (n: nat) : nat :=
+        match n with
+        | O => 0
+        | S n => 0
+        end.
+
+    Definition d1Function (n: nat) : nat :=
+        match n with
+        | O => 0
+        | S n => n
+        end.
+
+    Definition timerSystemBind (s:delayStates) : DynamicSystem :=
+        match s with
+        | d0 => d0DS
+        | d1 => d1DS
+        end.
+
+    Definition delayRel (s:delayStates) :
+    set (set delayPorts * ConstraintAutomata.DC delayPorts nat * nat * delayStates) :=
+        match s with
+        | d0 => [([DA], (ConstraintAutomata.dc DA 1), 0, d1)]
+        | d1 => [([DA], (ConstraintAutomata.dc DA 1), 0, 0)]
+        end.

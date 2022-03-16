@@ -1,0 +1,2122 @@
+DIGEST e524117a6303efc5deb33c6a3be2a808
+FReoCA
+R15:20 CaMain <> <> lib
+mod 159:163 <> ReoCa
+sec 176:180 ReoCa ReoCa
+var 268:271 ReoCa.ReoCa name
+var 273:277 ReoCa.ReoCa state
+var 279:282 ReoCa.ReoCa data
+def 304:321 ReoCa ReoCABinaryChannel
+R329:332 ReoCA <> ReoCa.ReoCa.name var
+binder 324:324 <> a:4
+binder 326:326 <> b:5
+R344:346 Coq.Lists.ListSet <> set def
+R348:352 ReoCA <> ReoCa.ReoCa.state var
+binder 336:341 <> states:6
+R372:374 Coq.Lists.ListSet <> set def
+R376:380 ReoCA <> ReoCa.ReoCa.state var
+binder 356:368 <> initialStates:7
+R413:416 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R408:412 ReoCA <> ReoCa.ReoCa.state var
+R417:419 Coq.Lists.ListSet <> set def
+R464:466 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R430:432 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R422:424 Coq.Lists.ListSet <> set def
+R426:429 ReoCA <> ReoCa.ReoCa.name var
+R433:453 CaMain ConstraintAutomata DC ind
+R460:463 ReoCA <> ReoCa.ReoCa.data var
+R455:458 ReoCA <> ReoCa.ReoCa.name var
+R467:471 ReoCA <> ReoCa.ReoCa.state var
+binder 387:404 <> transitionRelation:8
+R492:511 CaMain ConstraintAutomata Q proj
+R492:511 CaMain ConstraintAutomata Q proj
+R530:549 CaMain ConstraintAutomata N proj
+R567:586 CaMain ConstraintAutomata T proj
+R617:637 CaMain ConstraintAutomata Q0 proj
+R516:521 ReoCA <> states:6 var
+R554:554 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R556:556 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R558:558 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R555:555 ReoCA <> a:4 var
+R557:557 ReoCA <> b:5 var
+R591:608 ReoCA <> transitionRelation:8 var
+R642:654 ReoCA <> initialStates:7 var
+def 747:765 ReoCa ReoCATernaryChannel
+R775:778 ReoCA <> ReoCa.ReoCa.name var
+binder 768:768 <> a:9
+binder 770:770 <> b:10
+binder 772:772 <> c:11
+R790:792 Coq.Lists.ListSet <> set def
+R794:798 ReoCA <> ReoCa.ReoCa.state var
+binder 782:787 <> states:12
+R818:820 Coq.Lists.ListSet <> set def
+R822:826 ReoCA <> ReoCa.ReoCa.state var
+binder 802:814 <> initialStates:13
+R858:861 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R853:857 ReoCA <> ReoCa.ReoCa.state var
+R862:864 Coq.Lists.ListSet <> set def
+R909:911 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R875:877 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R867:869 Coq.Lists.ListSet <> set def
+R871:874 ReoCA <> ReoCa.ReoCa.name var
+R878:898 CaMain ConstraintAutomata DC ind
+R905:908 ReoCA <> ReoCa.ReoCa.data var
+R900:903 ReoCA <> ReoCa.ReoCa.name var
+R912:916 ReoCA <> ReoCa.ReoCa.state var
+binder 833:850 <> transitionRelation:14
+R939:958 CaMain ConstraintAutomata Q proj
+R939:958 CaMain ConstraintAutomata Q proj
+R977:996 CaMain ConstraintAutomata N proj
+R1016:1035 CaMain ConstraintAutomata T proj
+R1066:1086 CaMain ConstraintAutomata Q0 proj
+R963:968 ReoCA <> states:12 var
+R1001:1001 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R1003:1003 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R1005:1005 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R1007:1007 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R1002:1002 ReoCA <> a:9 var
+R1004:1004 ReoCA <> b:10 var
+R1006:1006 ReoCA <> c:11 var
+R1040:1057 ReoCA <> transitionRelation:14 var
+R1091:1103 ReoCA <> initialStates:13 var
+R1122:1126 ReoCA ReoCa.ReoCa <> sec
+R1133:1137 ReoCA ReoCa <> mod
+ind 1275:1283 <> syncState
+constr 1288:1290 <> q0s
+ind 1305:1313 <> syncPorts
+constr 1318:1318 <> E
+constr 1322:1322 <> F
+inst 1345:1355 <> syncStateEq
+R1358:1362 Coq.Classes.EquivDec <> EqDec class
+R1374:1375 Coq.Init.Logic <> eq ind
+R1364:1372 ReoCA <> syncState ind
+R1385:1393 Coq.Classes.EquivDec <> equiv_dec def
+binder 1395:1395 <> x:19
+binder 1397:1397 <> y:20
+R1417:1417 ReoCA <> y:20 var
+R1415:1415 ReoCA <> x:19 var
+R1432:1434 ReoCA <> q0s constr
+R1436:1438 ReoCA <> q0s constr
+R1443:1449 Coq.Program.Utils <> in_left syndef
+def 1502:1519 <> dataAssignmentBoth
+binder 1521:1521 <> n:23
+R1537:1537 ReoCA <> n:23 var
+R1580:1590 Coq.Init.Datatypes <> S constr
+def 1624:1640 <> timeStampTestSync
+R1645:1647 Coq.Init.Datatypes <> nat ind
+binder 1643:1643 <> n:25
+R1652:1664 Coq.QArith.QArith_base <> Q rec
+R1679:1679 ReoCA <> n:25 var
+R1699:1699 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R1708:1708 Coq.Init.Datatypes <> S constr
+R1742:1742 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R1738:1740 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R1716:1721 Coq.ZArith.BinInt Z of_N def
+R1724:1731 Coq.NArith.BinNat N of_nat def
+R1733:1733 Coq.Init.Datatypes <> S constr
+R1735:1735 ReoCA <> n:25 var
+prf 1826:1847 <> timeStampTestHoldsSync
+binder 1858:1858 <> n:27
+R1866:1868 Coq.QArith.QArith_base <> Qlt def
+R1871:1887 ReoCA <> timeStampTestSync def
+R1889:1889 ReoCA <> n:27 var
+R1893:1909 ReoCA <> timeStampTestSync def
+R1912:1912 Coq.Init.Datatypes <> S constr
+R1914:1914 ReoCA <> n:27 var
+R1958:1974 ReoCA <> timeStampTestSync def
+R2007:2023 ReoCA <> timeStampTestSync def
+R2034:2044 CaMain <> orderZofNat thm
+R2034:2044 CaMain <> orderZofNat thm
+inst 2076:2086 <> syncPortsEq
+R2089:2093 Coq.Classes.EquivDec <> EqDec class
+R2105:2106 Coq.Init.Logic <> eq ind
+R2095:2103 ReoCA <> syncPorts ind
+R2116:2124 Coq.Classes.EquivDec <> equiv_dec def
+binder 2126:2126 <> x:28
+binder 2128:2128 <> y:29
+R2148:2148 ReoCA <> y:29 var
+R2146:2146 ReoCA <> x:28 var
+R2163:2163 ReoCA <> E constr
+R2165:2165 ReoCA <> E constr
+R2169:2169 ReoCA <> F constr
+R2171:2171 ReoCA <> F constr
+R2176:2182 Coq.Program.Utils <> in_left syndef
+R2176:2182 Coq.Program.Utils <> in_left syndef
+R2192:2192 ReoCA <> E constr
+R2194:2194 ReoCA <> F constr
+R2198:2198 ReoCA <> F constr
+R2200:2200 ReoCA <> E constr
+R2205:2212 Coq.Program.Utils <> in_right syndef
+R2205:2212 Coq.Program.Utils <> in_right syndef
+def 2242:2246 <> portE
+R2262:2282 CaMain ConstraintAutomata id proj
+R2262:2282 CaMain ConstraintAutomata id proj
+R2298:2330 CaMain ConstraintAutomata dataAssignment proj
+R2363:2390 CaMain ConstraintAutomata timeStamp proj
+R2422:2447 CaMain ConstraintAutomata tdsCond proj
+R2484:2507 CaMain ConstraintAutomata index proj
+R2287:2287 ReoCA <> E constr
+R2335:2352 ReoCA <> dataAssignmentBoth def
+R2395:2411 ReoCA <> timeStampTestSync def
+R2452:2473 ReoCA <> timeStampTestHoldsSync thm
+def 2532:2536 <> portF
+R2551:2571 CaMain ConstraintAutomata id proj
+R2551:2571 CaMain ConstraintAutomata id proj
+R2587:2619 CaMain ConstraintAutomata dataAssignment proj
+R2652:2679 CaMain ConstraintAutomata timeStamp proj
+R2711:2736 CaMain ConstraintAutomata tdsCond proj
+R2773:2796 CaMain ConstraintAutomata index proj
+R2576:2576 ReoCA <> F constr
+R2624:2641 ReoCA <> dataAssignmentBoth def
+R2684:2700 ReoCA <> timeStampTestSync def
+R2741:2762 ReoCA <> timeStampTestHoldsSync thm
+def 2821:2834 <> syncCaBehavior
+R2840:2848 ReoCA <> syncState ind
+binder 2837:2837 <> s:32
+R2856:2858 Coq.Lists.ListSet <> set def
+R2912:2914 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R2874:2876 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R2861:2863 Coq.Lists.ListSet <> set def
+R2865:2873 ReoCA <> syncPorts ind
+R2877:2897 CaMain ConstraintAutomata DC ind
+R2909:2911 Coq.Init.Datatypes <> nat ind
+R2899:2907 ReoCA <> syncPorts ind
+R2915:2923 ReoCA <> syncState ind
+R2939:2939 ReoCA <> s:32 var
+R2952:2954 ReoCA <> q0s constr
+R2959:2959 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3006:3006 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R2960:2960 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2966:2968 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3000:3001 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R3005:3005 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R2961:2961 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2963:2963 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2965:2965 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R2962:2962 ReoCA <> E constr
+R2964:2964 ReoCA <> F constr
+R2969:2991 CaMain ConstraintAutomata eqDc constr
+R2999:2999 ReoCA <> F constr
+R2997:2997 ReoCA <> E constr
+R2993:2995 Coq.Init.Datatypes <> nat ind
+R3002:3004 ReoCA <> q0s constr
+def 3032:3037 <> syncCA
+R3050:3069 CaMain ConstraintAutomata Q proj
+R3050:3069 CaMain ConstraintAutomata Q proj
+R3085:3104 CaMain ConstraintAutomata N proj
+R3120:3139 CaMain ConstraintAutomata T proj
+R3164:3184 CaMain ConstraintAutomata Q0 proj
+R3074:3074 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3078:3078 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3075:3077 ReoCA <> q0s constr
+R3109:3109 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R3111:3111 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R3113:3113 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R3110:3110 ReoCA <> E constr
+R3112:3112 ReoCA <> F constr
+R3144:3157 ReoCA <> syncCaBehavior def
+R3189:3189 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3193:3193 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3190:3192 ReoCA <> q0s constr
+def 3215:3223 <> paramSync
+R3228:3251 ReoCA <> ReoCABinaryChannel def
+R3269:3282 ReoCA <> syncCaBehavior def
+R3263:3263 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3267:3267 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3264:3266 ReoCA <> q0s constr
+R3257:3257 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3261:3261 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R3258:3260 ReoCA <> q0s constr
+R3255:3255 ReoCA <> F constr
+R3253:3253 ReoCA <> E constr
+R3304:3325 CaMain ConstraintAutomata run def
+R3334:3334 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R3340:3340 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R3346:3346 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R3335:3339 ReoCA <> portE def
+R3341:3345 ReoCA <> portF def
+R3327:3332 ReoCA <> syncCA def
+ind 3387:3401 <> lossySyncStates
+constr 3406:3407 <> q0
+ind 3423:3436 <> lossySyncPorts
+constr 3441:3441 <> A
+constr 3445:3445 <> B
+inst 3468:3483 <> lossySyncStateEq
+R3486:3490 Coq.Classes.EquivDec <> EqDec class
+R3508:3509 Coq.Init.Logic <> eq ind
+R3492:3506 ReoCA <> lossySyncStates ind
+R3519:3527 Coq.Classes.EquivDec <> equiv_dec def
+binder 3529:3529 <> x:38
+binder 3531:3531 <> y:39
+R3551:3551 ReoCA <> y:39 var
+R3549:3549 ReoCA <> x:38 var
+R3566:3567 ReoCA <> q0 constr
+R3570:3571 ReoCA <> q0 constr
+R3576:3582 Coq.Program.Utils <> in_left syndef
+inst 3618:3633 <> LossySyncPortsEq
+R3636:3640 Coq.Classes.EquivDec <> EqDec class
+R3657:3658 Coq.Init.Logic <> eq ind
+R3642:3655 ReoCA <> lossySyncPorts ind
+R3668:3676 Coq.Classes.EquivDec <> equiv_dec def
+binder 3678:3678 <> x:42
+binder 3680:3680 <> y:43
+R3700:3700 ReoCA <> y:43 var
+R3698:3698 ReoCA <> x:42 var
+R3715:3715 ReoCA <> A constr
+R3717:3717 ReoCA <> A constr
+R3721:3721 ReoCA <> B constr
+R3723:3723 ReoCA <> B constr
+R3728:3734 Coq.Program.Utils <> in_left syndef
+R3728:3734 Coq.Program.Utils <> in_left syndef
+R3744:3744 ReoCA <> A constr
+R3746:3746 ReoCA <> B constr
+R3750:3750 ReoCA <> B constr
+R3752:3752 ReoCA <> A constr
+R3757:3764 Coq.Program.Utils <> in_right syndef
+R3757:3764 Coq.Program.Utils <> in_right syndef
+def 3794:3820 <> dataAssignmentLossySyncBoth
+binder 3822:3822 <> n:46
+R3838:3838 ReoCA <> n:46 var
+R3879:3879 Coq.Init.Datatypes <> S constr
+def 3914:3928 <> timeStampLossyA
+R3933:3935 Coq.Init.Datatypes <> nat ind
+binder 3931:3931 <> n:48
+R3940:3952 Coq.QArith.QArith_base <> Q rec
+R3967:3967 ReoCA <> n:48 var
+R3987:3987 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R3996:3996 Coq.Init.Datatypes <> S constr
+R4031:4031 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R4026:4028 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R4004:4009 Coq.ZArith.BinInt Z of_N def
+R4012:4019 Coq.NArith.BinNat N of_nat def
+R4021:4021 Coq.Init.Datatypes <> S constr
+R4023:4023 ReoCA <> n:48 var
+def 4057:4071 <> timeStampLossyB
+R4076:4078 Coq.Init.Datatypes <> nat ind
+binder 4074:4074 <> n:50
+R4083:4095 Coq.QArith.QArith_base <> Q rec
+R4110:4110 ReoCA <> n:50 var
+R4130:4130 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R4139:4139 Coq.Init.Datatypes <> S constr
+R4173:4173 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R4169:4171 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R4147:4152 Coq.ZArith.BinInt Z of_N def
+R4155:4162 Coq.NArith.BinNat N of_nat def
+R4164:4164 Coq.Init.Datatypes <> S constr
+R4166:4166 ReoCA <> n:50 var
+prf 4194:4217 <> timeStampTestHoldsLossyA
+binder 4227:4227 <> n:52
+R4235:4237 Coq.QArith.QArith_base <> Qlt def
+R4240:4254 ReoCA <> timeStampLossyA def
+R4256:4256 ReoCA <> n:52 var
+R4260:4274 ReoCA <> timeStampLossyA def
+R4277:4277 Coq.Init.Datatypes <> S constr
+R4279:4279 ReoCA <> n:52 var
+R4323:4337 ReoCA <> timeStampLossyA def
+R4363:4377 ReoCA <> timeStampLossyA def
+R4388:4398 CaMain <> orderZofNat thm
+R4388:4398 CaMain <> orderZofNat thm
+prf 4419:4442 <> timeStampTestHoldsLossyB
+binder 4452:4452 <> n:53
+R4460:4462 Coq.QArith.QArith_base <> Qlt def
+R4465:4479 ReoCA <> timeStampLossyB def
+R4481:4481 ReoCA <> n:53 var
+R4485:4499 ReoCA <> timeStampLossyB def
+R4502:4502 Coq.Init.Datatypes <> S constr
+R4504:4504 ReoCA <> n:53 var
+R4547:4561 ReoCA <> timeStampLossyB def
+R4587:4601 ReoCA <> timeStampLossyB def
+R4612:4622 CaMain <> orderZofNat thm
+R4612:4622 CaMain <> orderZofNat thm
+def 4648:4666 <> lossySyncCaBehavior
+R4672:4686 ReoCA <> lossySyncStates ind
+binder 4669:4669 <> s:54
+R4693:4695 Coq.Lists.ListSet <> set def
+R4759:4761 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R4716:4718 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R4698:4700 Coq.Lists.ListSet <> set def
+R4702:4715 ReoCA <> lossySyncPorts ind
+R4719:4739 CaMain ConstraintAutomata DC ind
+R4756:4758 Coq.Init.Datatypes <> nat ind
+R4741:4754 ReoCA <> lossySyncPorts ind
+R4762:4776 ReoCA <> lossySyncStates ind
+R4791:4791 ReoCA <> s:54 var
+R4804:4805 ReoCA <> q0 constr
+R4810:4810 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4856:4870 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4925:4925 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4811:4811 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4817:4819 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4851:4852 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4855:4855 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4812:4812 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4814:4814 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4816:4816 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R4813:4813 ReoCA <> A constr
+R4815:4815 ReoCA <> B constr
+R4820:4842 CaMain ConstraintAutomata eqDc constr
+R4850:4850 ReoCA <> B constr
+R4848:4848 ReoCA <> A constr
+R4844:4846 Coq.Init.Datatypes <> nat ind
+R4853:4854 ReoCA <> q0 constr
+R4871:4871 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4875:4877 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4919:4921 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4924:4924 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R4872:4872 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4874:4874 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4873:4873 ReoCA <> A constr
+R4878:4899 CaMain ConstraintAutomata tDc constr
+R4916:4918 Coq.Init.Datatypes <> nat ind
+R4901:4914 ReoCA <> lossySyncPorts ind
+R4922:4923 ReoCA <> q0 constr
+def 4951:4961 <> lossySyncCA
+R4973:4992 CaMain ConstraintAutomata Q proj
+R4973:4992 CaMain ConstraintAutomata Q proj
+R5007:5026 CaMain ConstraintAutomata N proj
+R5042:5061 CaMain ConstraintAutomata T proj
+R5091:5111 CaMain ConstraintAutomata Q0 proj
+R4997:4997 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5000:5000 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R4998:4999 ReoCA <> q0 constr
+R5031:5031 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5033:5033 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5035:5035 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5032:5032 ReoCA <> A constr
+R5034:5034 ReoCA <> B constr
+R5066:5084 ReoCA <> lossySyncCaBehavior def
+R5116:5116 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5119:5119 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R5117:5118 ReoCA <> q0 constr
+def 5141:5145 <> portA
+R5161:5181 CaMain ConstraintAutomata id proj
+R5161:5181 CaMain ConstraintAutomata id proj
+R5197:5229 CaMain ConstraintAutomata dataAssignment proj
+R5271:5298 CaMain ConstraintAutomata timeStamp proj
+R5328:5353 CaMain ConstraintAutomata tdsCond proj
+R5392:5415 CaMain ConstraintAutomata index proj
+R5186:5186 ReoCA <> A constr
+R5234:5260 ReoCA <> dataAssignmentLossySyncBoth def
+R5303:5317 ReoCA <> timeStampLossyA def
+R5358:5381 ReoCA <> timeStampTestHoldsLossyA thm
+def 5440:5444 <> portB
+R5459:5479 CaMain ConstraintAutomata id proj
+R5459:5479 CaMain ConstraintAutomata id proj
+R5495:5527 CaMain ConstraintAutomata dataAssignment proj
+R5569:5596 CaMain ConstraintAutomata timeStamp proj
+R5626:5651 CaMain ConstraintAutomata tdsCond proj
+R5690:5713 CaMain ConstraintAutomata index proj
+R5484:5484 ReoCA <> B constr
+R5532:5558 ReoCA <> dataAssignmentLossySyncBoth def
+R5601:5615 ReoCA <> timeStampLossyB def
+R5656:5679 ReoCA <> timeStampTestHoldsLossyB thm
+R5743:5764 CaMain ConstraintAutomata run def
+R5778:5778 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5784:5784 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5790:5790 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R5779:5783 ReoCA <> portA def
+R5785:5789 ReoCA <> portB def
+R5766:5776 ReoCA <> lossySyncCA def
+def 6035:6048 <> paramLossySync
+R6053:6076 ReoCA <> ReoCABinaryChannel def
+R6092:6110 ReoCA <> lossySyncCaBehavior def
+R6087:6087 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R6090:6090 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R6088:6089 ReoCA <> q0 constr
+R6082:6082 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R6085:6085 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R6083:6084 ReoCA <> q0 constr
+R6080:6080 ReoCA <> B constr
+R6078:6078 ReoCA <> A constr
+ind 6142:6151 <> FIFOStates
+constr 6163:6165 <> q0F
+constr 6169:6171 <> p0F
+constr 6175:6177 <> p1F
+ind 6192:6200 <> FIFOports
+constr 6212:6213 <> AF
+constr 6217:6218 <> BF
+inst 6240:6246 <> portsEq
+R6250:6254 Coq.Classes.EquivDec <> EqDec class
+R6266:6267 Coq.Init.Logic <> eq ind
+R6256:6264 ReoCA <> FIFOports ind
+R6277:6285 Coq.Classes.EquivDec <> equiv_dec def
+binder 6287:6287 <> x:60
+binder 6289:6289 <> y:61
+R6309:6309 ReoCA <> y:61 var
+R6307:6307 ReoCA <> x:60 var
+R6324:6325 ReoCA <> AF constr
+R6327:6328 ReoCA <> AF constr
+R6332:6333 ReoCA <> BF constr
+R6335:6336 ReoCA <> BF constr
+R6341:6347 Coq.Program.Utils <> in_left syndef
+R6341:6347 Coq.Program.Utils <> in_left syndef
+R6357:6358 ReoCA <> AF constr
+R6360:6361 ReoCA <> BF constr
+R6365:6366 ReoCA <> BF constr
+R6368:6369 ReoCA <> AF constr
+R6374:6381 Coq.Program.Utils <> in_right syndef
+R6374:6381 Coq.Program.Utils <> in_right syndef
+def 6410:6424 <> dataAssignmentA
+binder 6426:6426 <> n:64
+R6442:6442 ReoCA <> n:64 var
+R6498:6498 Coq.Init.Datatypes <> S constr
+def 6533:6547 <> dataAssignmentB
+binder 6549:6549 <> n:66
+R6564:6564 ReoCA <> n:66 var
+R6621:6621 Coq.Init.Datatypes <> S constr
+def 6654:6667 <> timeStampFIFOA
+R6671:6673 Coq.Init.Datatypes <> nat ind
+binder 6669:6669 <> n:68
+R6678:6690 Coq.QArith.QArith_base <> Q rec
+R6705:6705 ReoCA <> n:68 var
+R6725:6725 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6741:6741 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6757:6757 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6773:6773 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6789:6789 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6806:6806 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6815:6815 Coq.Init.Datatypes <> S constr
+R6850:6850 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6845:6847 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R6823:6828 Coq.ZArith.BinInt Z of_N def
+R6831:6838 Coq.NArith.BinNat N of_nat def
+R6840:6840 Coq.Init.Datatypes <> S constr
+R6842:6842 ReoCA <> n:68 var
+def 6877:6890 <> timeStampFIFOB
+R6895:6897 Coq.Init.Datatypes <> nat ind
+binder 6893:6893 <> n:70
+R6902:6914 Coq.QArith.QArith_base <> Q rec
+R6929:6929 ReoCA <> n:70 var
+R6949:6949 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6966:6966 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6981:6981 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R6996:6996 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R7012:7012 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R7028:7028 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R7037:7037 Coq.Init.Datatypes <> S constr
+R7072:7072 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R7067:7069 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R7045:7050 Coq.ZArith.BinInt Z of_N def
+R7053:7060 Coq.NArith.BinNat N of_nat def
+R7062:7062 Coq.Init.Datatypes <> S constr
+R7064:7064 ReoCA <> n:70 var
+prf 7093:7115 <> timeStampTestFIFOAHolds
+binder 7126:7126 <> n:72
+R7129:7131 Coq.QArith.QArith_base <> Qlt def
+R7134:7147 ReoCA <> timeStampFIFOA def
+R7149:7149 ReoCA <> n:72 var
+R7153:7166 ReoCA <> timeStampFIFOA def
+R7169:7169 Coq.Init.Datatypes <> S constr
+R7171:7171 ReoCA <> n:72 var
+R7214:7227 ReoCA <> timeStampFIFOA def
+R7252:7265 ReoCA <> timeStampFIFOA def
+R7459:7461 Coq.QArith.QArith_base <> Qlt def
+R7470:7480 CaMain <> orderZofNat thm
+R7470:7480 CaMain <> orderZofNat thm
+prf 7502:7524 <> timeStampTestFIFOBHolds
+binder 7535:7535 <> n:73
+R7543:7545 Coq.QArith.QArith_base <> Qlt def
+R7548:7561 ReoCA <> timeStampFIFOB def
+R7563:7563 ReoCA <> n:73 var
+R7567:7580 ReoCA <> timeStampFIFOB def
+R7583:7583 Coq.Init.Datatypes <> S constr
+R7585:7585 ReoCA <> n:73 var
+R7629:7642 ReoCA <> timeStampFIFOB def
+R7667:7680 ReoCA <> timeStampFIFOB def
+R7874:7876 Coq.QArith.QArith_base <> Qlt def
+R7885:7895 CaMain <> orderZofNat thm
+R7885:7895 CaMain <> orderZofNat thm
+def 7922:7927 <> portAF
+R7943:7963 CaMain ConstraintAutomata id proj
+R7943:7963 CaMain ConstraintAutomata id proj
+R7980:8012 CaMain ConstraintAutomata dataAssignment proj
+R8042:8069 CaMain ConstraintAutomata timeStamp proj
+R8098:8123 CaMain ConstraintAutomata tdsCond proj
+R8161:8184 CaMain ConstraintAutomata index proj
+R7968:7969 ReoCA <> AF constr
+R8017:8031 ReoCA <> dataAssignmentA def
+R8074:8087 ReoCA <> timeStampFIFOA def
+R8128:8150 ReoCA <> timeStampTestFIFOAHolds thm
+def 8209:8214 <> portBF
+R8230:8250 CaMain ConstraintAutomata id proj
+R8230:8250 CaMain ConstraintAutomata id proj
+R8267:8299 CaMain ConstraintAutomata dataAssignment proj
+R8329:8356 CaMain ConstraintAutomata timeStamp proj
+R8385:8410 CaMain ConstraintAutomata tdsCond proj
+R8448:8471 CaMain ConstraintAutomata index proj
+R8255:8256 ReoCA <> BF constr
+R8304:8318 ReoCA <> dataAssignmentB def
+R8361:8374 ReoCA <> timeStampFIFOB def
+R8415:8437 ReoCA <> timeStampTestFIFOBHolds thm
+def 8496:8504 <> realports
+R8509:8509 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8516:8516 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8523:8523 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8510:8515 ReoCA <> portAF def
+R8517:8522 ReoCA <> portBF def
+def 8540:8556 <> oneBoundedFIFOrel
+R8561:8570 ReoCA <> FIFOStates ind
+binder 8559:8559 <> s:74
+R8577:8579 Coq.Lists.ListSet <> set def
+R8633:8635 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R8595:8597 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R8582:8584 Coq.Lists.ListSet <> set def
+R8586:8594 ReoCA <> FIFOports ind
+R8598:8618 CaMain ConstraintAutomata DC ind
+R8630:8632 Coq.Init.Datatypes <> nat ind
+R8620:8628 ReoCA <> FIFOports ind
+R8636:8645 ReoCA <> FIFOStates ind
+R8661:8661 ReoCA <> s:74 var
+R8674:8676 ReoCA <> q0F constr
+R8681:8681 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8723:8738 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8780:8780 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8682:8682 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8687:8689 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8716:8718 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8722:8722 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8683:8683 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8686:8686 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8684:8685 ReoCA <> AF constr
+R8690:8710 CaMain ConstraintAutomata dc constr
+R8712:8713 ReoCA <> AF constr
+R8719:8721 ReoCA <> p0F constr
+R8739:8739 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8744:8746 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8773:8775 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8779:8779 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8740:8740 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8743:8743 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8741:8742 ReoCA <> AF constr
+R8747:8767 CaMain ConstraintAutomata dc constr
+R8769:8770 ReoCA <> AF constr
+R8776:8778 ReoCA <> p1F constr
+R8788:8790 ReoCA <> p0F constr
+R8795:8795 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8837:8837 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8796:8796 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8801:8803 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8830:8832 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8836:8836 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8797:8797 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8800:8800 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8798:8799 ReoCA <> BF constr
+R8804:8824 CaMain ConstraintAutomata dc constr
+R8826:8827 ReoCA <> BF constr
+R8833:8835 ReoCA <> q0F constr
+R8845:8847 ReoCA <> p1F constr
+R8852:8852 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8894:8894 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8853:8853 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8858:8860 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8887:8889 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8893:8893 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R8854:8854 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8857:8857 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R8855:8856 ReoCA <> BF constr
+R8861:8881 CaMain ConstraintAutomata dc constr
+R8883:8884 ReoCA <> BF constr
+R8890:8892 ReoCA <> q0F constr
+def 8920:8935 <> oneBoundedFIFOCA
+R8946:8965 CaMain ConstraintAutomata Q proj
+R8946:8965 CaMain ConstraintAutomata Q proj
+R8989:9008 CaMain ConstraintAutomata N proj
+R9026:9045 CaMain ConstraintAutomata T proj
+R9073:9093 CaMain ConstraintAutomata Q0 proj
+R8970:8970 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8974:8974 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8978:8978 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8982:8982 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R8971:8973 ReoCA <> q0F constr
+R8975:8977 ReoCA <> p0F constr
+R8979:8981 ReoCA <> p1F constr
+R9013:9013 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R9016:9016 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R9019:9019 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R9014:9015 ReoCA <> AF constr
+R9017:9018 ReoCA <> BF constr
+R9050:9066 ReoCA <> oneBoundedFIFOrel def
+R9098:9098 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R9102:9102 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R9099:9101 ReoCA <> q0F constr
+def 9124:9133 <> paramFIFO1
+R9138:9161 ReoCA <> ReoCABinaryChannel def
+R9189:9205 ReoCA <> oneBoundedFIFOrel def
+R9183:9183 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R9187:9187 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R9184:9186 ReoCA <> q0F constr
+R9169:9169 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R9173:9173 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R9177:9177 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R9181:9181 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R9170:9172 ReoCA <> q0F constr
+R9174:9176 ReoCA <> p0F constr
+R9178:9180 ReoCA <> p1F constr
+R9166:9167 ReoCA <> BF constr
+R9163:9164 ReoCA <> AF constr
+prf 9217:9224 <> dataInAF
+binder 9234:9234 <> s:76
+R9338:9346 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R9237:9238 Coq.Lists.List <> In def
+R9244:9294 CaMain ConstraintAutomata retrievePortsFromRespTransitions def
+R9297:9316 CaMain ConstraintAutomata T proj
+R9335:9335 ReoCA <> s:76 var
+R9318:9333 ReoCA <> oneBoundedFIFOCA def
+R9240:9241 ReoCA <> AF constr
+R9348:9350 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R9347:9347 ReoCA <> s:76 var
+R9351:9353 ReoCA <> q0F constr
+R9616:9637 CaMain ConstraintAutomata run def
+R9656:9664 ReoCA <> realports def
+R9639:9654 ReoCA <> oneBoundedFIFOCA def
+ind 9704:9717 <> syncDrainState
+constr 9722:9724 <> q1D
+ind 9739:9752 <> syncDrainPorts
+constr 9758:9759 <> AD
+constr 9763:9764 <> BD
+inst 9787:9802 <> syncDrainStateEq
+R9805:9809 Coq.Classes.EquivDec <> EqDec class
+R9826:9827 Coq.Init.Logic <> eq ind
+R9811:9824 ReoCA <> syncDrainState ind
+R9837:9845 Coq.Classes.EquivDec <> equiv_dec def
+binder 9847:9847 <> x:81
+binder 9849:9849 <> y:82
+R9869:9869 ReoCA <> y:82 var
+R9867:9867 ReoCA <> x:81 var
+R9884:9886 ReoCA <> q1D constr
+R9889:9891 ReoCA <> q1D constr
+R9896:9902 Coq.Program.Utils <> in_left syndef
+def 9931:9957 <> dataAssignmentSyncDrainBoth
+binder 9959:9959 <> n:85
+R9975:9975 ReoCA <> n:85 var
+R10017:10017 Coq.Init.Datatypes <> S constr
+def 10051:10068 <> timeStampSyncDrain
+R10073:10075 Coq.Init.Datatypes <> nat ind
+binder 10071:10071 <> n:87
+R10080:10092 Coq.QArith.QArith_base <> Q rec
+R10107:10107 ReoCA <> n:87 var
+R10127:10127 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R10136:10136 Coq.Init.Datatypes <> S constr
+R10170:10170 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R10166:10168 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R10144:10149 Coq.ZArith.BinInt Z of_N def
+R10152:10159 Coq.NArith.BinNat N of_nat def
+R10161:10161 Coq.Init.Datatypes <> S constr
+R10163:10163 ReoCA <> n:87 var
+prf 10191:10213 <> timeStampSyncDrainHolds
+binder 10224:10224 <> n:89
+R10232:10234 Coq.QArith.QArith_base <> Qlt def
+R10237:10254 ReoCA <> timeStampSyncDrain def
+R10256:10256 ReoCA <> n:89 var
+R10260:10277 ReoCA <> timeStampSyncDrain def
+R10280:10280 Coq.Init.Datatypes <> S constr
+R10282:10282 ReoCA <> n:89 var
+R10326:10343 ReoCA <> timeStampSyncDrain def
+R10368:10385 ReoCA <> timeStampSyncDrain def
+R10431:10448 ReoCA <> timeStampSyncDrain def
+R10457:10467 CaMain <> orderZofNat thm
+R10457:10467 CaMain <> orderZofNat thm
+inst 10500:10515 <> syncDrainPortsEq
+R10518:10522 Coq.Classes.EquivDec <> EqDec class
+R10539:10540 Coq.Init.Logic <> eq ind
+R10524:10537 ReoCA <> syncDrainPorts ind
+R10550:10558 Coq.Classes.EquivDec <> equiv_dec def
+binder 10560:10560 <> x:90
+binder 10562:10562 <> y:91
+R10582:10582 ReoCA <> y:91 var
+R10580:10580 ReoCA <> x:90 var
+R10597:10598 ReoCA <> AD constr
+R10600:10601 ReoCA <> AD constr
+R10605:10606 ReoCA <> BD constr
+R10608:10609 ReoCA <> BD constr
+R10614:10620 Coq.Program.Utils <> in_left syndef
+R10614:10620 Coq.Program.Utils <> in_left syndef
+R10630:10631 ReoCA <> AD constr
+R10633:10634 ReoCA <> BD constr
+R10638:10639 ReoCA <> BD constr
+R10641:10642 ReoCA <> AD constr
+R10647:10654 Coq.Program.Utils <> in_right syndef
+R10647:10654 Coq.Program.Utils <> in_right syndef
+def 10684:10689 <> portAD
+R10705:10725 CaMain ConstraintAutomata id proj
+R10705:10725 CaMain ConstraintAutomata id proj
+R10742:10774 CaMain ConstraintAutomata dataAssignment proj
+R10816:10843 CaMain ConstraintAutomata timeStamp proj
+R10876:10901 CaMain ConstraintAutomata tdsCond proj
+R10939:10962 CaMain ConstraintAutomata index proj
+R10730:10731 ReoCA <> AD constr
+R10779:10805 ReoCA <> dataAssignmentSyncDrainBoth def
+R10848:10865 ReoCA <> timeStampSyncDrain def
+R10906:10928 ReoCA <> timeStampSyncDrainHolds thm
+def 10987:10992 <> portBD
+R11007:11027 CaMain ConstraintAutomata id proj
+R11007:11027 CaMain ConstraintAutomata id proj
+R11044:11076 CaMain ConstraintAutomata dataAssignment proj
+R11118:11145 CaMain ConstraintAutomata timeStamp proj
+R11178:11203 CaMain ConstraintAutomata tdsCond proj
+R11241:11264 CaMain ConstraintAutomata index proj
+R11032:11033 ReoCA <> BD constr
+R11081:11107 ReoCA <> dataAssignmentSyncDrainBoth def
+R11150:11167 ReoCA <> timeStampSyncDrain def
+R11208:11230 ReoCA <> timeStampSyncDrainHolds thm
+def 11289:11307 <> syncDrainCaBehavior
+R11313:11326 ReoCA <> syncDrainState ind
+binder 11310:11310 <> s:94
+R11331:11333 Coq.Lists.ListSet <> set def
+R11399:11401 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R11356:11358 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R11338:11340 Coq.Lists.ListSet <> set def
+R11342:11355 ReoCA <> syncDrainPorts ind
+R11359:11379 CaMain ConstraintAutomata DC ind
+R11396:11398 Coq.Init.Datatypes <> nat ind
+R11381:11394 ReoCA <> syncDrainPorts ind
+R11402:11415 ReoCA <> syncDrainState ind
+R11431:11431 ReoCA <> s:94 var
+R11444:11446 ReoCA <> q1D constr
+R11451:11451 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11510:11510 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11452:11452 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11460:11462 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11504:11505 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11509:11509 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R11453:11453 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11456:11456 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11459:11459 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11454:11455 ReoCA <> AD constr
+R11457:11458 ReoCA <> BD constr
+R11463:11484 CaMain ConstraintAutomata tDc constr
+R11501:11503 Coq.Init.Datatypes <> nat ind
+R11486:11499 ReoCA <> syncDrainPorts ind
+R11506:11508 ReoCA <> q1D constr
+def 11536:11546 <> SyncDrainCA
+R11558:11577 CaMain ConstraintAutomata Q proj
+R11558:11577 CaMain ConstraintAutomata Q proj
+R11593:11612 CaMain ConstraintAutomata N proj
+R11630:11649 CaMain ConstraintAutomata T proj
+R11679:11699 CaMain ConstraintAutomata Q0 proj
+R11582:11582 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11586:11586 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11583:11585 ReoCA <> q1D constr
+R11617:11617 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11620:11620 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11623:11623 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11618:11619 ReoCA <> AD constr
+R11621:11622 ReoCA <> BD constr
+R11654:11672 ReoCA <> syncDrainCaBehavior def
+R11704:11704 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11708:11708 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11705:11707 ReoCA <> q1D constr
+R11735:11756 CaMain ConstraintAutomata run def
+R11770:11770 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11777:11777 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11784:11784 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R11771:11776 ReoCA <> portAD def
+R11778:11783 ReoCA <> portBD def
+R11758:11768 ReoCA <> SyncDrainCA def
+def 11804:11817 <> paramSyncDrain
+R11822:11845 ReoCA <> ReoCABinaryChannel def
+R11865:11883 ReoCA <> syncDrainCaBehavior def
+R11859:11859 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11863:11863 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11860:11862 ReoCA <> q1D constr
+R11853:11853 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11857:11857 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11854:11856 ReoCA <> q1D constr
+R11850:11851 ReoCA <> BD constr
+R11847:11848 ReoCA <> AD constr
+R11895:11908 ReoCA <> paramSyncDrain def
+ind 11943:11957 <> aSyncDrainState
+constr 11962:11964 <> q1A
+ind 11979:11993 <> aSyncDrainPorts
+constr 11999:12000 <> AA
+constr 12004:12005 <> BA
+inst 12028:12044 <> aSyncDrainStateEq
+R12047:12051 Coq.Classes.EquivDec <> EqDec class
+R12069:12070 Coq.Init.Logic <> eq ind
+R12053:12067 ReoCA <> aSyncDrainState ind
+R12080:12088 Coq.Classes.EquivDec <> equiv_dec def
+binder 12090:12090 <> x:100
+binder 12092:12092 <> y:101
+R12112:12112 ReoCA <> y:101 var
+R12110:12110 ReoCA <> x:100 var
+R12127:12129 ReoCA <> q1A constr
+R12132:12134 ReoCA <> q1A constr
+R12139:12145 Coq.Program.Utils <> in_left syndef
+def 12174:12201 <> dataAssignmentASyncDrainBoth
+binder 12203:12203 <> n:104
+R12219:12219 ReoCA <> n:104 var
+R12260:12260 Coq.Init.Datatypes <> S constr
+def 12294:12313 <> timeStampASyncDrainA
+R12318:12320 Coq.Init.Datatypes <> nat ind
+binder 12316:12316 <> n:106
+R12325:12337 Coq.QArith.QArith_base <> Q rec
+R12352:12352 ReoCA <> n:106 var
+R12372:12372 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R12388:12388 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R12397:12397 Coq.Init.Datatypes <> S constr
+R12431:12431 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R12427:12429 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R12405:12410 Coq.ZArith.BinInt Z of_N def
+R12413:12420 Coq.NArith.BinNat N of_nat def
+R12422:12422 Coq.Init.Datatypes <> S constr
+R12424:12424 ReoCA <> n:106 var
+def 12458:12477 <> timeStampASyncDrainB
+R12482:12484 Coq.Init.Datatypes <> nat ind
+binder 12480:12480 <> n:108
+R12489:12501 Coq.QArith.QArith_base <> Q rec
+R12516:12516 ReoCA <> n:108 var
+R12536:12536 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R12551:12551 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R12560:12560 Coq.Init.Datatypes <> S constr
+R12595:12595 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R12590:12592 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R12568:12573 Coq.ZArith.BinInt Z of_N def
+R12576:12583 Coq.NArith.BinNat N of_nat def
+R12585:12585 Coq.Init.Datatypes <> S constr
+R12587:12587 ReoCA <> n:108 var
+prf 12616:12639 <> timeStampASyncDrainHolds
+binder 12650:12650 <> n:110
+R12658:12660 Coq.QArith.QArith_base <> Qlt def
+R12663:12682 ReoCA <> timeStampASyncDrainA def
+R12684:12684 ReoCA <> n:110 var
+R12688:12707 ReoCA <> timeStampASyncDrainA def
+R12710:12710 Coq.Init.Datatypes <> S constr
+R12712:12712 ReoCA <> n:110 var
+R12756:12775 ReoCA <> timeStampASyncDrainA def
+R12800:12819 ReoCA <> timeStampASyncDrainA def
+R12865:12884 ReoCA <> timeStampASyncDrainA def
+R12893:12903 CaMain <> orderZofNat thm
+R12893:12903 CaMain <> orderZofNat thm
+prf 12926:12950 <> timeStampASyncDrainBHolds
+binder 12961:12961 <> n:111
+R12969:12971 Coq.QArith.QArith_base <> Qlt def
+R12974:12993 ReoCA <> timeStampASyncDrainB def
+R12995:12995 ReoCA <> n:111 var
+R12999:13018 ReoCA <> timeStampASyncDrainB def
+R13021:13021 Coq.Init.Datatypes <> S constr
+R13023:13023 ReoCA <> n:111 var
+R13067:13086 ReoCA <> timeStampASyncDrainB def
+R13111:13130 ReoCA <> timeStampASyncDrainB def
+R13176:13195 ReoCA <> timeStampASyncDrainB def
+R13204:13214 CaMain <> orderZofNat thm
+R13204:13214 CaMain <> orderZofNat thm
+inst 13246:13262 <> aSyncDrainPortsEq
+R13265:13269 Coq.Classes.EquivDec <> EqDec class
+R13287:13288 Coq.Init.Logic <> eq ind
+R13271:13285 ReoCA <> aSyncDrainPorts ind
+R13298:13306 Coq.Classes.EquivDec <> equiv_dec def
+binder 13308:13308 <> x:112
+binder 13310:13310 <> y:113
+R13330:13330 ReoCA <> y:113 var
+R13328:13328 ReoCA <> x:112 var
+R13345:13346 ReoCA <> AA constr
+R13348:13349 ReoCA <> AA constr
+R13353:13354 ReoCA <> BA constr
+R13356:13357 ReoCA <> BA constr
+R13362:13368 Coq.Program.Utils <> in_left syndef
+R13362:13368 Coq.Program.Utils <> in_left syndef
+R13378:13379 ReoCA <> AA constr
+R13381:13382 ReoCA <> BA constr
+R13386:13387 ReoCA <> BA constr
+R13389:13390 ReoCA <> AA constr
+R13395:13402 Coq.Program.Utils <> in_right syndef
+R13395:13402 Coq.Program.Utils <> in_right syndef
+def 13432:13437 <> portAA
+R13453:13473 CaMain ConstraintAutomata id proj
+R13453:13473 CaMain ConstraintAutomata id proj
+R13490:13522 CaMain ConstraintAutomata dataAssignment proj
+R13565:13592 CaMain ConstraintAutomata timeStamp proj
+R13627:13652 CaMain ConstraintAutomata tdsCond proj
+R13691:13714 CaMain ConstraintAutomata index proj
+R13478:13479 ReoCA <> AA constr
+R13527:13554 ReoCA <> dataAssignmentASyncDrainBoth def
+R13597:13616 ReoCA <> timeStampASyncDrainA def
+R13657:13680 ReoCA <> timeStampASyncDrainHolds thm
+def 13739:13744 <> portBA
+R13759:13779 CaMain ConstraintAutomata id proj
+R13759:13779 CaMain ConstraintAutomata id proj
+R13796:13828 CaMain ConstraintAutomata dataAssignment proj
+R13871:13898 CaMain ConstraintAutomata timeStamp proj
+R13933:13958 CaMain ConstraintAutomata tdsCond proj
+R13998:14021 CaMain ConstraintAutomata index proj
+R13784:13785 ReoCA <> BA constr
+R13833:13860 ReoCA <> dataAssignmentASyncDrainBoth def
+R13903:13922 ReoCA <> timeStampASyncDrainB def
+R13963:13987 ReoCA <> timeStampASyncDrainBHolds thm
+def 14046:14065 <> aSyncDrainCaBehavior
+R14071:14085 ReoCA <> aSyncDrainState ind
+binder 14068:14068 <> s:116
+R14089:14091 Coq.Lists.ListSet <> set def
+R14159:14161 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R14115:14117 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R14096:14098 Coq.Lists.ListSet <> set def
+R14100:14114 ReoCA <> aSyncDrainPorts ind
+R14118:14138 CaMain ConstraintAutomata DC ind
+R14156:14158 Coq.Init.Datatypes <> nat ind
+R14140:14154 ReoCA <> aSyncDrainPorts ind
+R14162:14176 ReoCA <> aSyncDrainState ind
+R14192:14192 ReoCA <> s:116 var
+R14205:14207 ReoCA <> q1A constr
+R14212:14212 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14269:14284 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14341:14341 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14213:14213 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R14218:14220 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R14263:14264 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R14268:14268 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R14214:14214 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14217:14217 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14215:14216 ReoCA <> AA constr
+R14221:14242 CaMain ConstraintAutomata tDc constr
+R14260:14262 Coq.Init.Datatypes <> nat ind
+R14244:14258 ReoCA <> aSyncDrainPorts ind
+R14265:14267 ReoCA <> q1A constr
+R14285:14285 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R14290:14292 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R14335:14336 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R14340:14340 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R14286:14286 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14289:14289 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14287:14288 ReoCA <> BA constr
+R14293:14314 CaMain ConstraintAutomata tDc constr
+R14332:14334 Coq.Init.Datatypes <> nat ind
+R14316:14330 ReoCA <> aSyncDrainPorts ind
+R14337:14339 ReoCA <> q1A constr
+def 14367:14378 <> aSyncDrainCA
+R14390:14409 CaMain ConstraintAutomata Q proj
+R14390:14409 CaMain ConstraintAutomata Q proj
+R14425:14444 CaMain ConstraintAutomata N proj
+R14462:14481 CaMain ConstraintAutomata T proj
+R14512:14532 CaMain ConstraintAutomata Q0 proj
+R14414:14414 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14418:14418 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14415:14417 ReoCA <> q1A constr
+R14449:14449 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14452:14452 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14455:14455 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14450:14451 ReoCA <> AA constr
+R14453:14454 ReoCA <> BA constr
+R14486:14505 ReoCA <> aSyncDrainCaBehavior def
+R14537:14537 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14541:14541 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14538:14540 ReoCA <> q1A constr
+R14568:14589 CaMain ConstraintAutomata run def
+R14605:14605 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14612:14612 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14619:14619 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R14606:14611 ReoCA <> portAA def
+R14613:14618 ReoCA <> portBA def
+R14591:14602 ReoCA <> aSyncDrainCA def
+def 14639:14653 <> paramAsyncDrain
+R14658:14681 ReoCA <> ReoCABinaryChannel def
+R14701:14720 ReoCA <> aSyncDrainCaBehavior def
+R14695:14695 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14699:14699 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14696:14698 ReoCA <> q1A constr
+R14689:14689 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14693:14693 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R14690:14692 ReoCA <> q1A constr
+R14686:14687 ReoCA <> BA constr
+R14683:14684 ReoCA <> AA constr
+ind 14754:14764 <> filterState
+constr 14769:14771 <> q1F
+ind 14786:14796 <> filterPorts
+constr 14802:14802 <> C
+constr 14806:14806 <> D
+inst 14829:14841 <> filterStateEq
+R14844:14848 Coq.Classes.EquivDec <> EqDec class
+R14862:14863 Coq.Init.Logic <> eq ind
+R14850:14860 ReoCA <> filterState ind
+R14873:14881 Coq.Classes.EquivDec <> equiv_dec def
+binder 14883:14883 <> x:122
+binder 14885:14885 <> y:123
+R14905:14905 ReoCA <> y:123 var
+R14903:14903 ReoCA <> x:122 var
+R14920:14922 ReoCA <> q1F constr
+R14925:14927 ReoCA <> q1F constr
+R14932:14938 Coq.Program.Utils <> in_left syndef
+def 14967:14990 <> dataAssignmentfilterBoth
+binder 14992:14992 <> n:126
+R15008:15008 ReoCA <> n:126 var
+R15049:15049 Coq.Init.Datatypes <> S constr
+def 15083:15098 <> timeStampfilterA
+R15103:15105 Coq.Init.Datatypes <> nat ind
+binder 15101:15101 <> n:128
+R15110:15122 Coq.QArith.QArith_base <> Q rec
+R15137:15137 ReoCA <> n:128 var
+R15157:15157 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R15173:15173 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R15182:15182 Coq.Init.Datatypes <> S constr
+R15216:15216 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R15212:15214 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R15190:15195 Coq.ZArith.BinInt Z of_N def
+R15198:15205 Coq.NArith.BinNat N of_nat def
+R15207:15207 Coq.Init.Datatypes <> S constr
+R15209:15209 ReoCA <> n:128 var
+def 15243:15258 <> timeStampfilterB
+R15263:15265 Coq.Init.Datatypes <> nat ind
+binder 15261:15261 <> n:130
+R15270:15282 Coq.QArith.QArith_base <> Q rec
+R15297:15297 ReoCA <> n:130 var
+R15316:15316 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R15325:15325 Coq.Init.Datatypes <> S constr
+R15360:15360 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R15355:15357 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R15333:15338 Coq.ZArith.BinInt Z of_N def
+R15341:15348 Coq.NArith.BinNat N of_nat def
+R15350:15350 Coq.Init.Datatypes <> S constr
+R15352:15352 ReoCA <> n:130 var
+prf 15381:15400 <> timeStampfilterHolds
+binder 15411:15411 <> n:132
+R15419:15421 Coq.QArith.QArith_base <> Qlt def
+R15424:15439 ReoCA <> timeStampfilterA def
+R15441:15441 ReoCA <> n:132 var
+R15445:15460 ReoCA <> timeStampfilterA def
+R15463:15463 Coq.Init.Datatypes <> S constr
+R15465:15465 ReoCA <> n:132 var
+R15511:15526 ReoCA <> timeStampfilterA def
+R15551:15566 ReoCA <> timeStampfilterA def
+R15612:15627 ReoCA <> timeStampfilterA def
+R15636:15646 CaMain <> orderZofNat thm
+R15636:15646 CaMain <> orderZofNat thm
+prf 15667:15687 <> timeStampfilterBHolds
+binder 15698:15698 <> n:133
+R15706:15708 Coq.QArith.QArith_base <> Qlt def
+R15711:15726 ReoCA <> timeStampfilterB def
+R15728:15728 ReoCA <> n:133 var
+R15732:15747 ReoCA <> timeStampfilterB def
+R15750:15750 Coq.Init.Datatypes <> S constr
+R15752:15752 ReoCA <> n:133 var
+R15799:15814 ReoCA <> timeStampfilterB def
+R15839:15854 ReoCA <> timeStampfilterB def
+R15863:15873 CaMain <> orderZofNat thm
+R15863:15873 CaMain <> orderZofNat thm
+inst 15905:15917 <> filterPortsEq
+R15920:15924 Coq.Classes.EquivDec <> EqDec class
+R15938:15939 Coq.Init.Logic <> eq ind
+R15926:15936 ReoCA <> filterPorts ind
+R15949:15957 Coq.Classes.EquivDec <> equiv_dec def
+binder 15959:15959 <> x:134
+binder 15961:15961 <> y:135
+R15981:15981 ReoCA <> y:135 var
+R15979:15979 ReoCA <> x:134 var
+R15996:15996 ReoCA <> C constr
+R15998:15998 ReoCA <> C constr
+R16002:16002 ReoCA <> D constr
+R16004:16004 ReoCA <> D constr
+R16009:16015 Coq.Program.Utils <> in_left syndef
+R16009:16015 Coq.Program.Utils <> in_left syndef
+R16025:16025 ReoCA <> C constr
+R16027:16027 ReoCA <> D constr
+R16031:16031 ReoCA <> D constr
+R16033:16033 ReoCA <> C constr
+R16038:16045 Coq.Program.Utils <> in_right syndef
+R16038:16045 Coq.Program.Utils <> in_right syndef
+def 16075:16079 <> portC
+R16095:16115 CaMain ConstraintAutomata id proj
+R16095:16115 CaMain ConstraintAutomata id proj
+R16131:16163 CaMain ConstraintAutomata dataAssignment proj
+R16202:16229 CaMain ConstraintAutomata timeStamp proj
+R16260:16285 CaMain ConstraintAutomata tdsCond proj
+R16320:16343 CaMain ConstraintAutomata index proj
+R16120:16120 ReoCA <> C constr
+R16168:16191 ReoCA <> dataAssignmentfilterBoth def
+R16234:16249 ReoCA <> timeStampfilterA def
+R16290:16309 ReoCA <> timeStampfilterHolds thm
+def 16368:16372 <> portD
+R16387:16407 CaMain ConstraintAutomata id proj
+R16387:16407 CaMain ConstraintAutomata id proj
+R16423:16455 CaMain ConstraintAutomata dataAssignment proj
+R16494:16521 CaMain ConstraintAutomata timeStamp proj
+R16552:16577 CaMain ConstraintAutomata tdsCond proj
+R16613:16636 CaMain ConstraintAutomata index proj
+R16412:16412 ReoCA <> D constr
+R16460:16483 ReoCA <> dataAssignmentfilterBoth def
+R16526:16541 ReoCA <> timeStampfilterB def
+R16582:16602 ReoCA <> timeStampfilterBHolds thm
+def 16757:16772 <> filterCaBehavior
+R16778:16788 ReoCA <> filterState ind
+binder 16775:16775 <> s:138
+R16793:16795 Coq.Lists.ListSet <> set def
+R16855:16857 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R16815:16817 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R16800:16802 Coq.Lists.ListSet <> set def
+R16804:16814 ReoCA <> filterPorts ind
+R16818:16838 CaMain ConstraintAutomata DC ind
+R16852:16854 Coq.Init.Datatypes <> nat ind
+R16840:16850 ReoCA <> filterPorts ind
+R16858:16868 ReoCA <> filterState ind
+R16884:16884 ReoCA <> s:138 var
+R16897:16899 ReoCA <> q1F constr
+R16904:16904 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R17058:17073 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R17141:17141 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R16905:16905 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R16911:16913 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17052:17053 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17057:17057 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R16906:16906 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R16908:16908 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R16910:16910 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R16907:16907 ReoCA <> C constr
+R16909:16909 ReoCA <> D constr
+R16914:16937 CaMain ConstraintAutomata andDc constr
+R17020:17042 CaMain ConstraintAutomata eqDc constr
+R17050:17050 ReoCA <> D constr
+R17048:17048 ReoCA <> C constr
+R17044:17046 Coq.Init.Datatypes <> nat ind
+R16940:16960 CaMain ConstraintAutomata dc constr
+R16962:16962 ReoCA <> C constr
+R17054:17056 ReoCA <> q1F constr
+R17074:17074 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17078:17080 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17135:17136 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17140:17140 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17075:17075 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17077:17077 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17076:17076 ReoCA <> C constr
+R17081:17104 CaMain ConstraintAutomata negDc constr
+R17107:17127 CaMain ConstraintAutomata dc constr
+R17129:17129 ReoCA <> C constr
+R17137:17139 ReoCA <> q1F constr
+def 17205:17212 <> filterCA
+R17224:17243 CaMain ConstraintAutomata Q proj
+R17224:17243 CaMain ConstraintAutomata Q proj
+R17259:17278 CaMain ConstraintAutomata N proj
+R17294:17313 CaMain ConstraintAutomata T proj
+R17340:17360 CaMain ConstraintAutomata Q0 proj
+R17248:17248 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17252:17252 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17249:17251 ReoCA <> q1F constr
+R17283:17283 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R17285:17285 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R17287:17287 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R17284:17284 ReoCA <> C constr
+R17286:17286 ReoCA <> D constr
+R17318:17333 ReoCA <> filterCaBehavior def
+R17365:17365 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17369:17369 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17366:17368 ReoCA <> q1F constr
+R17396:17417 CaMain ConstraintAutomata run def
+R17428:17428 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R17434:17434 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R17440:17440 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R17429:17433 ReoCA <> portC def
+R17435:17439 ReoCA <> portD def
+R17419:17426 ReoCA <> filterCA def
+def 17459:17469 <> paramFilter
+R17474:17497 ReoCA <> ReoCABinaryChannel def
+R17515:17530 ReoCA <> filterCaBehavior def
+R17509:17509 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17513:17513 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17510:17512 ReoCA <> q1F constr
+R17503:17503 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17507:17507 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R17504:17506 ReoCA <> q1F constr
+R17501:17501 ReoCA <> D constr
+R17499:17499 ReoCA <> C constr
+def 17570:17585 <> trasformFunction
+R17591:17593 Coq.Init.Datatypes <> nat ind
+binder 17588:17588 <> n:140
+R17600:17602 Coq.Init.Peano <> ::nat_scope:x_'+'_x not
+R17599:17599 ReoCA <> n:140 var
+ind 17619:17632 <> transformState
+constr 17637:17639 <> q1T
+ind 17654:17667 <> transformPorts
+constr 17673:17674 <> AT
+constr 17678:17679 <> BT
+inst 17702:17717 <> transformStateEq
+R17720:17724 Coq.Classes.EquivDec <> EqDec class
+R17741:17742 Coq.Init.Logic <> eq ind
+R17726:17739 ReoCA <> transformState ind
+R17752:17760 Coq.Classes.EquivDec <> equiv_dec def
+binder 17762:17762 <> x:145
+binder 17764:17764 <> y:146
+R17784:17784 ReoCA <> y:146 var
+R17782:17782 ReoCA <> x:145 var
+R17799:17801 ReoCA <> q1T constr
+R17804:17806 ReoCA <> q1T constr
+R17811:17817 Coq.Program.Utils <> in_left syndef
+def 17846:17870 <> dataAssignmenttransformAF
+binder 17872:17872 <> n:149
+R17888:17888 ReoCA <> n:149 var
+R17957:17957 Coq.Init.Datatypes <> S constr
+def 17992:18016 <> dataAssignmenttransformBF
+binder 18018:18018 <> n:151
+R18034:18034 ReoCA <> n:151 var
+R18103:18103 Coq.Init.Datatypes <> S constr
+def 18137:18155 <> timeStamptransformA
+R18160:18162 Coq.Init.Datatypes <> nat ind
+binder 18158:18158 <> n:153
+R18167:18179 Coq.QArith.QArith_base <> Q rec
+R18194:18194 ReoCA <> n:153 var
+R18214:18214 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R18230:18230 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R18239:18239 Coq.Init.Datatypes <> S constr
+R18274:18274 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R18269:18271 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R18247:18252 Coq.ZArith.BinInt Z of_N def
+R18255:18262 Coq.NArith.BinNat N of_nat def
+R18264:18264 Coq.Init.Datatypes <> S constr
+R18266:18266 ReoCA <> n:153 var
+def 18301:18319 <> timeStamptransformB
+R18324:18326 Coq.Init.Datatypes <> nat ind
+binder 18322:18322 <> n:155
+R18331:18343 Coq.QArith.QArith_base <> Q rec
+R18358:18358 ReoCA <> n:155 var
+R18378:18378 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R18393:18393 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R18402:18402 Coq.Init.Datatypes <> S constr
+R18437:18437 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R18432:18434 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R18410:18415 Coq.ZArith.BinInt Z of_N def
+R18418:18425 Coq.NArith.BinNat N of_nat def
+R18427:18427 Coq.Init.Datatypes <> S constr
+R18429:18429 ReoCA <> n:155 var
+prf 18458:18480 <> timeStamptransformHolds
+binder 18491:18491 <> n:157
+R18499:18501 Coq.QArith.QArith_base <> Qlt def
+R18504:18522 ReoCA <> timeStamptransformA def
+R18524:18524 ReoCA <> n:157 var
+R18528:18546 ReoCA <> timeStamptransformA def
+R18549:18549 Coq.Init.Datatypes <> S constr
+R18551:18551 ReoCA <> n:157 var
+R18598:18616 ReoCA <> timeStamptransformA def
+R18641:18659 ReoCA <> timeStamptransformA def
+R18702:18712 CaMain <> orderZofNat thm
+R18702:18712 CaMain <> orderZofNat thm
+prf 18733:18756 <> timeStamptransformBHolds
+binder 18767:18767 <> n:158
+R18775:18777 Coq.QArith.QArith_base <> Qlt def
+R18780:18798 ReoCA <> timeStamptransformB def
+R18800:18800 ReoCA <> n:158 var
+R18804:18822 ReoCA <> timeStamptransformB def
+R18825:18825 Coq.Init.Datatypes <> S constr
+R18827:18827 ReoCA <> n:158 var
+R18874:18892 ReoCA <> timeStamptransformB def
+R18917:18935 ReoCA <> timeStamptransformB def
+R18978:18988 CaMain <> orderZofNat thm
+R18978:18988 CaMain <> orderZofNat thm
+inst 19020:19035 <> transformPortsEq
+R19038:19042 Coq.Classes.EquivDec <> EqDec class
+R19059:19060 Coq.Init.Logic <> eq ind
+R19044:19057 ReoCA <> transformPorts ind
+R19070:19078 Coq.Classes.EquivDec <> equiv_dec def
+binder 19080:19080 <> x:159
+binder 19082:19082 <> y:160
+R19102:19102 ReoCA <> y:160 var
+R19100:19100 ReoCA <> x:159 var
+R19117:19118 ReoCA <> AT constr
+R19120:19121 ReoCA <> AT constr
+R19125:19126 ReoCA <> BT constr
+R19128:19129 ReoCA <> BT constr
+R19134:19140 Coq.Program.Utils <> in_left syndef
+R19134:19140 Coq.Program.Utils <> in_left syndef
+R19150:19151 ReoCA <> AT constr
+R19153:19154 ReoCA <> BT constr
+R19158:19159 ReoCA <> BT constr
+R19161:19162 ReoCA <> AT constr
+R19167:19174 Coq.Program.Utils <> in_right syndef
+R19167:19174 Coq.Program.Utils <> in_right syndef
+def 19204:19209 <> portAT
+R19225:19245 CaMain ConstraintAutomata id proj
+R19225:19245 CaMain ConstraintAutomata id proj
+R19262:19294 CaMain ConstraintAutomata dataAssignment proj
+R19334:19361 CaMain ConstraintAutomata timeStamp proj
+R19395:19420 CaMain ConstraintAutomata tdsCond proj
+R19458:19481 CaMain ConstraintAutomata index proj
+R19250:19251 ReoCA <> AT constr
+R19299:19323 ReoCA <> dataAssignmenttransformAF def
+R19366:19384 ReoCA <> timeStamptransformA def
+R19425:19447 ReoCA <> timeStamptransformHolds thm
+def 19506:19511 <> portBT
+R19526:19546 CaMain ConstraintAutomata id proj
+R19526:19546 CaMain ConstraintAutomata id proj
+R19563:19595 CaMain ConstraintAutomata dataAssignment proj
+R19635:19662 CaMain ConstraintAutomata timeStamp proj
+R19696:19721 CaMain ConstraintAutomata tdsCond proj
+R19760:19783 CaMain ConstraintAutomata index proj
+R19551:19552 ReoCA <> BT constr
+R19600:19624 ReoCA <> dataAssignmenttransformBF def
+R19667:19685 ReoCA <> timeStamptransformB def
+R19726:19749 ReoCA <> timeStamptransformBHolds thm
+def 19808:19826 <> transformCaBehavior
+R19832:19845 ReoCA <> transformState ind
+binder 19829:19829 <> s:163
+R19850:19852 Coq.Lists.ListSet <> set def
+R19918:19920 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19875:19877 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19857:19859 Coq.Lists.ListSet <> set def
+R19861:19874 ReoCA <> transformPorts ind
+R19878:19898 CaMain ConstraintAutomata DC ind
+R19915:19917 Coq.Init.Datatypes <> nat ind
+R19900:19913 ReoCA <> transformPorts ind
+R19921:19934 ReoCA <> transformState ind
+R19950:19950 ReoCA <> s:163 var
+R19963:19965 ReoCA <> q1T constr
+R19970:19970 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20034:20034 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R19971:19971 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R19979:19981 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R20028:20029 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R20033:20033 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R19972:19972 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R19975:19975 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R19978:19978 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R19973:19974 ReoCA <> AT constr
+R19976:19977 ReoCA <> BT constr
+R19982:20004 CaMain ConstraintAutomata trDc constr
+R20026:20027 ReoCA <> BT constr
+R20023:20024 ReoCA <> AT constr
+R20006:20021 ReoCA <> trasformFunction def
+R20030:20032 ReoCA <> q1T constr
+def 20059:20069 <> transformCA
+R20081:20100 CaMain ConstraintAutomata Q proj
+R20081:20100 CaMain ConstraintAutomata Q proj
+R20116:20135 CaMain ConstraintAutomata N proj
+R20153:20172 CaMain ConstraintAutomata T proj
+R20202:20222 CaMain ConstraintAutomata Q0 proj
+R20105:20105 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20109:20109 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20106:20108 ReoCA <> q1T constr
+R20140:20140 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R20143:20143 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R20146:20146 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R20141:20142 ReoCA <> AT constr
+R20144:20145 ReoCA <> BT constr
+R20177:20195 ReoCA <> transformCaBehavior def
+R20227:20227 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20231:20231 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20228:20230 ReoCA <> q1T constr
+R20258:20279 CaMain ConstraintAutomata run def
+R20293:20293 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R20300:20300 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R20307:20307 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R20294:20299 ReoCA <> portAT def
+R20301:20306 ReoCA <> portBT def
+R20281:20291 ReoCA <> transformCA def
+def 20326:20339 <> paramTransform
+R20344:20367 ReoCA <> ReoCABinaryChannel def
+R20387:20405 ReoCA <> transformCaBehavior def
+R20381:20381 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20385:20385 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20382:20384 ReoCA <> q1T constr
+R20375:20375 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20379:20379 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R20376:20378 ReoCA <> q1T constr
+R20372:20373 ReoCA <> BT constr
+R20369:20370 ReoCA <> AT constr
+ind 20439:20449 <> mergerState
+constr 20454:20456 <> q1M
+ind 20471:20481 <> mergerPorts
+constr 20487:20488 <> AM
+constr 20492:20493 <> BM
+constr 20497:20498 <> CM
+inst 20521:20533 <> mergerStateEq
+R20536:20540 Coq.Classes.EquivDec <> EqDec class
+R20554:20555 Coq.Init.Logic <> eq ind
+R20542:20552 ReoCA <> mergerState ind
+R20565:20573 Coq.Classes.EquivDec <> equiv_dec def
+binder 20575:20575 <> x:169
+binder 20577:20577 <> y:170
+R20597:20597 ReoCA <> y:170 var
+R20595:20595 ReoCA <> x:169 var
+R20612:20614 ReoCA <> q1M constr
+R20617:20619 ReoCA <> q1M constr
+R20624:20630 Coq.Program.Utils <> in_left syndef
+def 20659:20682 <> dataAssignmentmergerBoth
+binder 20684:20684 <> n:173
+R20700:20700 ReoCA <> n:173 var
+R20758:20758 Coq.Init.Datatypes <> S constr
+def 20792:20807 <> timeStampmergerA
+R20812:20814 Coq.Init.Datatypes <> nat ind
+binder 20810:20810 <> n:175
+R20819:20831 Coq.QArith.QArith_base <> Q rec
+R20846:20846 ReoCA <> n:175 var
+R20865:20865 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R20880:20880 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R20889:20889 Coq.Init.Datatypes <> S constr
+R20924:20924 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R20919:20921 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R20897:20902 Coq.ZArith.BinInt Z of_N def
+R20905:20912 Coq.NArith.BinNat N of_nat def
+R20914:20914 Coq.Init.Datatypes <> S constr
+R20916:20916 ReoCA <> n:175 var
+def 20951:20966 <> timeStampmergerB
+R20971:20973 Coq.Init.Datatypes <> nat ind
+binder 20969:20969 <> n:177
+R20978:20990 Coq.QArith.QArith_base <> Q rec
+R21005:21005 ReoCA <> n:177 var
+R21024:21024 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R21039:21039 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R21048:21048 Coq.Init.Datatypes <> S constr
+R21083:21083 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R21078:21080 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R21056:21061 Coq.ZArith.BinInt Z of_N def
+R21064:21071 Coq.NArith.BinNat N of_nat def
+R21073:21073 Coq.Init.Datatypes <> S constr
+R21075:21075 ReoCA <> n:177 var
+def 21109:21124 <> timeStampmergerC
+R21129:21131 Coq.Init.Datatypes <> nat ind
+binder 21127:21127 <> n:179
+R21136:21148 Coq.QArith.QArith_base <> Q rec
+R21163:21163 ReoCA <> n:179 var
+R21182:21182 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R21197:21197 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R21206:21206 Coq.Init.Datatypes <> S constr
+R21241:21241 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R21236:21238 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R21214:21219 Coq.ZArith.BinInt Z of_N def
+R21222:21229 Coq.NArith.BinNat N of_nat def
+R21231:21231 Coq.Init.Datatypes <> S constr
+R21233:21233 ReoCA <> n:179 var
+prf 21262:21281 <> timeStampmergerHolds
+binder 21292:21292 <> n:181
+R21300:21302 Coq.QArith.QArith_base <> Qlt def
+R21305:21320 ReoCA <> timeStampmergerA def
+R21322:21322 ReoCA <> n:181 var
+R21326:21341 ReoCA <> timeStampmergerA def
+R21344:21344 Coq.Init.Datatypes <> S constr
+R21346:21346 ReoCA <> n:181 var
+R21393:21408 ReoCA <> timeStampmergerA def
+R21433:21448 ReoCA <> timeStampmergerA def
+R21491:21501 CaMain <> orderZofNat thm
+R21491:21501 CaMain <> orderZofNat thm
+prf 21522:21542 <> timeStampmergerBHolds
+binder 21553:21553 <> n:182
+R21561:21563 Coq.QArith.QArith_base <> Qlt def
+R21566:21581 ReoCA <> timeStampmergerB def
+R21583:21583 ReoCA <> n:182 var
+R21587:21602 ReoCA <> timeStampmergerB def
+R21605:21605 Coq.Init.Datatypes <> S constr
+R21607:21607 ReoCA <> n:182 var
+R21654:21669 ReoCA <> timeStampmergerB def
+R21694:21709 ReoCA <> timeStampmergerB def
+R21752:21762 CaMain <> orderZofNat thm
+R21752:21762 CaMain <> orderZofNat thm
+prf 21783:21803 <> timeStampmergerCHolds
+binder 21814:21814 <> n:183
+R21822:21824 Coq.QArith.QArith_base <> Qlt def
+R21827:21842 ReoCA <> timeStampmergerC def
+R21844:21844 ReoCA <> n:183 var
+R21848:21863 ReoCA <> timeStampmergerC def
+R21866:21866 Coq.Init.Datatypes <> S constr
+R21868:21868 ReoCA <> n:183 var
+R21915:21930 ReoCA <> timeStampmergerC def
+R21955:21970 ReoCA <> timeStampmergerC def
+R22013:22023 CaMain <> orderZofNat thm
+R22013:22023 CaMain <> orderZofNat thm
+inst 22055:22067 <> mergerPortsEq
+R22070:22074 Coq.Classes.EquivDec <> EqDec class
+R22088:22089 Coq.Init.Logic <> eq ind
+R22076:22086 ReoCA <> mergerPorts ind
+R22099:22107 Coq.Classes.EquivDec <> equiv_dec def
+binder 22109:22109 <> x:184
+binder 22111:22111 <> y:185
+R22131:22131 ReoCA <> y:185 var
+R22129:22129 ReoCA <> x:184 var
+R22146:22147 ReoCA <> AM constr
+R22149:22150 ReoCA <> AM constr
+R22154:22155 ReoCA <> BM constr
+R22157:22158 ReoCA <> BM constr
+R22163:22164 ReoCA <> CM constr
+R22167:22168 ReoCA <> CM constr
+R22173:22179 Coq.Program.Utils <> in_left syndef
+R22173:22179 Coq.Program.Utils <> in_left syndef
+R22173:22179 Coq.Program.Utils <> in_left syndef
+R22189:22190 ReoCA <> AM constr
+R22192:22193 ReoCA <> BM constr
+R22197:22198 ReoCA <> AM constr
+R22200:22201 ReoCA <> CM constr
+R22205:22206 ReoCA <> BM constr
+R22208:22209 ReoCA <> AM constr
+R22213:22214 ReoCA <> BM constr
+R22216:22217 ReoCA <> CM constr
+R22221:22222 ReoCA <> CM constr
+R22225:22226 ReoCA <> AM constr
+R22230:22231 ReoCA <> CM constr
+R22234:22235 ReoCA <> BM constr
+R22240:22247 Coq.Program.Utils <> in_right syndef
+R22240:22247 Coq.Program.Utils <> in_right syndef
+R22240:22247 Coq.Program.Utils <> in_right syndef
+R22240:22247 Coq.Program.Utils <> in_right syndef
+R22240:22247 Coq.Program.Utils <> in_right syndef
+R22240:22247 Coq.Program.Utils <> in_right syndef
+def 22277:22282 <> portAM
+R22298:22318 CaMain ConstraintAutomata id proj
+R22298:22318 CaMain ConstraintAutomata id proj
+R22335:22367 CaMain ConstraintAutomata dataAssignment proj
+R22406:22433 CaMain ConstraintAutomata timeStamp proj
+R22464:22489 CaMain ConstraintAutomata tdsCond proj
+R22524:22547 CaMain ConstraintAutomata index proj
+R22323:22324 ReoCA <> AM constr
+R22372:22395 ReoCA <> dataAssignmentmergerBoth def
+R22438:22453 ReoCA <> timeStampmergerA def
+R22494:22513 ReoCA <> timeStampmergerHolds thm
+def 22572:22577 <> portBM
+R22592:22612 CaMain ConstraintAutomata id proj
+R22592:22612 CaMain ConstraintAutomata id proj
+R22629:22661 CaMain ConstraintAutomata dataAssignment proj
+R22700:22727 CaMain ConstraintAutomata timeStamp proj
+R22758:22783 CaMain ConstraintAutomata tdsCond proj
+R22819:22842 CaMain ConstraintAutomata index proj
+R22617:22618 ReoCA <> BM constr
+R22666:22689 ReoCA <> dataAssignmentmergerBoth def
+R22732:22747 ReoCA <> timeStampmergerB def
+R22788:22808 ReoCA <> timeStampmergerBHolds thm
+def 22867:22872 <> portCM
+R22887:22907 CaMain ConstraintAutomata id proj
+R22887:22907 CaMain ConstraintAutomata id proj
+R22924:22956 CaMain ConstraintAutomata dataAssignment proj
+R22995:23022 CaMain ConstraintAutomata timeStamp proj
+R23053:23078 CaMain ConstraintAutomata tdsCond proj
+R23114:23137 CaMain ConstraintAutomata index proj
+R22912:22913 ReoCA <> CM constr
+R22961:22984 ReoCA <> dataAssignmentmergerBoth def
+R23027:23042 ReoCA <> timeStampmergerC def
+R23083:23103 ReoCA <> timeStampmergerCHolds thm
+def 23162:23177 <> mergerCaBehavior
+R23183:23193 ReoCA <> mergerState ind
+binder 23180:23180 <> s:188
+R23198:23200 Coq.Lists.ListSet <> set def
+R23260:23262 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R23220:23222 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R23205:23207 Coq.Lists.ListSet <> set def
+R23209:23219 ReoCA <> mergerPorts ind
+R23223:23243 CaMain ConstraintAutomata DC ind
+R23257:23259 Coq.Init.Datatypes <> nat ind
+R23245:23255 ReoCA <> mergerPorts ind
+R23263:23273 ReoCA <> mergerState ind
+R23289:23289 ReoCA <> s:188 var
+R23302:23304 ReoCA <> q1M constr
+R23309:23309 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23360:23375 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23426:23426 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23310:23310 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R23318:23320 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R23354:23355 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R23359:23359 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R23311:23311 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23314:23314 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23317:23317 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23312:23313 ReoCA <> AM constr
+R23315:23316 ReoCA <> CM constr
+R23321:23343 CaMain ConstraintAutomata eqDc constr
+R23352:23353 ReoCA <> CM constr
+R23349:23350 ReoCA <> AM constr
+R23345:23347 Coq.Init.Datatypes <> nat ind
+R23356:23358 ReoCA <> q1M constr
+R23376:23376 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R23384:23386 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R23420:23421 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R23425:23425 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R23377:23377 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23380:23380 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23383:23383 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23378:23379 ReoCA <> BM constr
+R23381:23382 ReoCA <> CM constr
+R23387:23409 CaMain ConstraintAutomata eqDc constr
+R23418:23419 ReoCA <> CM constr
+R23415:23416 ReoCA <> BM constr
+R23411:23413 Coq.Init.Datatypes <> nat ind
+R23422:23424 ReoCA <> q1M constr
+def 23453:23460 <> mergerCA
+R23472:23491 CaMain ConstraintAutomata Q proj
+R23472:23491 CaMain ConstraintAutomata Q proj
+R23507:23526 CaMain ConstraintAutomata N proj
+R23547:23566 CaMain ConstraintAutomata T proj
+R23593:23613 CaMain ConstraintAutomata Q0 proj
+R23496:23496 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23500:23500 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23497:23499 ReoCA <> q1M constr
+R23531:23531 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23534:23534 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23537:23537 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23540:23540 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23532:23533 ReoCA <> AM constr
+R23535:23536 ReoCA <> BM constr
+R23538:23539 ReoCA <> CM constr
+R23571:23586 ReoCA <> mergerCaBehavior def
+R23618:23618 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23622:23622 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23619:23621 ReoCA <> q1M constr
+R23649:23670 CaMain ConstraintAutomata run def
+R23681:23681 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23688:23688 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23695:23695 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23702:23702 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R23682:23687 ReoCA <> portAM def
+R23689:23694 ReoCA <> portBM def
+R23696:23701 ReoCA <> portCM def
+R23672:23679 ReoCA <> mergerCA def
+def 23722:23732 <> paramMerger
+R23737:23761 ReoCA <> ReoCATernaryChannel def
+R23784:23799 ReoCA <> mergerCaBehavior def
+R23778:23778 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23782:23782 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23779:23781 ReoCA <> q1M constr
+R23772:23772 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23776:23776 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23773:23775 ReoCA <> q1M constr
+R23769:23770 ReoCA <> CM constr
+R23766:23767 ReoCA <> BM constr
+R23763:23764 ReoCA <> AM constr
+ind 23837:23851 <> replicatorState
+constr 23856:23858 <> q1R
+ind 23873:23887 <> replicatorPorts
+constr 23893:23894 <> AR
+constr 23898:23899 <> BR
+constr 23903:23904 <> CR
+inst 23927:23943 <> replicatorStateEq
+R23946:23950 Coq.Classes.EquivDec <> EqDec class
+R23968:23969 Coq.Init.Logic <> eq ind
+R23952:23966 ReoCA <> replicatorState ind
+R23979:23987 Coq.Classes.EquivDec <> equiv_dec def
+binder 23989:23989 <> x:194
+binder 23991:23991 <> y:195
+R24011:24011 ReoCA <> y:195 var
+R24009:24009 ReoCA <> x:194 var
+R24026:24028 ReoCA <> q1R constr
+R24031:24033 ReoCA <> q1R constr
+R24038:24044 Coq.Program.Utils <> in_left syndef
+def 24073:24100 <> dataAssignmentreplicatorBoth
+binder 24102:24102 <> n:198
+R24118:24118 ReoCA <> n:198 var
+R24173:24173 Coq.Init.Datatypes <> S constr
+R24183:24185 Coq.Init.Peano <> ::nat_scope:x_'+'_x not
+R24186:24186 Coq.Init.Datatypes <> S constr
+R24188:24188 ReoCA <> n:198 var
+def 24213:24232 <> timeStampreplicatorA
+R24237:24239 Coq.Init.Datatypes <> nat ind
+binder 24235:24235 <> n:200
+R24244:24256 Coq.QArith.QArith_base <> Q rec
+R24271:24271 ReoCA <> n:200 var
+R24290:24290 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24305:24305 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24314:24314 Coq.Init.Datatypes <> S constr
+R24349:24349 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24344:24346 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R24322:24327 Coq.ZArith.BinInt Z of_N def
+R24330:24337 Coq.NArith.BinNat N of_nat def
+R24339:24339 Coq.Init.Datatypes <> S constr
+R24341:24341 ReoCA <> n:200 var
+def 24376:24395 <> timeStampreplicatorB
+R24400:24402 Coq.Init.Datatypes <> nat ind
+binder 24398:24398 <> n:202
+R24407:24419 Coq.QArith.QArith_base <> Q rec
+R24434:24434 ReoCA <> n:202 var
+R24453:24453 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24468:24468 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24477:24477 Coq.Init.Datatypes <> S constr
+R24512:24512 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24507:24509 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R24485:24490 Coq.ZArith.BinInt Z of_N def
+R24493:24500 Coq.NArith.BinNat N of_nat def
+R24502:24502 Coq.Init.Datatypes <> S constr
+R24504:24504 ReoCA <> n:202 var
+def 24538:24557 <> timeStampreplicatorC
+R24562:24564 Coq.Init.Datatypes <> nat ind
+binder 24560:24560 <> n:204
+R24569:24581 Coq.QArith.QArith_base <> Q rec
+R24596:24596 ReoCA <> n:204 var
+R24615:24615 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24630:24630 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24639:24639 Coq.Init.Datatypes <> S constr
+R24674:24674 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R24669:24671 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R24647:24652 Coq.ZArith.BinInt Z of_N def
+R24655:24662 Coq.NArith.BinNat N of_nat def
+R24664:24664 Coq.Init.Datatypes <> S constr
+R24666:24666 ReoCA <> n:204 var
+prf 24695:24718 <> timeStampreplicatorHolds
+binder 24729:24729 <> n:206
+R24737:24739 Coq.QArith.QArith_base <> Qlt def
+R24742:24761 ReoCA <> timeStampreplicatorA def
+R24763:24763 ReoCA <> n:206 var
+R24767:24786 ReoCA <> timeStampreplicatorA def
+R24789:24789 Coq.Init.Datatypes <> S constr
+R24791:24791 ReoCA <> n:206 var
+R24838:24857 ReoCA <> timeStampreplicatorA def
+R24882:24901 ReoCA <> timeStampreplicatorA def
+R24944:24954 CaMain <> orderZofNat thm
+R24944:24954 CaMain <> orderZofNat thm
+prf 24975:24999 <> timeStampreplicatorBHolds
+binder 25010:25010 <> n:207
+R25018:25020 Coq.QArith.QArith_base <> Qlt def
+R25023:25042 ReoCA <> timeStampreplicatorB def
+R25044:25044 ReoCA <> n:207 var
+R25048:25067 ReoCA <> timeStampreplicatorB def
+R25070:25070 Coq.Init.Datatypes <> S constr
+R25072:25072 ReoCA <> n:207 var
+R25119:25138 ReoCA <> timeStampreplicatorB def
+R25163:25182 ReoCA <> timeStampreplicatorB def
+R25225:25235 CaMain <> orderZofNat thm
+R25225:25235 CaMain <> orderZofNat thm
+prf 25256:25280 <> timeStampreplicatorCHolds
+binder 25291:25291 <> n:208
+R25299:25301 Coq.QArith.QArith_base <> Qlt def
+R25304:25323 ReoCA <> timeStampreplicatorC def
+R25325:25325 ReoCA <> n:208 var
+R25329:25348 ReoCA <> timeStampreplicatorC def
+R25351:25351 Coq.Init.Datatypes <> S constr
+R25353:25353 ReoCA <> n:208 var
+R25400:25419 ReoCA <> timeStampreplicatorC def
+R25444:25463 ReoCA <> timeStampreplicatorC def
+R25506:25516 CaMain <> orderZofNat thm
+R25506:25516 CaMain <> orderZofNat thm
+inst 25548:25564 <> replicatorPortsEq
+R25567:25571 Coq.Classes.EquivDec <> EqDec class
+R25589:25590 Coq.Init.Logic <> eq ind
+R25573:25587 ReoCA <> replicatorPorts ind
+R25600:25608 Coq.Classes.EquivDec <> equiv_dec def
+binder 25610:25610 <> x:209
+binder 25612:25612 <> y:210
+R25632:25632 ReoCA <> y:210 var
+R25630:25630 ReoCA <> x:209 var
+R25647:25648 ReoCA <> AR constr
+R25650:25651 ReoCA <> AR constr
+R25655:25656 ReoCA <> BR constr
+R25658:25659 ReoCA <> BR constr
+R25664:25665 ReoCA <> CR constr
+R25668:25669 ReoCA <> CR constr
+R25674:25680 Coq.Program.Utils <> in_left syndef
+R25674:25680 Coq.Program.Utils <> in_left syndef
+R25674:25680 Coq.Program.Utils <> in_left syndef
+R25690:25691 ReoCA <> AR constr
+R25693:25694 ReoCA <> BR constr
+R25698:25699 ReoCA <> AR constr
+R25701:25702 ReoCA <> CR constr
+R25706:25707 ReoCA <> BR constr
+R25709:25710 ReoCA <> AR constr
+R25714:25715 ReoCA <> BR constr
+R25717:25718 ReoCA <> CR constr
+R25722:25723 ReoCA <> CR constr
+R25726:25727 ReoCA <> AR constr
+R25731:25732 ReoCA <> CR constr
+R25735:25736 ReoCA <> BR constr
+R25741:25748 Coq.Program.Utils <> in_right syndef
+R25741:25748 Coq.Program.Utils <> in_right syndef
+R25741:25748 Coq.Program.Utils <> in_right syndef
+R25741:25748 Coq.Program.Utils <> in_right syndef
+R25741:25748 Coq.Program.Utils <> in_right syndef
+R25741:25748 Coq.Program.Utils <> in_right syndef
+def 25778:25783 <> portAR
+R25799:25819 CaMain ConstraintAutomata id proj
+R25799:25819 CaMain ConstraintAutomata id proj
+R25836:25868 CaMain ConstraintAutomata dataAssignment proj
+R25911:25938 CaMain ConstraintAutomata timeStamp proj
+R25973:25998 CaMain ConstraintAutomata tdsCond proj
+R26037:26060 CaMain ConstraintAutomata index proj
+R25824:25825 ReoCA <> AR constr
+R25873:25900 ReoCA <> dataAssignmentreplicatorBoth def
+R25943:25962 ReoCA <> timeStampreplicatorA def
+R26003:26026 ReoCA <> timeStampreplicatorHolds thm
+def 26085:26090 <> portBR
+R26105:26125 CaMain ConstraintAutomata id proj
+R26105:26125 CaMain ConstraintAutomata id proj
+R26142:26174 CaMain ConstraintAutomata dataAssignment proj
+R26217:26244 CaMain ConstraintAutomata timeStamp proj
+R26279:26304 CaMain ConstraintAutomata tdsCond proj
+R26344:26367 CaMain ConstraintAutomata index proj
+R26130:26131 ReoCA <> BR constr
+R26179:26206 ReoCA <> dataAssignmentreplicatorBoth def
+R26249:26268 ReoCA <> timeStampreplicatorB def
+R26309:26333 ReoCA <> timeStampreplicatorBHolds thm
+def 26392:26397 <> portCR
+R26412:26432 CaMain ConstraintAutomata id proj
+R26412:26432 CaMain ConstraintAutomata id proj
+R26449:26481 CaMain ConstraintAutomata dataAssignment proj
+R26524:26551 CaMain ConstraintAutomata timeStamp proj
+R26586:26611 CaMain ConstraintAutomata tdsCond proj
+R26651:26674 CaMain ConstraintAutomata index proj
+R26437:26438 ReoCA <> CR constr
+R26486:26513 ReoCA <> dataAssignmentreplicatorBoth def
+R26556:26575 ReoCA <> timeStampreplicatorC def
+R26616:26640 ReoCA <> timeStampreplicatorCHolds thm
+def 26699:26718 <> replicatorCaBehavior
+R26724:26738 ReoCA <> replicatorState ind
+binder 26721:26721 <> s:213
+R26743:26745 Coq.Lists.ListSet <> set def
+R26813:26815 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R26769:26771 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R26750:26752 Coq.Lists.ListSet <> set def
+R26754:26768 ReoCA <> replicatorPorts ind
+R26772:26792 CaMain ConstraintAutomata DC ind
+R26810:26812 Coq.Init.Datatypes <> nat ind
+R26794:26808 ReoCA <> replicatorPorts ind
+R26816:26830 ReoCA <> replicatorState ind
+R26846:26846 ReoCA <> s:213 var
+R26859:26861 ReoCA <> q1R constr
+R26866:26866 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27037:27037 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R26867:26867 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R26878:26880 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R27031:27032 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R27036:27036 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R26868:26868 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R26871:26871 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R26874:26874 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R26877:26877 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R26869:26870 ReoCA <> AR constr
+R26872:26873 ReoCA <> BR constr
+R26875:26876 ReoCA <> CR constr
+R26881:26904 CaMain ConstraintAutomata andDc constr
+R26997:27019 CaMain ConstraintAutomata eqDc constr
+R27028:27029 ReoCA <> CR constr
+R27025:27026 ReoCA <> AR constr
+R27021:27023 Coq.Init.Datatypes <> nat ind
+R26907:26929 CaMain ConstraintAutomata eqDc constr
+R26938:26939 ReoCA <> BR constr
+R26935:26936 ReoCA <> AR constr
+R26931:26933 Coq.Init.Datatypes <> nat ind
+R27033:27035 ReoCA <> q1R constr
+def 27063:27074 <> replicatorCA
+R27086:27105 CaMain ConstraintAutomata Q proj
+R27086:27105 CaMain ConstraintAutomata Q proj
+R27121:27140 CaMain ConstraintAutomata N proj
+R27161:27180 CaMain ConstraintAutomata T proj
+R27211:27231 CaMain ConstraintAutomata Q0 proj
+R27110:27110 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27114:27114 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27111:27113 ReoCA <> q1R constr
+R27145:27145 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R27148:27148 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R27151:27151 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R27154:27154 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R27146:27147 ReoCA <> AR constr
+R27149:27150 ReoCA <> BR constr
+R27152:27153 ReoCA <> CR constr
+R27185:27204 ReoCA <> replicatorCaBehavior def
+R27236:27236 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27240:27240 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27237:27239 ReoCA <> q1R constr
+R27267:27288 CaMain ConstraintAutomata run def
+R27303:27303 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R27310:27310 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R27317:27317 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R27324:27324 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R27304:27309 ReoCA <> portAR def
+R27311:27316 ReoCA <> portBR def
+R27318:27323 ReoCA <> portCR def
+R27290:27301 ReoCA <> replicatorCA def
+def 27344:27358 <> paramReplicator
+R27363:27387 ReoCA <> ReoCATernaryChannel def
+R27410:27429 ReoCA <> replicatorCaBehavior def
+R27404:27404 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27408:27408 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27405:27407 ReoCA <> q1R constr
+R27398:27398 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27402:27402 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R27399:27401 ReoCA <> q1R constr
+R27395:27396 ReoCA <> CR constr
+R27392:27393 ReoCA <> BR constr
+R27389:27390 ReoCA <> AR constr
+ind 27464:27474 <> delayStates
+constr 27486:27487 <> d0
+constr 27491:27492 <> d1
+ind 27509:27518 <> delayPorts
+constr 27530:27531 <> DA
+constr 27535:27536 <> DB
+def 27794:27809 <> dataAssignmentDA
+binder 27811:27811 <> n:219
+R27829:27829 ReoCA <> n:219 var
+R27925:27925 Coq.Init.Datatypes <> S constr
+def 27966:27981 <> dataAssignmentDB
+binder 27983:27983 <> n:221
+R28000:28000 ReoCA <> n:221 var
+R28095:28095 Coq.Init.Datatypes <> S constr
+def 28134:28148 <> timeStampDelayA
+R28152:28154 Coq.Init.Datatypes <> nat ind
+binder 28150:28150 <> n:223
+R28159:28171 Coq.QArith.QArith_base <> Q rec
+R28188:28188 ReoCA <> n:223 var
+R28210:28210 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28228:28228 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28246:28246 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28264:28264 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28282:28282 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28301:28301 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28312:28312 Coq.Init.Datatypes <> S constr
+R28347:28347 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28342:28344 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R28320:28325 Coq.ZArith.BinInt Z of_N def
+R28328:28335 Coq.NArith.BinNat N of_nat def
+R28337:28337 Coq.Init.Datatypes <> S constr
+R28339:28339 ReoCA <> n:223 var
+def 28380:28394 <> timeStampDelayB
+R28399:28401 Coq.Init.Datatypes <> nat ind
+binder 28397:28397 <> n:225
+R28406:28418 Coq.QArith.QArith_base <> Q rec
+R28435:28435 ReoCA <> n:225 var
+R28457:28457 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28476:28476 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28493:28493 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28510:28510 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28528:28528 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28546:28546 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28557:28557 Coq.Init.Datatypes <> S constr
+R28592:28592 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R28587:28589 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R28565:28570 Coq.ZArith.BinInt Z of_N def
+R28573:28580 Coq.NArith.BinNat N of_nat def
+R28582:28582 Coq.Init.Datatypes <> S constr
+R28584:28584 ReoCA <> n:225 var
+prf 28619:28642 <> timeStampTestDelayAHolds
+binder 28653:28653 <> n:227
+R28656:28658 Coq.QArith.QArith_base <> Qlt def
+R28661:28675 ReoCA <> timeStampDelayA def
+R28677:28677 ReoCA <> n:227 var
+R28681:28695 ReoCA <> timeStampDelayA def
+R28698:28698 Coq.Init.Datatypes <> S constr
+R28700:28700 ReoCA <> n:227 var
+R28747:28761 ReoCA <> timeStampDelayA def
+R28788:28802 ReoCA <> timeStampDelayA def
+R29006:29008 Coq.QArith.QArith_base <> Qlt def
+R29017:29027 CaMain <> orderZofNat thm
+R29017:29027 CaMain <> orderZofNat thm
+prf 29053:29076 <> timeStampTestDelayBHolds
+binder 29087:29087 <> n:228
+R29097:29099 Coq.QArith.QArith_base <> Qlt def
+R29102:29116 ReoCA <> timeStampDelayB def
+R29118:29118 ReoCA <> n:228 var
+R29122:29136 ReoCA <> timeStampDelayB def
+R29139:29139 Coq.Init.Datatypes <> S constr
+R29141:29141 ReoCA <> n:228 var
+R29189:29203 ReoCA <> timeStampDelayB def
+R29230:29244 ReoCA <> timeStampDelayB def
+R29448:29450 Coq.QArith.QArith_base <> Qlt def
+R29459:29469 CaMain <> orderZofNat thm
+R29459:29469 CaMain <> orderZofNat thm
+def 29500:29505 <> portDA
+R29523:29543 CaMain ConstraintAutomata id proj
+R29523:29543 CaMain ConstraintAutomata id proj
+R29562:29594 CaMain ConstraintAutomata dataAssignment proj
+R29627:29654 CaMain ConstraintAutomata timeStamp proj
+R29686:29711 CaMain ConstraintAutomata tdsCond proj
+R29752:29775 CaMain ConstraintAutomata index proj
+R29548:29549 ReoCA <> DA constr
+R29599:29614 ReoCA <> dataAssignmentDA def
+R29659:29673 ReoCA <> timeStampDelayA def
+R29716:29739 ReoCA <> timeStampTestDelayAHolds thm
+def 29804:29809 <> portDB
+R29827:29847 CaMain ConstraintAutomata id proj
+R29827:29847 CaMain ConstraintAutomata id proj
+R29866:29898 CaMain ConstraintAutomata dataAssignment proj
+R29931:29958 CaMain ConstraintAutomata timeStamp proj
+R29990:30015 CaMain ConstraintAutomata tdsCond proj
+R30056:30079 CaMain ConstraintAutomata index proj
+R29852:29853 ReoCA <> DB constr
+R29903:29918 ReoCA <> dataAssignmentDB def
+R29963:29977 ReoCA <> timeStampDelayB def
+R30020:30043 ReoCA <> timeStampTestDelayBHolds thm
+def 30108:30121 <> realDelayPorts
+R30126:30126 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R30133:30133 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R30140:30140 Coq.Lists.List ListNotations ::list_scope:'['_x_';'_x_';'_'..'_';'_x_']' not
+R30127:30132 ReoCA <> portDA def
+R30134:30139 ReoCA <> portDB def
+constr 30383:30384 <> FF
+rec 30360:30371 <> FlowFunction
+proj 30394:30394 <> I
+proj 30409:30412 <> FUNC
+proj 30434:30443 <> FinalValue
+R30398:30400 Coq.Init.Datatypes <> nat ind
+R30419:30422 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R30416:30418 Coq.Init.Datatypes <> nat ind
+R30423:30425 Coq.Init.Datatypes <> nat ind
+R30447:30449 Coq.Init.Datatypes <> nat ind
+def 30475:30484 <> d0Function
+R30490:30492 Coq.Init.Datatypes <> nat ind
+binder 30487:30487 <> n:233
+R30497:30499 Coq.Init.Datatypes <> nat ind
+R30516:30516 ReoCA <> n:233 var
+R30531:30531 Coq.Init.Datatypes <> O constr
+R30546:30546 Coq.Init.Datatypes <> S constr
+def 30580:30585 <> d0Flow
+R30599:30599 ReoCA <> I proj
+R30599:30599 ReoCA <> I proj
+R30613:30616 ReoCA <> FUNC proj
+R30639:30648 ReoCA <> FinalValue proj
+R30621:30630 ReoCA <> d0Function def
+def 30680:30689 <> d1Function
+R30695:30697 Coq.Init.Datatypes <> nat ind
+binder 30692:30692 <> n:235
+R30702:30704 Coq.Init.Datatypes <> nat ind
+R30721:30721 ReoCA <> n:235 var
+R30736:30736 Coq.Init.Datatypes <> O constr
+R30751:30751 Coq.Init.Datatypes <> S constr
+R30758:30758 ReoCA <> n:235 var
+def 30785:30790 <> d1Flow
+R30804:30804 ReoCA <> I proj
+R30804:30804 ReoCA <> I proj
+R30818:30821 ReoCA <> FUNC proj
+R30844:30853 ReoCA <> FinalValue proj
+R30826:30835 ReoCA <> d1Function def
+def 30923:30943 <> timerDynamicalSystems
+R30948:30958 ReoCA <> delayStates ind
+binder 30946:30946 <> s:237
+R30963:30974 ReoCA <> FlowFunction rec
+R30991:30991 ReoCA <> s:237 var
+R31006:31007 ReoCA <> d0 constr
+R31012:31017 ReoCA <> d0Flow def
+R31027:31028 ReoCA <> d1 constr
+R31033:31038 ReoCA <> d1Flow def
+ind 31184:31190 <> SCTypes
+constr 31201:31203 <> tSc
+constr 31211:31214 <> eqSc
+def 31233:31238 <> evalSC
+R31245:31251 ReoCA <> SCTypes ind
+binder 31241:31242 <> sc:241
+R31264:31266 Coq.Init.Datatypes <> nat ind
+binder 31255:31261 <> condVal:242
+R31275:31277 Coq.Init.Datatypes <> nat ind
+binder 31270:31272 <> val:243
+R31281:31284 Coq.Init.Datatypes <> bool ind
+R31301:31302 ReoCA <> sc:241 var
+R31317:31319 ReoCA <> tSc constr
+R31324:31327 Coq.Init.Datatypes <> true constr
+R31337:31340 ReoCA <> eqSc constr
+R31356:31359 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R31349:31355 ReoCA <> condVal:242 var
+R31360:31362 ReoCA <> val:243 var
+R31380:31384 Coq.Init.Datatypes <> false constr
+R31370:31373 Coq.Init.Datatypes <> true constr
+def 31475:31482 <> delayRel
+R31487:31497 ReoCA <> delayStates ind
+binder 31485:31485 <> s:245
+R31506:31508 Coq.Lists.ListSet <> set def
+R31564:31566 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R31525:31527 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R31511:31513 Coq.Lists.ListSet <> set def
+R31515:31524 ReoCA <> delayPorts ind
+R31528:31548 CaMain ConstraintAutomata DC ind
+R31561:31563 Coq.Init.Datatypes <> nat ind
+R31550:31559 ReoCA <> delayPorts ind
+R31567:31577 ReoCA <> delayStates ind
+R31595:31595 ReoCA <> s:245 var
+R31610:31611 ReoCA <> d0 constr
+R31616:31616 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R31657:31657 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R31617:31617 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R31622:31624 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R31651:31653 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R31656:31656 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R31618:31618 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R31621:31621 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R31619:31620 ReoCA <> DA constr
+R31625:31645 CaMain ConstraintAutomata dc constr
+R31647:31648 ReoCA <> DA constr
+R31654:31655 ReoCA <> d0 constr
+R31667:31668 ReoCA <> d1 constr
+R31673:31673 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R31714:31714 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R31674:31674 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R31679:31681 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R31708:31710 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R31713:31713 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R31675:31675 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R31678:31678 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R31676:31677 ReoCA <> DA constr
+R31682:31702 CaMain ConstraintAutomata dc constr
+R31704:31705 ReoCA <> DA constr
+R31711:31712 ReoCA <> d1 constr

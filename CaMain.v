@@ -407,14 +407,93 @@ Module ConstraintAutomata.
       reflexivity. 
     Defined.
   
-    Fixpoint step' (theta : set tds) (portNames: set name)
+    (* Fixpoint step' (theta : set tds) (portNames: set name)
      (transitions: set(set name * DC name data * state)) : set state :=
      match transitions with
      | [] => []
      | a::t => if (set_eq (portNames)((fst(fst(a))))) 
                    && (evalCompositeDc (theta) (snd(fst(a)))) then snd(a)::step' theta portNames t
                    else step' theta portNames t
-     end.
+     end. *)
+     
+    (* Tentativa de mudança HCA *)
+    Inductive SCTypes :=
+    | tSc
+    | eqSc.
+
+    Definition evalSC (condVal: nat) (val: nat): bool :=
+      match condVal with
+      | condVal => if (condVal == val) then true else false
+    end.
+
+    Record DynamicSystem : Type := DS {
+      I : nat;
+      FUNC : nat -> nat;
+      CurrentValue : nat;
+    }.
+
+    (*Valores default para funções de manipulação de lista*)
+    Definition defaultDSFUNC (n: nat) : nat := 0.
+
+    Definition defaultDS := (0, defaultDSFUNC, 0).
+
+    (* Definition d0DS := {|
+        I := 0;
+        FUNC := d0Function;
+        CurrentValue := 0;
+    |}.
+
+    Definition d1DS := {|
+        I := 5;
+        FUNC := d1Function;
+        CurrentValue := 5;
+    |}. *)
+
+
+    (*Função para associar estados ao seus sistemas dinâmicos
+      É necessário uma lista de estados e uma de sistemas dinâmicos com tamanhos iguais,
+      assim um estado é associado a um SD com mesma posição que a sua
+    *)
+    Fixpoint DSBind' (s: state) (statesList: list state) (staticStateList: list state) (DSList: list (nat * (nat -> nat) * nat)) (count: nat) : list (nat * (nat -> nat) * nat) :=
+      match statesList with
+      | [] => []
+      | h::t => if h == s then [(nth count DSList defaultDS)] else (DSBind' s t staticStateList DSList (count + 1))
+      end.
+
+    Definition DSBind (s: state) (statesList: list state) (DSList: list (nat * (nat -> nat) * nat)) : (nat * (nat -> nat) * nat) :=
+      hd defaultDS (DSBind' s statesList statesList DSList 0).
+    
+
+    (* Step' modificada*)
+    (* Foram adicionados como parametros:
+      -Uma lista de estados
+
+      -Uma lista de sistemas dinâmicos (DSList) para atualizar os valores dos sistemas dinâmicos
+      para as próximas chamadas da função
+
+      -A função DSBind que utilizará a lista de estados e a lista de sistemas dinâmicos para associa-los
+
+      -Modificada o formato da transição para adicionar um 'nat' (space constraint)
+      
+    *)
+
+    (*
+      Record de sistemas dinâmicos foi substituido por uma tupla (nat * (nat -> nat) * nat) (ValorInicial * Função de Fluxo * ValorAtual)
+      para facilitar manipulação
+    *)
+
+    Fixpoint step' (theta : set tds) (portNames: set name)
+    (transitions: set(set name * DC name data * nat * state)) 
+    (DSBind : (state -> (list state) -> (list (nat * (nat -> nat) * nat)) -> (nat * (nat -> nat) * nat))) 
+    (statesList: list state) (DSList: list (nat * (nat -> nat) * nat)): set state :=
+    match transitions with
+    | [] => []
+    | a::t => if (set_eq (portNames)((fst(fst(fst(a)))))) && 
+                  (evalCompositeDc (theta) (snd(fst(fst(a))))) && 
+                  (evalSC (snd(fst(a))) (snd(DSBind (snd(a)) statesList DSList))) 
+                  then snd(a)::step' theta portNames t DSBind statesList DSList
+                  else step' theta portNames t DSBind statesList DSList
+    end.
 
     Lemma step'_sound : forall theta, forall portNames, forall transitions, step' theta portNames transitions <> [] -> exists a,
     In a transitions /\ (set_eq (portNames)((fst(fst(a)))))

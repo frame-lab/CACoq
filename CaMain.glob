@@ -1,0 +1,1440 @@
+DIGEST cd230a90ea79632005557f4f19872901
+FCaMain
+R15:21 Coq.Lists.ListSet <> <> lib
+R39:42 Coq.Lists.List <> <> lib
+R60:75 Coq.Classes.EquivDec <> <> lib
+R93:111 Coq.Program.Program <> <> lib
+R129:134 Coq.QArith.QArith <> <> lib
+R152:170 Coq.Numbers.BinNums <> <> lib
+R188:204 Coq.micromega.Lia <> <> lib
+prf 320:330 <> orderZofNat
+binder 341:341 <> n:1
+binder 351:351 <> a:2
+R378:380 Coq.QArith.QArith_base <> ::Q_scope:x_'<'_x not
+R354:354 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R373:376 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R369:371 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R355:362 Coq.ZArith.BinInt Z of_nat def
+R365:365 Coq.Init.Datatypes <> S constr
+R367:367 CaMain <> n:1 var
+R372:372 CaMain <> a:2 var
+R403:405 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R399:401 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R381:388 Coq.ZArith.BinInt Z of_nat def
+R391:391 Coq.Init.Datatypes <> S constr
+R394:394 Coq.Init.Datatypes <> S constr
+R396:396 CaMain <> n:1 var
+R402:402 CaMain <> a:2 var
+binder 439:439 <> z:3
+R447:449 Coq.QArith.QArith_base <> ::Q_scope:x_'<'_x not
+R443:445 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R442:442 CaMain <> z:3 var
+R450:450 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R456:459 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R452:454 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R451:451 CaMain <> z:3 var
+binder 439:439 <> z:4
+R447:449 Coq.QArith.QArith_base <> ::Q_scope:x_'<'_x not
+R443:445 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R442:442 CaMain <> z:4 var
+R450:450 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R456:459 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R452:454 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R451:451 CaMain <> z:4 var
+R492:494 Coq.QArith.QArith_base <> ::Q_scope:x_'<'_x not
+R482:489 Coq.QArith.QArith_base <> inject_Z def
+R495:502 Coq.QArith.QArith_base <> inject_Z def
+R506:508 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R492:494 Coq.QArith.QArith_base <> ::Q_scope:x_'<'_x not
+R482:489 Coq.QArith.QArith_base <> inject_Z def
+R495:502 Coq.QArith.QArith_base <> inject_Z def
+R506:508 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R525:531 Coq.QArith.QArith_base <> Zlt_Qlt thm
+R525:531 Coq.QArith.QArith_base <> Zlt_Qlt thm
+R525:531 Coq.QArith.QArith_base <> Zlt_Qlt thm
+R549:556 Coq.QArith.QArith_base <> inject_Z def
+binder 590:590 <> b:5
+binder 600:600 <> a:6
+R614:616 Coq.QArith.QArith_base <> ::Q_scope:x_'<'_x not
+R603:603 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R609:612 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R605:607 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R604:604 CaMain <> b:5 var
+R608:608 CaMain <> a:6 var
+R617:617 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R629:632 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R618:618 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R624:627 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R620:622 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R619:619 CaMain <> b:5 var
+R628:628 CaMain <> a:6 var
+binder 590:590 <> b:7
+binder 600:600 <> a:8
+R614:616 Coq.QArith.QArith_base <> ::Q_scope:x_'<'_x not
+R603:603 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R609:612 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R605:607 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R604:604 CaMain <> b:7 var
+R608:608 CaMain <> a:8 var
+R617:617 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R629:632 Coq.QArith.QArith_base <> ::Q_scope:x_'#'_x not
+R618:618 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R624:627 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R620:622 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R619:619 CaMain <> b:7 var
+R628:628 CaMain <> a:8 var
+R658:668 Coq.ZArith.BinInt Z add_assoc thm
+R658:668 Coq.ZArith.BinInt Z add_assoc thm
+R658:668 Coq.ZArith.BinInt Z add_assoc thm
+R680:689 Coq.ZArith.BinInt Z add_comm thm
+R680:689 Coq.ZArith.BinInt Z add_comm thm
+R680:689 Coq.ZArith.BinInt Z add_comm thm
+R705:715 Coq.ZArith.BinInt Z add_assoc thm
+R705:715 Coq.ZArith.BinInt Z add_assoc thm
+R705:715 Coq.ZArith.BinInt Z add_assoc thm
+binder 744:744 <> n:9
+R761:763 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R747:754 Coq.ZArith.BinInt Z of_nat def
+R757:757 Coq.Init.Datatypes <> S constr
+R759:759 CaMain <> n:9 var
+R765:765 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R776:779 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R766:773 Coq.ZArith.BinInt Z of_nat def
+R775:775 CaMain <> n:9 var
+binder 744:744 <> n:10
+R761:763 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R747:754 Coq.ZArith.BinInt Z of_nat def
+R757:757 Coq.Init.Datatypes <> S constr
+R759:759 CaMain <> n:10 var
+R765:765 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R776:779 Coq.ZArith.BinInt <> ::Z_scope:x_'+'_x not
+R766:773 Coq.ZArith.BinInt Z of_nat def
+R775:775 CaMain <> n:10 var
+R822:822 Coq.Init.Datatypes <> S constr
+R822:822 Coq.Init.Datatypes <> S constr
+R822:822 Coq.Init.Datatypes <> S constr
+inst 1138:1149 <> option_eqdec
+binder 1151:1151 <> A:11
+R1155:1159 Coq.Classes.EquivDec <> EqDec class
+R1161:1161 CaMain <> A:11 var
+R1163:1164 Coq.Init.Logic <> eq ind
+binder 1155:1164 <> H:13
+R1169:1173 Coq.Classes.EquivDec <> EqDec class
+R1186:1187 Coq.Init.Logic <> eq ind
+R1176:1181 Coq.Init.Datatypes <> option ind
+R1183:1183 CaMain <> A:11 var
+R1196:1204 Coq.Classes.EquivDec <> equiv_dec def
+binder 1206:1206 <> x:14
+binder 1208:1208 <> y:15
+R1226:1226 CaMain <> y:15 var
+R1223:1223 CaMain <> x:14 var
+R1241:1244 Coq.Init.Datatypes <> Some constr
+R1249:1252 Coq.Init.Datatypes <> Some constr
+R1263:1266 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R1287:1294 Coq.Program.Utils <> in_right syndef
+R1274:1280 Coq.Program.Utils <> in_left syndef
+R1304:1307 Coq.Init.Datatypes <> None constr
+R1310:1313 Coq.Init.Datatypes <> None constr
+R1318:1324 Coq.Program.Utils <> in_left syndef
+R1334:1337 Coq.Init.Datatypes <> Some constr
+R1342:1345 Coq.Init.Datatypes <> None constr
+R1349:1352 Coq.Init.Datatypes <> None constr
+R1355:1358 Coq.Init.Datatypes <> Some constr
+R1365:1372 Coq.Program.Utils <> in_right syndef
+R1365:1372 Coq.Program.Utils <> in_right syndef
+inst 1404:1413 <> pair_eqdec
+binder 1415:1415 <> A:18
+binder 1417:1417 <> B:19
+R1421:1425 Coq.Classes.EquivDec <> EqDec class
+R1427:1427 CaMain <> A:18 var
+R1429:1430 Coq.Init.Logic <> eq ind
+binder 1421:1430 <> H:21
+R1435:1439 Coq.Classes.EquivDec <> EqDec class
+R1441:1441 CaMain <> B:19 var
+R1443:1444 Coq.Init.Logic <> eq ind
+binder 1435:1444 <> H0:23
+R1449:1453 Coq.Classes.EquivDec <> EqDec class
+R1463:1464 Coq.Init.Logic <> eq ind
+R1457:1459 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R1456:1456 CaMain <> A:18 var
+R1460:1460 CaMain <> B:19 var
+R1473:1481 Coq.Classes.EquivDec <> equiv_dec def
+binder 1483:1483 <> x:24
+binder 1485:1485 <> y:25
+R1502:1502 CaMain <> y:25 var
+R1499:1499 CaMain <> x:24 var
+R1517:1517 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1519:1520 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1522:1522 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1525:1525 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1527:1527 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1529:1529 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R1538:1541 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R1644:1651 Coq.Program.Utils <> in_right syndef
+R1581:1584 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R1605:1612 Coq.Program.Utils <> in_right syndef
+R1592:1598 Coq.Program.Utils <> in_left syndef
+def 1682:1689 <> s1_in_s2
+binder 1692:1692 <> A:28
+R1697:1701 Coq.Classes.EquivDec <> EqDec class
+R1703:1703 CaMain <> A:28 var
+R1705:1706 Coq.Init.Logic <> eq ind
+binder 1697:1706 <> H:30
+R1718:1720 Coq.Lists.ListSet <> set def
+R1722:1722 CaMain <> A:28 var
+binder 1710:1711 <> s1:31
+binder 1713:1714 <> s2:32
+R1736:1737 CaMain <> s1:31 var
+R1750:1751 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R1756:1759 Coq.Init.Datatypes <> true constr
+R1768:1769 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R1797:1800 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R1775:1781 Coq.Lists.ListSet <> set_mem def
+R1795:1796 CaMain <> s2:32 var
+R1783:1791 Coq.Classes.EquivDec <> equiv_dec def
+R1801:1808 CaMain <> s1_in_s2:33 def
+R1812:1813 CaMain <> s2:32 var
+def 1832:1837 <> set_eq
+binder 1840:1840 <> A:35
+R1845:1849 Coq.Classes.EquivDec <> EqDec class
+R1851:1851 CaMain <> A:35 var
+R1853:1854 Coq.Init.Logic <> eq ind
+binder 1845:1854 <> H:37
+R1866:1868 Coq.Lists.ListSet <> set def
+R1870:1870 CaMain <> A:35 var
+binder 1858:1859 <> s1:38
+binder 1861:1862 <> s2:39
+R1891:1894 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R1882:1887 Coq.Init.Datatypes <> length def
+R1889:1890 CaMain <> s1:38 var
+R1895:1900 Coq.Init.Datatypes <> length def
+R1902:1903 CaMain <> s2:39 var
+R2017:2021 Coq.Init.Datatypes <> false constr
+R1921:1928 CaMain <> s1_in_s2 def
+R1933:1934 CaMain <> s2:39 var
+R1930:1931 CaMain <> s1:38 var
+R2004:2008 Coq.Init.Datatypes <> false constr
+R1956:1963 CaMain <> s1_in_s2 def
+R1968:1969 CaMain <> s1:38 var
+R1965:1966 CaMain <> s2:39 var
+R1987:1991 Coq.Init.Datatypes <> false constr
+R1977:1980 Coq.Init.Datatypes <> true constr
+prf 2031:2042 <> set_eq_sound
+binder 2045:2045 <> A:41
+R2050:2054 Coq.Classes.EquivDec <> EqDec class
+R2056:2056 CaMain <> A:41 var
+R2058:2059 Coq.Init.Logic <> eq ind
+binder 2050:2059 <> H:43
+R2076:2078 Coq.Lists.ListSet <> set def
+R2080:2080 CaMain <> A:41 var
+binder 2071:2072 <> s1:44
+R2095:2097 Coq.Lists.ListSet <> set def
+R2099:2099 CaMain <> A:41 var
+binder 2090:2091 <> s2:45
+R2124:2128 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R2117:2119 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2105:2110 CaMain <> set_eq def
+R2115:2116 CaMain <> s2:45 var
+R2112:2113 CaMain <> s1:44 var
+R2120:2123 Coq.Init.Datatypes <> true constr
+R2129:2130 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2152:2160 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2140:2142 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2131:2136 Coq.Init.Datatypes <> length def
+R2138:2139 CaMain <> s1:44 var
+R2143:2148 Coq.Init.Datatypes <> length def
+R2150:2151 CaMain <> s2:45 var
+R2182:2185 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R2175:2177 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2161:2168 CaMain <> s1_in_s2 def
+R2173:2174 CaMain <> s2:45 var
+R2170:2171 CaMain <> s1:44 var
+R2178:2181 Coq.Init.Datatypes <> true constr
+R2200:2202 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R2186:2193 CaMain <> s1_in_s2 def
+R2198:2199 CaMain <> s1:44 var
+R2195:2196 CaMain <> s2:45 var
+R2203:2206 Coq.Init.Datatypes <> true constr
+R2349:2354 CaMain <> set_eq def
+R2372:2380 Coq.Classes.EquivDec <> equiv_dec def
+R2402:2409 CaMain <> s1_in_s2 def
+R2413:2416 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2402:2409 CaMain <> s1_in_s2 def
+R2413:2416 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2435:2442 CaMain <> s1_in_s2 def
+R2449:2452 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2435:2442 CaMain <> s1_in_s2 def
+R2449:2452 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R2883:2891 Coq.Classes.EquivDec <> equiv_dec def
+mod 3058:3075 <> ConstraintAutomata
+sec 3088:3105 ConstraintAutomata ConstraintAutomata
+var 3122:3126 ConstraintAutomata.ConstraintAutomata state
+var 3128:3131 ConstraintAutomata.ConstraintAutomata name
+var 3133:3136 ConstraintAutomata.ConstraintAutomata data
+R3160:3164 Coq.Classes.EquivDec <> EqDec class
+R3166:3169 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R3171:3172 Coq.Init.Logic <> eq ind
+binder 3160:3172 <> H:50
+R3177:3181 Coq.Classes.EquivDec <> EqDec class
+R3183:3187 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R3189:3190 Coq.Init.Logic <> eq ind
+binder 3177:3190 <> H0:52
+R3195:3199 Coq.Classes.EquivDec <> EqDec class
+R3202:3205 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+R3208:3209 Coq.Init.Logic <> eq ind
+binder 3195:3209 <> H1:54
+R3242:3245 Coq.Init.Datatypes <> negb def
+R3248:3255 Coq.QArith.QArith_base <> Qle_bool def
+not 3227:3227 ConstraintAutomata.ConstraintAutomata :::x_'<?'_x
+R3290:3297 Coq.QArith.QArith_base <> Qeq_bool def
+not 3277:3277 ConstraintAutomata.ConstraintAutomata :::x_'=?'_x
+constr 3324:3328 ConstraintAutomata mktds
+rec 3317:3319 ConstraintAutomata tds
+proj 3338:3339 ConstraintAutomata id
+proj 3355:3368 ConstraintAutomata dataAssignment
+proj 3392:3400 ConstraintAutomata timeStamp
+proj 3432:3438 ConstraintAutomata tdsCond
+proj 3499:3503 ConstraintAutomata index
+R3343:3346 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R3375:3378 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3372:3374 Coq.Init.Datatypes <> nat ind
+R3379:3382 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+R3407:3410 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3404:3406 Coq.Init.Datatypes <> nat ind
+R3411:3423 Coq.QArith.QArith_base <> Q rec
+R3451:3453 Coq.Init.Datatypes <> nat ind
+binder 3449:3449 <> n:59
+R3456:3458 Coq.QArith.QArith_base <> Qlt def
+R3461:3469 CaMain <> timeStamp:58 meth
+R3471:3471 CaMain <> n:59 var
+R3475:3483 CaMain <> timeStamp:58 meth
+R3486:3486 Coq.Init.Datatypes <> S constr
+R3488:3488 CaMain <> n:59 var
+R3507:3509 Coq.Init.Datatypes <> nat ind
+ind 3534:3535 ConstraintAutomata DC
+constr 3556:3558 ConstraintAutomata tDc
+constr 3581:3582 ConstraintAutomata dc
+constr 3621:3624 ConstraintAutomata eqDc
+constr 3663:3667 ConstraintAutomata andDc
+constr 3722:3725 ConstraintAutomata orDc
+constr 3781:3784 ConstraintAutomata trDc
+constr 3842:3846 ConstraintAutomata negDc
+binder 3537:3540 <> name:62
+binder 3542:3545 <> data:63
+R3562:3563 CaMain <> DC:64 ind
+R3570:3573 CaMain <> data:63 var
+R3565:3568 CaMain <> name:62 var
+R3590:3593 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3586:3589 CaMain <> name:62 var
+R3598:3601 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3594:3597 CaMain <> data:63 var
+R3602:3603 CaMain <> DC:64 ind
+R3610:3613 CaMain <> data:63 var
+R3605:3608 CaMain <> name:62 var
+R3632:3635 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3628:3631 CaMain <> name:62 var
+R3640:3643 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3636:3639 CaMain <> name:62 var
+R3644:3645 CaMain <> DC:64 ind
+R3652:3655 CaMain <> data:63 var
+R3647:3650 CaMain <> name:62 var
+R3683:3686 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3671:3672 CaMain <> DC:64 ind
+R3679:3682 CaMain <> data:63 var
+R3674:3677 CaMain <> name:62 var
+R3699:3702 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3687:3688 CaMain <> DC:64 ind
+R3695:3698 CaMain <> data:63 var
+R3690:3693 CaMain <> name:62 var
+R3703:3704 CaMain <> DC:64 ind
+R3711:3714 CaMain <> data:63 var
+R3706:3709 CaMain <> name:62 var
+R3742:3745 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3730:3731 CaMain <> DC:64 ind
+R3738:3741 CaMain <> data:63 var
+R3733:3736 CaMain <> name:62 var
+R3758:3761 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3746:3747 CaMain <> DC:64 ind
+R3754:3757 CaMain <> data:63 var
+R3749:3752 CaMain <> name:62 var
+R3762:3763 CaMain <> DC:64 ind
+R3770:3773 CaMain <> data:63 var
+R3765:3768 CaMain <> name:62 var
+R3789:3789 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3802:3806 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3794:3797 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3790:3793 CaMain <> data:63 var
+R3798:3801 CaMain <> data:63 var
+R3811:3814 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3807:3810 CaMain <> name:62 var
+R3819:3822 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3815:3818 CaMain <> name:62 var
+R3823:3824 CaMain <> DC:64 ind
+R3831:3834 CaMain <> data:63 var
+R3826:3829 CaMain <> name:62 var
+R3862:3865 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R3850:3851 CaMain <> DC:64 ind
+R3858:3861 CaMain <> data:63 var
+R3853:3856 CaMain <> name:62 var
+R3866:3867 CaMain <> DC:64 ind
+R3874:3877 CaMain <> data:63 var
+R3869:3872 CaMain <> name:62 var
+R3906:3910 CaMain ConstraintAutomata andDc constr
+not 3894:3894 ConstraintAutomata.ConstraintAutomata :::x_'@'_x
+R3974:3977 CaMain ConstraintAutomata orDc constr
+not 3962:3962 ConstraintAutomata.ConstraintAutomata :::x_'$'_x
+def 4033:4038 ConstraintAutomata evalDC
+R4045:4050 Coq.Init.Datatypes <> option ind
+R4052:4054 CaMain ConstraintAutomata tds rec
+binder 4041:4042 <> po:66
+R4062:4065 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+binder 4058:4058 <> d:67
+R4070:4073 Coq.Init.Datatypes <> bool ind
+R4091:4092 CaMain <> po:66 var
+R4108:4111 Coq.Init.Datatypes <> Some constr
+R4147:4150 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R4122:4135 CaMain ConstraintAutomata dataAssignment proj
+R4139:4143 CaMain ConstraintAutomata index proj
+R4151:4151 CaMain <> d:67 var
+R4169:4173 Coq.Init.Datatypes <> false constr
+R4159:4162 Coq.Init.Datatypes <> true constr
+R4184:4187 Coq.Init.Datatypes <> None constr
+R4192:4196 Coq.Init.Datatypes <> false constr
+prf 4221:4231 ConstraintAutomata evalDCSound
+binder 4242:4243 <> po:69
+binder 4253:4253 <> d:70
+R4274:4278 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R4267:4269 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4256:4261 CaMain ConstraintAutomata evalDC def
+R4266:4266 CaMain <> d:70 var
+R4263:4264 CaMain <> po:69 var
+R4270:4273 Coq.Init.Datatypes <> true constr
+R4279:4285 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R4287:4288 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 4286:4286 <> x:71
+R4300:4310 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R4291:4293 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4289:4290 CaMain <> po:69 var
+R4294:4297 Coq.Init.Datatypes <> Some constr
+R4299:4299 CaMain <> x:71 var
+R4336:4338 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R4311:4324 CaMain ConstraintAutomata dataAssignment proj
+R4328:4332 CaMain ConstraintAutomata index proj
+R4334:4334 CaMain <> x:71 var
+R4326:4326 CaMain <> x:71 var
+R4339:4339 CaMain <> d:70 var
+R4413:4421 Coq.Classes.EquivDec <> equiv_dec def
+R4564:4569 CaMain ConstraintAutomata evalDC def
+R4593:4601 Coq.Classes.EquivDec <> equiv_dec def
+def 4779:4799 ConstraintAutomata retrievePortFromInput
+R4806:4808 Coq.Lists.ListSet <> set def
+R4810:4812 CaMain ConstraintAutomata tds rec
+binder 4802:4804 <> tds:72
+R4819:4822 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 4816:4816 <> n:73
+R4840:4842 CaMain <> tds:72 var
+R4857:4858 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R4863:4866 Coq.Init.Datatypes <> None constr
+R4877:4878 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R4889:4892 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R4888:4888 CaMain <> n:73 var
+R4893:4894 CaMain ConstraintAutomata id proj
+R4916:4936 CaMain <> retrievePortFromInput:74 def
+R4940:4940 CaMain <> n:73 var
+R4904:4907 Coq.Init.Datatypes <> Some constr
+prf 4963:4988 ConstraintAutomata retrievePortFromInputSound
+R5003:5005 Coq.Lists.ListSet <> set def
+R5007:5009 CaMain ConstraintAutomata tds rec
+binder 4999:5001 <> tds:76
+R5022:5025 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 5019:5019 <> n:77
+binder 5034:5034 <> a:78
+R5073:5080 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R5064:5066 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5037:5057 CaMain ConstraintAutomata retrievePortFromInput def
+R5063:5063 CaMain <> n:77 var
+R5059:5061 CaMain <> tds:76 var
+R5067:5070 Coq.Init.Datatypes <> Some constr
+R5072:5072 CaMain <> a:78 var
+R5089:5092 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R5081:5082 Coq.Lists.List <> In def
+R5086:5088 CaMain <> tds:76 var
+R5084:5084 CaMain <> a:78 var
+R5094:5096 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5093:5093 CaMain <> n:77 var
+R5097:5098 CaMain ConstraintAutomata id proj
+R5100:5100 CaMain <> a:78 var
+R5191:5199 Coq.Classes.EquivDec <> equiv_dec def
+def 5398:5408 ConstraintAutomata eqDataPorts
+R5415:5418 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 5411:5412 <> n1:79
+R5426:5429 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 5422:5423 <> n2:80
+R5440:5442 Coq.Lists.ListSet <> set def
+R5444:5446 CaMain ConstraintAutomata tds rec
+binder 5433:5437 <> theta:81
+R5465:5485 CaMain ConstraintAutomata retrievePortFromInput def
+R5493:5494 CaMain <> n1:79 var
+R5487:5491 CaMain <> theta:81 var
+R5510:5513 Coq.Init.Datatypes <> Some constr
+R5527:5547 CaMain ConstraintAutomata retrievePortFromInput def
+R5555:5556 CaMain <> n2:80 var
+R5549:5553 CaMain <> theta:81 var
+R5584:5587 Coq.Init.Datatypes <> Some constr
+R5597:5597 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R5623:5628 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R5654:5654 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R5598:5611 CaMain ConstraintAutomata dataAssignment proj
+R5615:5619 CaMain ConstraintAutomata index proj
+R5629:5642 CaMain ConstraintAutomata dataAssignment proj
+R5646:5650 CaMain ConstraintAutomata index proj
+R5671:5675 Coq.Init.Datatypes <> false constr
+R5661:5664 Coq.Init.Datatypes <> true constr
+R5697:5700 Coq.Init.Datatypes <> None constr
+R5705:5709 Coq.Init.Datatypes <> false constr
+R5741:5744 Coq.Init.Datatypes <> None constr
+R5749:5753 Coq.Init.Datatypes <> false constr
+prf 5777:5792 ConstraintAutomata eqDataPortsSound
+binder 5803:5804 <> n1:82
+binder 5814:5815 <> n2:83
+binder 5825:5827 <> tds:84
+R5859:5870 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R5852:5854 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5831:5841 CaMain ConstraintAutomata eqDataPorts def
+R5849:5851 CaMain <> tds:84 var
+R5846:5847 CaMain <> n2:83 var
+R5843:5844 CaMain <> n1:82 var
+R5855:5858 Coq.Init.Datatypes <> true constr
+R5871:5877 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R5879:5880 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 5878:5878 <> a:85
+R5918:5921 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R5909:5911 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5881:5901 CaMain ConstraintAutomata retrievePortFromInput def
+R5907:5908 CaMain <> n1:82 var
+R5903:5905 CaMain <> tds:84 var
+R5912:5915 Coq.Init.Datatypes <> Some constr
+R5917:5917 CaMain <> a:85 var
+R5922:5928 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R5930:5931 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 5929:5929 <> b:86
+R5969:5979 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R5960:5962 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5932:5952 CaMain ConstraintAutomata retrievePortFromInput def
+R5958:5959 CaMain <> n2:83 var
+R5954:5956 CaMain <> tds:84 var
+R5963:5966 Coq.Init.Datatypes <> Some constr
+R5968:5968 CaMain <> b:86 var
+R5980:5980 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6006:6010 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R6036:6036 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R5981:5994 CaMain ConstraintAutomata dataAssignment proj
+R5998:6002 CaMain ConstraintAutomata index proj
+R6004:6004 CaMain <> a:85 var
+R5996:5996 CaMain <> a:85 var
+R6011:6024 CaMain ConstraintAutomata dataAssignment proj
+R6028:6032 CaMain ConstraintAutomata index proj
+R6034:6034 CaMain <> b:86 var
+R6026:6026 CaMain <> b:86 var
+R6082:6092 CaMain ConstraintAutomata eqDataPorts def
+R6110:6130 CaMain ConstraintAutomata retrievePortFromInput def
+R6110:6130 CaMain ConstraintAutomata retrievePortFromInput def
+R6158:6178 CaMain ConstraintAutomata retrievePortFromInput def
+R6158:6178 CaMain ConstraintAutomata retrievePortFromInput def
+R6250:6258 Coq.Classes.EquivDec <> equiv_dec def
+R6569:6579 CaMain ConstraintAutomata eqDataPorts def
+R6627:6635 Coq.Classes.EquivDec <> equiv_dec def
+def 6690:6700 ConstraintAutomata transformDC
+R6718:6721 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R6714:6717 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+R6722:6725 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+binder 6703:6711 <> transform:87
+R6733:6736 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 6729:6730 <> n1:88
+R6744:6747 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 6740:6741 <> n2:89
+R6755:6757 Coq.Lists.ListSet <> set def
+R6759:6761 CaMain ConstraintAutomata tds rec
+binder 6751:6753 <> tds:90
+R6780:6800 CaMain ConstraintAutomata retrievePortFromInput def
+R6806:6807 CaMain <> n1:88 var
+R6802:6804 CaMain <> tds:90 var
+R6823:6826 Coq.Init.Datatypes <> Some constr
+R6840:6860 CaMain ConstraintAutomata retrievePortFromInput def
+R6866:6867 CaMain <> n2:89 var
+R6862:6864 CaMain <> tds:90 var
+R6895:6898 Coq.Init.Datatypes <> Some constr
+R6946:6950 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R6976:6976 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R6908:6916 CaMain <> transform:87 var
+R6919:6932 CaMain ConstraintAutomata dataAssignment proj
+R6936:6940 CaMain ConstraintAutomata index proj
+R6951:6964 CaMain ConstraintAutomata dataAssignment proj
+R6968:6972 CaMain ConstraintAutomata index proj
+R6993:6997 Coq.Init.Datatypes <> false constr
+R6983:6986 Coq.Init.Datatypes <> true constr
+R7019:7022 Coq.Init.Datatypes <> None constr
+R7027:7031 Coq.Init.Datatypes <> false constr
+R7063:7066 Coq.Init.Datatypes <> None constr
+R7071:7075 Coq.Init.Datatypes <> false constr
+prf 7099:7114 ConstraintAutomata transformDCsound
+binder 7125:7133 <> transform:91
+binder 7143:7144 <> n1:92
+binder 7154:7155 <> n2:93
+binder 7165:7167 <> tds:94
+R7208:7218 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R7201:7203 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R7170:7180 CaMain ConstraintAutomata transformDC def
+R7198:7200 CaMain <> tds:94 var
+R7195:7196 CaMain <> n2:93 var
+R7192:7193 CaMain <> n1:92 var
+R7182:7190 CaMain <> transform:91 var
+R7204:7207 Coq.Init.Datatypes <> true constr
+R7219:7225 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R7227:7228 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 7226:7226 <> a:95
+R7266:7269 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R7257:7259 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R7229:7249 CaMain ConstraintAutomata retrievePortFromInput def
+R7255:7256 CaMain <> n1:92 var
+R7251:7253 CaMain <> tds:94 var
+R7260:7263 Coq.Init.Datatypes <> Some constr
+R7265:7265 CaMain <> a:95 var
+R7270:7276 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R7278:7279 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 7277:7277 <> b:96
+R7317:7327 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R7308:7310 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R7280:7300 CaMain ConstraintAutomata retrievePortFromInput def
+R7306:7307 CaMain <> n2:93 var
+R7302:7304 CaMain <> tds:94 var
+R7311:7314 Coq.Init.Datatypes <> Some constr
+R7316:7316 CaMain <> b:96 var
+R7366:7369 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R7395:7395 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R7328:7336 CaMain <> transform:91 var
+R7339:7352 CaMain ConstraintAutomata dataAssignment proj
+R7356:7360 CaMain ConstraintAutomata index proj
+R7362:7362 CaMain <> a:95 var
+R7354:7354 CaMain <> a:95 var
+R7370:7383 CaMain ConstraintAutomata dataAssignment proj
+R7387:7391 CaMain ConstraintAutomata index proj
+R7393:7393 CaMain <> b:96 var
+R7385:7385 CaMain <> b:96 var
+R7441:7451 CaMain ConstraintAutomata transformDC def
+R7469:7489 CaMain ConstraintAutomata retrievePortFromInput def
+R7469:7489 CaMain ConstraintAutomata retrievePortFromInput def
+R7517:7537 CaMain ConstraintAutomata retrievePortFromInput def
+R7517:7537 CaMain ConstraintAutomata retrievePortFromInput def
+R7609:7617 Coq.Classes.EquivDec <> equiv_dec def
+R7928:7938 CaMain ConstraintAutomata transformDC def
+R7986:7994 Coq.Classes.EquivDec <> equiv_dec def
+def 8049:8063 ConstraintAutomata evalCompositeDc
+R8070:8072 Coq.Lists.ListSet <> set def
+R8074:8076 CaMain ConstraintAutomata tds rec
+binder 8066:8068 <> tds:97
+R8084:8085 CaMain ConstraintAutomata DC ind
+R8092:8095 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+R8087:8090 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 8080:8081 <> dc:98
+R8100:8103 Coq.Init.Datatypes <> bool ind
+R8120:8121 CaMain <> dc:98 var
+R8136:8138 CaMain ConstraintAutomata tDc constr
+R8147:8150 Coq.Init.Datatypes <> true constr
+R8160:8161 CaMain ConstraintAutomata dc constr
+R8170:8175 CaMain ConstraintAutomata evalDC def
+R8178:8198 CaMain ConstraintAutomata retrievePortFromInput def
+R8200:8202 CaMain <> tds:97 var
+R8219:8222 CaMain ConstraintAutomata eqDc constr
+R8233:8243 CaMain ConstraintAutomata eqDataPorts def
+R8249:8251 CaMain <> tds:97 var
+R8261:8265 CaMain ConstraintAutomata andDc constr
+R8295:8298 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R8274:8288 CaMain <> evalCompositeDc:99 def
+R8290:8292 CaMain <> tds:97 var
+R8299:8313 CaMain <> evalCompositeDc:99 def
+R8315:8317 CaMain <> tds:97 var
+R8329:8332 CaMain ConstraintAutomata orDc constr
+R8362:8365 Coq.Init.Datatypes <> ::bool_scope:x_'||'_x not
+R8341:8355 CaMain <> evalCompositeDc:99 def
+R8357:8359 CaMain <> tds:97 var
+R8366:8380 CaMain <> evalCompositeDc:99 def
+R8382:8384 CaMain <> tds:97 var
+R8396:8399 CaMain ConstraintAutomata trDc constr
+R8419:8429 CaMain ConstraintAutomata transformDC def
+R8445:8447 CaMain <> tds:97 var
+R8457:8461 CaMain ConstraintAutomata negDc constr
+R8468:8471 Coq.Init.Datatypes <> negb def
+R8474:8488 CaMain <> evalCompositeDc:99 def
+R8490:8492 CaMain <> tds:97 var
+prf 8523:8542 ConstraintAutomata evalCompositeDcSound
+binder 8553:8555 <> tds:101
+R8570:8571 CaMain ConstraintAutomata DC ind
+R8578:8581 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+R8573:8576 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 8565:8567 <> dca:102
+R8614:8625 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R8607:8609 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8584:8598 CaMain ConstraintAutomata evalCompositeDc def
+R8604:8606 CaMain <> dca:102 var
+R8600:8602 CaMain <> tds:101 var
+R8610:8613 Coq.Init.Datatypes <> true constr
+R8639:8649 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R8629:8631 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8626:8628 CaMain <> dca:102 var
+R8632:8634 CaMain ConstraintAutomata tDc constr
+R8650:8650 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R8734:8745 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R8651:8657 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R8659:8660 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 8658:8658 <> a:103
+R8661:8667 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R8669:8670 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 8668:8668 <> b:104
+R8683:8686 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R8674:8676 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8671:8673 CaMain <> dca:102 var
+R8677:8678 CaMain ConstraintAutomata dc constr
+R8682:8682 CaMain <> b:104 var
+R8680:8680 CaMain <> a:103 var
+R8687:8687 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8726:8729 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8688:8693 CaMain ConstraintAutomata evalDC def
+R8725:8725 CaMain <> b:104 var
+R8696:8716 CaMain ConstraintAutomata retrievePortFromInput def
+R8722:8722 CaMain <> a:103 var
+R8718:8720 CaMain <> tds:101 var
+R8730:8733 Coq.Init.Datatypes <> true constr
+R8746:8746 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R8813:8823 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R8747:8753 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R8755:8756 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 8754:8754 <> a:105
+R8757:8763 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R8765:8766 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 8764:8764 <> b:106
+R8783:8786 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R8770:8772 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8767:8769 CaMain <> dca:102 var
+R8773:8776 CaMain ConstraintAutomata eqDc constr
+R8782:8782 CaMain <> b:106 var
+R8780:8780 CaMain <> a:105 var
+R8806:8808 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8787:8797 CaMain ConstraintAutomata eqDataPorts def
+R8803:8805 CaMain <> tds:101 var
+R8801:8801 CaMain <> b:106 var
+R8799:8799 CaMain <> a:105 var
+R8809:8812 Coq.Init.Datatypes <> true constr
+R8824:8824 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R8917:8927 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R8825:8831 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R8833:8834 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 8832:8832 <> a:107
+R8835:8841 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R8843:8844 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 8842:8842 <> b:108
+R8860:8863 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R8848:8850 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8845:8847 CaMain <> dca:102 var
+R8851:8855 CaMain ConstraintAutomata andDc constr
+R8859:8859 CaMain <> b:108 var
+R8857:8857 CaMain <> a:107 var
+R8910:8912 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8885:8888 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R8864:8878 CaMain ConstraintAutomata evalCompositeDc def
+R8884:8884 CaMain <> a:107 var
+R8880:8882 CaMain <> tds:101 var
+R8889:8903 CaMain ConstraintAutomata evalCompositeDc def
+R8909:8909 CaMain <> b:108 var
+R8905:8907 CaMain <> tds:101 var
+R8913:8916 Coq.Init.Datatypes <> true constr
+R8928:8928 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R9019:9029 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R8929:8935 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R8937:8937 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 8936:8936 <> a:109
+R8938:8944 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R8946:8947 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 8945:8945 <> b:110
+R8962:8965 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R8951:8953 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8948:8950 CaMain <> dca:102 var
+R8954:8957 CaMain ConstraintAutomata orDc constr
+R8961:8961 CaMain <> b:110 var
+R8959:8959 CaMain <> a:109 var
+R9012:9014 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R8987:8990 Coq.Init.Datatypes <> ::bool_scope:x_'||'_x not
+R8966:8980 CaMain ConstraintAutomata evalCompositeDc def
+R8986:8986 CaMain <> a:109 var
+R8982:8984 CaMain <> tds:101 var
+R8991:9005 CaMain ConstraintAutomata evalCompositeDc def
+R9011:9011 CaMain <> b:110 var
+R9007:9009 CaMain <> tds:101 var
+R9015:9018 Coq.Init.Datatypes <> true constr
+R9030:9030 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R9112:9123 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R9186:9186 Coq.Init.Logic <> ::type_scope:x_'\/'_x not
+R9031:9037 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R9039:9040 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 9038:9038 <> a:111
+R9041:9047 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R9049:9050 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 9048:9048 <> b:112
+R9051:9057 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R9060:9061 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 9058:9059 <> tr:113
+R9079:9082 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R9065:9067 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R9062:9064 CaMain <> dca:102 var
+R9068:9071 CaMain ConstraintAutomata trDc constr
+R9078:9078 CaMain <> b:112 var
+R9076:9076 CaMain <> a:111 var
+R9073:9074 CaMain <> tr:113 var
+R9105:9107 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R9083:9093 CaMain ConstraintAutomata transformDC def
+R9102:9104 CaMain <> tds:101 var
+R9100:9100 CaMain <> b:112 var
+R9098:9098 CaMain <> a:111 var
+R9095:9096 CaMain <> tr:113 var
+R9108:9111 Coq.Init.Datatypes <> true constr
+R9124:9130 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R9132:9133 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 9131:9131 <> a:114
+R9147:9150 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R9137:9139 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R9134:9136 CaMain <> dca:102 var
+R9140:9144 CaMain ConstraintAutomata negDc constr
+R9146:9146 CaMain <> a:114 var
+R9179:9181 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R9151:9154 Coq.Init.Datatypes <> negb def
+R9157:9171 CaMain ConstraintAutomata evalCompositeDc def
+R9177:9177 CaMain <> a:114 var
+R9173:9175 CaMain <> tds:101 var
+R9182:9185 Coq.Init.Datatypes <> true constr
+constr 10363:10364 ConstraintAutomata CA
+rec 10334:10351 ConstraintAutomata constraintAutomata
+proj 10374:10374 ConstraintAutomata Q
+proj 10395:10395 ConstraintAutomata N
+proj 10415:10415 ConstraintAutomata T
+proj 10475:10476 ConstraintAutomata Q0
+R10378:10380 Coq.Lists.ListSet <> set def
+R10382:10386 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R10399:10401 Coq.Lists.ListSet <> set def
+R10403:10406 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R10424:10427 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R10419:10423 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R10428:10430 Coq.Lists.ListSet <> set def
+R10458:10460 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R10443:10445 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R10433:10435 Coq.Lists.ListSet <> set def
+R10438:10441 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R10446:10447 CaMain ConstraintAutomata DC ind
+R10454:10457 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+R10449:10452 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R10461:10465 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R10480:10482 Coq.Lists.ListSet <> set def
+R10484:10488 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+def 10512:10530 ConstraintAutomata returnSmallerNumber
+R10535:10547 Coq.QArith.QArith_base <> Q rec
+binder 10533:10533 <> m:120
+R10553:10555 Coq.Lists.ListSet <> set def
+R10557:10569 Coq.QArith.QArith_base <> Q rec
+binder 10551:10551 <> l:121
+R10587:10587 CaMain <> l:121 var
+R10602:10603 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R10608:10608 CaMain <> m:120 var
+R10619:10620 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R10632:10635 CaMain ConstraintAutomata.ConstraintAutomata :::x_'<?'_x not
+R10636:10636 CaMain <> m:120 var
+R10694:10712 CaMain <> returnSmallerNumber:122 def
+R10714:10714 CaMain <> m:120 var
+R10665:10683 CaMain <> returnSmallerNumber:122 def
+prf 10766:10790 ConstraintAutomata returnSmallerNumber_sound
+binder 10801:10801 <> m:124
+binder 10811:10811 <> l:125
+R10842:10850 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R10837:10840 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R10814:10832 CaMain ConstraintAutomata returnSmallerNumber def
+R10836:10836 CaMain <> l:125 var
+R10834:10834 CaMain <> m:124 var
+R10841:10841 CaMain <> m:124 var
+R10858:10861 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R10852:10855 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R10851:10851 CaMain <> l:125 var
+R10856:10857 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R10862:10868 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R10870:10871 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 10869:10869 <> a:126
+R10878:10881 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R10872:10873 Coq.Lists.List <> In def
+R10877:10877 CaMain <> l:125 var
+R10875:10875 CaMain <> a:126 var
+R10888:10890 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R10883:10886 CaMain ConstraintAutomata.ConstraintAutomata :::x_'<?'_x not
+R10887:10887 CaMain <> m:124 var
+R10882:10882 CaMain <> a:126 var
+R10891:10894 Coq.Init.Datatypes <> true constr
+R10950:10968 CaMain ConstraintAutomata returnSmallerNumber def
+R11045:11048 CaMain ConstraintAutomata.ConstraintAutomata :::x_'<?'_x not
+R11045:11048 CaMain ConstraintAutomata.ConstraintAutomata :::x_'<?'_x not
+not 11266:11266 ConstraintAutomata.ConstraintAutomata :::x_'|>'_x
+def 11355:11375 ConstraintAutomata getThetaTimeCandidate
+R11380:11382 CaMain ConstraintAutomata tds rec
+binder 11378:11378 <> p:127
+R11394:11394 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11416:11416 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R11395:11403 CaMain ConstraintAutomata timeStamp proj
+R11407:11411 CaMain ConstraintAutomata index proj
+R11413:11413 CaMain <> p:127 var
+R11405:11405 CaMain <> p:127 var
+def 11433:11448 ConstraintAutomata getAllThetaTimes
+R11458:11460 Coq.Lists.ListSet <> set def
+R11462:11464 CaMain ConstraintAutomata tds rec
+binder 11451:11455 <> theta:128
+R11482:11486 CaMain <> theta:128 var
+R11501:11502 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R11507:11508 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R11519:11520 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R11549:11550 Coq.Init.Datatypes <> ::list_scope:x_'++'_x not
+R11526:11546 CaMain ConstraintAutomata getThetaTimeCandidate def
+R11551:11566 CaMain <> getAllThetaTimes:129 def
+prf 11591:11611 ConstraintAutomata getAllThetaTimesSound
+R11625:11627 Coq.Lists.ListSet <> set def
+R11629:11631 CaMain ConstraintAutomata tds rec
+binder 11622:11622 <> s:131
+R11658:11662 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R11652:11655 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R11634:11649 CaMain ConstraintAutomata getAllThetaTimes def
+R11651:11651 CaMain <> s:131 var
+R11656:11657 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R11663:11669 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R11671:11672 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 11670:11670 <> a:132
+R11673:11674 Coq.Lists.List <> In def
+R11678:11678 CaMain <> s:131 var
+R11676:11676 CaMain <> a:132 var
+def 11881:11887 ConstraintAutomata minimum
+R11893:11895 Coq.Lists.ListSet <> set def
+R11897:11909 Coq.QArith.QArith_base <> Q rec
+binder 11890:11890 <> l:133
+R11922:11940 CaMain ConstraintAutomata returnSmallerNumber def
+R11962:11963 Coq.Lists.List <> tl def
+R11965:11965 CaMain <> l:133 var
+R11943:11944 Coq.Lists.List <> hd def
+R11958:11958 CaMain <> l:133 var
+R11947:11951 Coq.QArith.QArith_base <> Qmake constr
+def 11985:11992 ConstraintAutomata nextTime
+R12001:12003 Coq.Lists.ListSet <> set def
+R12005:12007 CaMain ConstraintAutomata tds rec
+binder 11995:11999 <> theta:134
+R12019:12025 CaMain ConstraintAutomata minimum def
+R12027:12042 CaMain ConstraintAutomata getAllThetaTimes def
+R12044:12048 CaMain <> theta:134 var
+def 12068:12087 ConstraintAutomata timeStampEqThetaTime
+R12096:12098 Coq.Lists.ListSet <> set def
+R12100:12102 CaMain ConstraintAutomata tds rec
+binder 12090:12094 <> theta:135
+R12108:12110 CaMain ConstraintAutomata tds rec
+binder 12106:12106 <> a:136
+R12143:12146 CaMain ConstraintAutomata.ConstraintAutomata :::x_'=?'_x not
+R12123:12131 CaMain ConstraintAutomata timeStamp proj
+R12135:12139 CaMain ConstraintAutomata index proj
+R12141:12141 CaMain <> a:136 var
+R12133:12133 CaMain <> a:136 var
+R12147:12154 CaMain ConstraintAutomata nextTime def
+R12157:12161 CaMain <> theta:135 var
+prf 12177:12201 ConstraintAutomata timeStampEqThetaTimeSound
+binder 12212:12212 <> s:137
+binder 12222:12222 <> a:138
+R12256:12268 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R12314:12314 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R12249:12251 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R12225:12244 CaMain ConstraintAutomata timeStampEqThetaTime def
+R12248:12248 CaMain <> a:138 var
+R12246:12246 CaMain <> s:137 var
+R12252:12255 Coq.Init.Datatypes <> true constr
+R12269:12269 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R12306:12309 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R12290:12293 CaMain ConstraintAutomata.ConstraintAutomata :::x_'=?'_x not
+R12270:12278 CaMain ConstraintAutomata timeStamp proj
+R12282:12286 CaMain ConstraintAutomata index proj
+R12288:12288 CaMain <> a:138 var
+R12280:12280 CaMain <> a:138 var
+R12294:12301 CaMain ConstraintAutomata nextTime def
+R12304:12304 CaMain <> s:137 var
+R12310:12313 Coq.Init.Datatypes <> true constr
+R12360:12379 CaMain ConstraintAutomata timeStampEqThetaTime def
+R12419:12438 CaMain ConstraintAutomata timeStampEqThetaTime def
+def 12493:12501 ConstraintAutomata nextNames
+R12511:12513 Coq.Lists.ListSet <> set def
+R12515:12517 CaMain ConstraintAutomata tds rec
+binder 12504:12508 <> theta:139
+R12528:12530 Coq.Lists.ListSet <> set def
+R12532:12534 CaMain ConstraintAutomata tds rec
+binder 12521:12526 <> theta2:140
+R12539:12541 Coq.Lists.ListSet <> set def
+R12543:12546 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R12564:12569 CaMain <> theta2:140 var
+R12585:12586 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R12596:12615 CaMain ConstraintAutomata timeStampEqThetaTime def
+R12617:12621 CaMain <> theta:139 var
+R12699:12707 CaMain <> nextNames:141 def
+R12709:12713 CaMain <> theta:139 var
+R12656:12659 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R12652:12653 CaMain ConstraintAutomata id proj
+R12660:12668 CaMain <> nextNames:141 def
+R12670:12674 CaMain <> theta:139 var
+R12725:12726 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R12733:12734 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+prf 12758:12771 ConstraintAutomata nextNamesSound
+binder 12782:12786 <> theta:143
+binder 12796:12801 <> theta2:144
+R12832:12842 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R12903:12903 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R12826:12829 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R12804:12812 CaMain ConstraintAutomata nextNames def
+R12820:12825 CaMain <> theta2:144 var
+R12814:12818 CaMain <> theta:143 var
+R12830:12831 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R12843:12849 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R12851:12852 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 12850:12850 <> a:145
+R12864:12867 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R12853:12854 Coq.Lists.List <> In def
+R12858:12863 CaMain <> theta2:144 var
+R12856:12856 CaMain <> a:145 var
+R12896:12898 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R12868:12887 CaMain ConstraintAutomata timeStampEqThetaTime def
+R12895:12895 CaMain <> a:145 var
+R12889:12893 CaMain <> theta:143 var
+R12899:12902 Coq.Init.Datatypes <> true constr
+R13019:13038 CaMain ConstraintAutomata timeStampEqThetaTime def
+R13019:13038 CaMain ConstraintAutomata timeStampEqThetaTime def
+R13335:13354 CaMain ConstraintAutomata timeStampEqThetaTime def
+R13335:13354 CaMain ConstraintAutomata timeStampEqThetaTime def
+def 13582:13587 ConstraintAutomata thetaN
+R13597:13599 Coq.Lists.ListSet <> set def
+R13601:13603 CaMain ConstraintAutomata tds rec
+binder 13590:13594 <> theta:146
+R13615:13623 CaMain ConstraintAutomata nextNames def
+R13634:13638 CaMain <> theta:146 var
+R13626:13630 CaMain <> theta:146 var
+def 13656:13663 ConstraintAutomata nextData
+R13673:13675 Coq.Lists.ListSet <> set def
+R13677:13679 CaMain ConstraintAutomata tds rec
+binder 13666:13670 <> theta:147
+R13690:13692 Coq.Lists.ListSet <> set def
+R13694:13696 CaMain ConstraintAutomata tds rec
+binder 13683:13688 <> theta2:148
+R13701:13703 Coq.Lists.ListSet <> set def
+R13710:13712 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R13706:13709 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R13713:13716 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+R13736:13741 CaMain <> theta2:148 var
+R13757:13758 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R13768:13787 CaMain ConstraintAutomata timeStampEqThetaTime def
+R13789:13793 CaMain <> theta:147 var
+R13903:13910 CaMain <> nextData:149 def
+R13912:13916 CaMain <> theta:147 var
+R13861:13864 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R13822:13823 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R13828:13832 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R13859:13860 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R13824:13825 CaMain ConstraintAutomata id proj
+R13833:13846 CaMain ConstraintAutomata dataAssignment proj
+R13850:13854 CaMain ConstraintAutomata index proj
+R13865:13872 CaMain <> nextData:149 def
+R13874:13878 CaMain <> theta:147 var
+R13928:13929 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R13936:13937 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+prf 13961:13973 ConstraintAutomata nextDataSound
+binder 13984:13988 <> theta:151
+binder 13998:14003 <> theta2:152
+R14033:14043 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R14104:14104 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R14027:14030 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R14006:14013 CaMain ConstraintAutomata nextData def
+R14021:14026 CaMain <> theta2:152 var
+R14015:14019 CaMain <> theta:151 var
+R14031:14032 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R14044:14050 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R14052:14053 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 14051:14051 <> a:153
+R14065:14068 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R14054:14055 Coq.Lists.List <> In def
+R14059:14064 CaMain <> theta2:152 var
+R14057:14057 CaMain <> a:153 var
+R14097:14099 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14069:14088 CaMain ConstraintAutomata timeStampEqThetaTime def
+R14096:14096 CaMain <> a:153 var
+R14090:14094 CaMain <> theta:151 var
+R14100:14103 Coq.Init.Datatypes <> true constr
+R14220:14239 CaMain ConstraintAutomata timeStampEqThetaTime def
+R14220:14239 CaMain ConstraintAutomata timeStampEqThetaTime def
+R14536:14555 CaMain ConstraintAutomata timeStampEqThetaTime def
+R14536:14555 CaMain ConstraintAutomata timeStampEqThetaTime def
+def 14805:14814 ConstraintAutomata derivative
+R14820:14822 CaMain ConstraintAutomata tds rec
+binder 14817:14817 <> p:154
+R14828:14832 CaMain ConstraintAutomata mktds constr
+R14895:14895 Coq.Init.Datatypes <> S constr
+R14898:14902 CaMain ConstraintAutomata index proj
+R14904:14904 CaMain <> p:154 var
+R14883:14889 CaMain ConstraintAutomata tdsCond proj
+R14891:14891 CaMain <> p:154 var
+R14861:14869 CaMain ConstraintAutomata timeStamp proj
+R14871:14871 CaMain <> p:154 var
+R14842:14855 CaMain ConstraintAutomata dataAssignment proj
+R14857:14857 CaMain <> p:154 var
+R14835:14836 CaMain ConstraintAutomata id proj
+R14838:14838 CaMain <> p:154 var
+prf 14920:14935 ConstraintAutomata derivative_sound
+binder 14946:14946 <> p:155
+R14961:14963 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R14949:14958 CaMain ConstraintAutomata derivative def
+R14960:14960 CaMain <> p:155 var
+R14964:14968 CaMain ConstraintAutomata mktds constr
+R15032:15032 Coq.Init.Datatypes <> S constr
+R15034:15038 CaMain ConstraintAutomata index proj
+R15040:15040 CaMain <> p:155 var
+R15019:15025 CaMain ConstraintAutomata tdsCond proj
+R15027:15027 CaMain <> p:155 var
+R14997:15005 CaMain ConstraintAutomata timeStamp proj
+R15007:15007 CaMain <> p:155 var
+R14978:14991 CaMain ConstraintAutomata dataAssignment proj
+R14993:14993 CaMain <> p:155 var
+R14971:14972 CaMain ConstraintAutomata id proj
+R14974:14974 CaMain <> p:155 var
+def 15100:15121 ConstraintAutomata derivativePortInvolved
+R15126:15128 Coq.Lists.ListSet <> set def
+R15130:15133 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 15124:15124 <> s:156
+R15140:15142 CaMain ConstraintAutomata tds rec
+binder 15137:15137 <> a:157
+R15161:15161 CaMain <> s:156 var
+R15176:15177 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R15182:15182 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R15184:15184 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R15183:15183 CaMain <> a:157 var
+R15196:15197 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R15207:15210 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R15211:15212 CaMain ConstraintAutomata id proj
+R15214:15214 CaMain <> a:157 var
+R15258:15279 CaMain <> derivativePortInvolved:158 def
+R15283:15283 CaMain <> a:157 var
+R15221:15221 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R15235:15235 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R15222:15231 CaMain ConstraintAutomata derivative def
+R15233:15233 CaMain <> a:157 var
+def 15312:15342 ConstraintAutomata allDerivativesFromPortsInvolved
+R15352:15354 Coq.Lists.ListSet <> set def
+R15356:15359 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 15345:15349 <> names:160
+R15369:15371 Coq.Lists.ListSet <> set def
+R15373:15375 CaMain ConstraintAutomata tds rec
+binder 15363:15367 <> theta:161
+R15380:15382 Coq.Lists.ListSet <> set def
+R15384:15386 CaMain ConstraintAutomata tds rec
+R15397:15404 Coq.Lists.List <> flat_map def
+R15437:15441 CaMain <> theta:161 var
+R15407:15428 CaMain ConstraintAutomata derivativePortInvolved def
+R15430:15434 CaMain <> names:160 var
+def 15460:15474 ConstraintAutomata portsDerivative
+R15484:15486 Coq.Lists.ListSet <> set def
+R15488:15491 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 15477:15481 <> names:162
+R15502:15504 Coq.Lists.ListSet <> set def
+R15506:15508 CaMain ConstraintAutomata tds rec
+binder 15495:15499 <> theta:163
+R15521:15551 CaMain ConstraintAutomata allDerivativesFromPortsInvolved def
+R15559:15563 CaMain <> theta:163 var
+R15553:15557 CaMain <> names:162 var
+def 15581:15602 ConstraintAutomata portsOutsideTransition
+R15608:15610 CaMain ConstraintAutomata tds rec
+binder 15605:15605 <> p:164
+R15626:15628 Coq.Lists.ListSet <> set def
+R15630:15633 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 15614:15622 <> portNames:165
+R15651:15659 CaMain <> portNames:165 var
+R15675:15676 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R15681:15684 Coq.Init.Datatypes <> true constr
+R15696:15697 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R15711:15714 Coq.Classes.EquivDec <> ::equiv_scope:x_'<>'_x not
+R15707:15708 CaMain ConstraintAutomata id proj
+R15710:15710 CaMain <> p:164 var
+R15755:15759 Coq.Init.Datatypes <> false constr
+R15723:15744 CaMain <> portsOutsideTransition:166 def
+R15746:15746 CaMain <> p:164 var
+prf 15783:15809 ConstraintAutomata portsOutsideTransitionSound
+binder 15820:15820 <> p:168
+binder 15830:15838 <> portNames:169
+R15883:15894 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R15933:15933 Coq.Init.Logic <> ::type_scope:x_'<->'_x not
+R15875:15877 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R15841:15862 CaMain ConstraintAutomata portsOutsideTransition def
+R15866:15874 CaMain <> portNames:169 var
+R15864:15864 CaMain <> p:168 var
+R15878:15882 Coq.Init.Datatypes <> false constr
+R15895:15901 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R15903:15904 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 15902:15902 <> b:170
+R15919:15923 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R15932:15932 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R15905:15906 Coq.Lists.List <> In def
+R15910:15918 CaMain <> portNames:169 var
+R15908:15908 CaMain <> b:170 var
+R15928:15930 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R15924:15925 CaMain ConstraintAutomata id proj
+R15927:15927 CaMain <> p:168 var
+R15931:15931 CaMain <> b:170 var
+R16054:16063 Coq.Classes.EquivDec <> nequiv_dec def
+R16327:16336 Coq.Classes.EquivDec <> nequiv_dec def
+ind 16904:16910 ConstraintAutomata SCTypes
+constr 16921:16923 ConstraintAutomata tSc
+constr 16931:16934 ConstraintAutomata eqSc
+def 16953:16958 ConstraintAutomata evalSC
+R16970:16972 Coq.Init.Datatypes <> nat ind
+binder 16961:16967 <> condVal:173
+R16981:16983 Coq.Init.Datatypes <> nat ind
+binder 16976:16978 <> val:174
+R16987:16990 Coq.Init.Datatypes <> bool ind
+R17007:17013 CaMain <> condVal:173 var
+R17050:17053 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R17043:17049 CaMain <> condVal:173 var
+R17054:17056 CaMain <> val:174 var
+R17074:17078 Coq.Init.Datatypes <> false constr
+R17064:17067 Coq.Init.Datatypes <> true constr
+constr 17125:17126 ConstraintAutomata DS
+rec 17101:17113 ConstraintAutomata DynamicSystem
+proj 17136:17136 ConstraintAutomata I
+proj 17151:17154 ConstraintAutomata FUNC
+proj 17176:17187 ConstraintAutomata CurrentValue
+R17140:17142 Coq.Init.Datatypes <> nat ind
+R17161:17164 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R17158:17160 Coq.Init.Datatypes <> nat ind
+R17165:17167 Coq.Init.Datatypes <> nat ind
+R17191:17193 Coq.Init.Datatypes <> nat ind
+def 17284:17296 ConstraintAutomata defaultDSFUNC
+R17302:17304 Coq.Init.Datatypes <> nat ind
+binder 17299:17299 <> n:180
+R17309:17311 Coq.Init.Datatypes <> nat ind
+def 17335:17343 ConstraintAutomata defaultDS
+R17348:17348 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17350:17351 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17365:17366 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17368:17368 Coq.Init.Datatypes <> ::core_scope:'('_x_','_x_','_'..'_','_x_')' not
+R17352:17364 CaMain ConstraintAutomata defaultDSFUNC def
+def 17841:17847 ConstraintAutomata DSBind'
+R17853:17857 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+binder 17850:17850 <> s:181
+R17873:17876 Coq.Init.Datatypes <> list ind
+R17878:17882 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+binder 17861:17870 <> statesList:182
+R17903:17906 Coq.Init.Datatypes <> list ind
+R17908:17912 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+binder 17886:17900 <> staticStateList:183
+R17924:17927 Coq.Init.Datatypes <> list ind
+R17948:17950 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R17933:17936 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R17947:17947 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R17930:17932 Coq.Init.Datatypes <> nat ind
+R17940:17943 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R17937:17939 Coq.Init.Datatypes <> nat ind
+R17944:17946 Coq.Init.Datatypes <> nat ind
+R17951:17953 Coq.Init.Datatypes <> nat ind
+binder 17916:17921 <> DSList:184
+R17965:17967 Coq.Init.Datatypes <> nat ind
+binder 17958:17962 <> count:185
+R17972:17975 Coq.Init.Datatypes <> list ind
+R17996:17998 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R17981:17984 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R17995:17995 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R17978:17980 Coq.Init.Datatypes <> nat ind
+R17988:17991 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R17985:17987 Coq.Init.Datatypes <> nat ind
+R17992:17994 Coq.Init.Datatypes <> nat ind
+R17999:18001 Coq.Init.Datatypes <> nat ind
+R18019:18028 CaMain <> statesList:182 var
+R18043:18044 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R18049:18050 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R18061:18062 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R18072:18075 Coq.Classes.EquivDec <> ::equiv_scope:x_'=='_x not
+R18076:18076 CaMain <> s:181 var
+R18120:18126 CaMain <> DSBind':186 def
+R18161:18163 Coq.Init.Peano <> ::nat_scope:x_'+'_x not
+R18156:18160 CaMain <> count:185 var
+R18148:18153 CaMain <> DSList:184 var
+R18132:18146 CaMain <> staticStateList:183 var
+R18128:18128 CaMain <> s:181 var
+R18083:18084 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R18111:18112 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R18085:18087 Coq.Lists.List <> nth def
+R18102:18110 CaMain ConstraintAutomata defaultDS def
+R18095:18100 CaMain <> DSList:184 var
+R18089:18093 CaMain <> count:185 var
+def 18195:18200 ConstraintAutomata DSBind
+R18206:18210 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+binder 18203:18203 <> s:188
+R18226:18229 Coq.Init.Datatypes <> list ind
+R18231:18235 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+binder 18214:18223 <> statesList:189
+R18247:18250 Coq.Init.Datatypes <> list ind
+R18271:18273 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R18256:18259 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R18270:18270 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R18253:18255 Coq.Init.Datatypes <> nat ind
+R18263:18266 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R18260:18262 Coq.Init.Datatypes <> nat ind
+R18267:18269 Coq.Init.Datatypes <> nat ind
+R18274:18276 Coq.Init.Datatypes <> nat ind
+binder 18239:18244 <> DSList:190
+R18301:18303 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R18286:18289 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R18300:18300 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R18283:18285 Coq.Init.Datatypes <> nat ind
+R18293:18296 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R18290:18292 Coq.Init.Datatypes <> nat ind
+R18297:18299 Coq.Init.Datatypes <> nat ind
+R18304:18306 Coq.Init.Datatypes <> nat ind
+R18318:18319 Coq.Lists.List <> hd def
+R18332:18338 CaMain ConstraintAutomata DSBind' def
+R18364:18369 CaMain <> DSList:190 var
+R18353:18362 CaMain <> statesList:189 var
+R18342:18351 CaMain <> statesList:189 var
+R18340:18340 CaMain <> s:188 var
+R18321:18329 CaMain ConstraintAutomata defaultDS def
+def 19038:19042 ConstraintAutomata step'
+R19053:19055 Coq.Lists.ListSet <> set def
+R19057:19059 CaMain ConstraintAutomata tds rec
+binder 19045:19049 <> theta:191
+R19074:19076 Coq.Lists.ListSet <> set def
+R19078:19081 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+binder 19063:19071 <> portNames:192
+R19102:19104 Coq.Lists.ListSet <> set def
+R19135:19137 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19129:19131 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19114:19116 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19106:19108 Coq.Lists.ListSet <> set def
+R19110:19113 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R19117:19118 CaMain ConstraintAutomata DC ind
+R19125:19128 CaMain <> ConstraintAutomata.ConstraintAutomata.data var
+R19120:19123 CaMain <> ConstraintAutomata.ConstraintAutomata.name var
+R19132:19134 Coq.Init.Datatypes <> nat ind
+R19138:19142 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+binder 19089:19099 <> transitions:193
+R19167:19170 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19162:19166 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R19171:19171 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19182:19186 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19172:19175 Coq.Init.Datatypes <> list ind
+R19177:19181 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R19187:19187 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19219:19224 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19249:19249 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19188:19191 Coq.Init.Datatypes <> list ind
+R19212:19214 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19197:19200 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19211:19211 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19194:19196 Coq.Init.Datatypes <> nat ind
+R19204:19207 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19201:19203 Coq.Init.Datatypes <> nat ind
+R19208:19210 Coq.Init.Datatypes <> nat ind
+R19215:19217 Coq.Init.Datatypes <> nat ind
+R19243:19245 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19228:19231 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19242:19242 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19225:19227 Coq.Init.Datatypes <> nat ind
+R19235:19238 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19232:19234 Coq.Init.Datatypes <> nat ind
+R19239:19241 Coq.Init.Datatypes <> nat ind
+R19246:19248 Coq.Init.Datatypes <> nat ind
+binder 19152:19157 <> DSBind:194
+R19271:19274 Coq.Init.Datatypes <> list ind
+R19276:19280 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+binder 19259:19268 <> statesList:195
+R19292:19295 Coq.Init.Datatypes <> list ind
+R19316:19318 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19301:19304 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19315:19315 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R19298:19300 Coq.Init.Datatypes <> nat ind
+R19308:19311 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19305:19307 Coq.Init.Datatypes <> nat ind
+R19312:19314 Coq.Init.Datatypes <> nat ind
+R19319:19321 Coq.Init.Datatypes <> nat ind
+binder 19284:19289 <> DSList:196
+R19326:19328 Coq.Lists.ListSet <> set def
+R19330:19334 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R19349:19359 CaMain <> transitions:193 var
+R19372:19373 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R19378:19379 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R19388:19389 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R19505:19528 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R19590:19590 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R19398:19398 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R19437:19461 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R19504:19504 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R19399:19404 CaMain <> set_eq def
+R19419:19421 Coq.Init.Datatypes <> fst def
+R19423:19425 Coq.Init.Datatypes <> fst def
+R19427:19429 Coq.Init.Datatypes <> fst def
+R19407:19415 CaMain <> portNames:192 var
+R19462:19476 CaMain ConstraintAutomata evalCompositeDc def
+R19487:19489 Coq.Init.Datatypes <> snd def
+R19491:19493 Coq.Init.Datatypes <> fst def
+R19495:19497 Coq.Init.Datatypes <> fst def
+R19479:19483 CaMain <> theta:191 var
+R19529:19534 CaMain ConstraintAutomata evalSC def
+R19551:19553 Coq.Init.Datatypes <> snd def
+R19555:19560 CaMain <> DSBind:194 var
+R19582:19587 CaMain <> DSList:196 var
+R19571:19580 CaMain <> statesList:195 var
+R19563:19565 Coq.Init.Datatypes <> snd def
+R19537:19539 Coq.Init.Datatypes <> snd def
+R19541:19543 Coq.Init.Datatypes <> fst def
+R19696:19700 CaMain <> step':197 def
+R19738:19743 CaMain <> DSList:196 var
+R19727:19736 CaMain <> statesList:195 var
+R19720:19725 CaMain <> DSBind:194 var
+R19708:19716 CaMain <> portNames:192 var
+R19702:19706 CaMain <> theta:191 var
+R19622:19623 Coq.Init.Datatypes <> ::list_scope:x_'::'_x not
+R19616:19618 Coq.Init.Datatypes <> snd def
+R19624:19628 CaMain <> step':197 def
+R19666:19671 CaMain <> DSList:196 var
+R19655:19664 CaMain <> statesList:195 var
+R19648:19653 CaMain <> DSBind:194 var
+R19636:19644 CaMain <> portNames:192 var
+R19630:19634 CaMain <> theta:191 var
+prf 19765:19775 ConstraintAutomata step'_sound
+binder 19786:19790 <> theta:199
+binder 19800:19808 <> portNames:200
+binder 19818:19828 <> transitions:201
+R19870:19873 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R19864:19867 Coq.Init.Logic <> ::type_scope:x_'<>'_x not
+R19831:19835 CaMain ConstraintAutomata step' def
+R19853:19863 CaMain <> transitions:201 var
+R19843:19851 CaMain <> portNames:200 var
+R19837:19841 CaMain <> theta:199 var
+R19868:19869 Coq.Lists.List ListNotations ::list_scope:'['_']' not
+R19874:19880 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+R19882:19887 Coq.Init.Logic <> ::type_scope:'exists'_x_'..'_x_','_x not
+binder 19881:19881 <> a:202
+R19904:19907 Coq.Init.Logic <> ::type_scope:x_'/\'_x not
+R19888:19889 Coq.Lists.List <> In def
+R19893:19903 CaMain <> transitions:201 var
+R19891:19891 CaMain <> a:202 var
+R20005:20007 Coq.Init.Logic <> ::type_scope:x_'='_x not
+R19908:19908 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R19942:19966 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R20004:20004 Coq.Init.Datatypes <> ::bool_scope:x_'&&'_x not
+R19909:19914 CaMain <> set_eq def
+R19929:19931 Coq.Init.Datatypes <> fst def
+R19933:19935 Coq.Init.Datatypes <> fst def
+R19937:19937 CaMain <> a:202 var
+R19917:19925 CaMain <> portNames:200 var
+R19967:19981 CaMain ConstraintAutomata evalCompositeDc def
+R19992:19994 Coq.Init.Datatypes <> snd def
+R19996:19998 Coq.Init.Datatypes <> fst def
+R20000:20000 CaMain <> a:202 var
+R19984:19988 CaMain <> theta:199 var
+R20008:20011 Coq.Init.Datatypes <> true constr
