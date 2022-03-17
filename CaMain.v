@@ -462,6 +462,17 @@ Module ConstraintAutomata.
 
     Definition DSBind (s: state) (statesList: list state) (DSList: list (nat * (nat -> nat) * nat)) : (nat * (nat -> nat) * nat) :=
       hd defaultDS (DSBind' s statesList statesList DSList 0).
+
+    
+    (*Simplismente aplicar função de fluxo na varíavel de valor atual de um SD*)
+    Definition updateDS (DS: (nat * (nat -> nat) * nat)) : (nat * (nat -> nat) * nat) :=
+      (fst(fst(DS)), snd(fst(DS)), (snd(fst(DS)) (snd(DS)))).
+    
+    (*Resetar valor do SD para valor Inicial*)
+    Definition resetDS (DS: (nat * (nat -> nat) * nat)) : (nat * (nat -> nat) * nat) :=
+      (fst(fst(DS)), snd(fst(DS)), fst(fst(DS))).
+    
+    (*Criar uma função para atualizar lista de sistemas dinâmico*)
     
 
     (* Step' modificada*)
