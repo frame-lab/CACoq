@@ -472,7 +472,12 @@ Module ConstraintAutomata.
     Definition resetDS (DS: (nat * (nat -> nat) * nat)) : (nat * (nat -> nat) * nat) :=
       (fst(fst(DS)), snd(fst(DS)), fst(fst(DS))).
     
-    (*Criar uma função para atualizar lista de sistemas dinâmico*)
+    (*Atualizar lista de sistemas dinâmicos*)
+    Fixpoint updateDSList (DSList: list (nat * (nat -> nat) * nat)) : list (nat * (nat -> nat) * nat) :=
+      match DSList with
+      | [] => []
+      | h::t => (updateDS h) :: updateDSList t
+      end.
     
 
     (* Step' modificada*)
