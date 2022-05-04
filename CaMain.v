@@ -569,14 +569,15 @@ Module ConstraintAutomata.
 
     
     (* run modificada *)
+    (* Chamar run com lista de estados atualizada*)
     Definition run' (ca:constraintAutomata)  : 
-    set tds -> nat -> set state -> set (set state) -> set (set state) :=
-    fix rec theta k initialStates trace := 
+    set tds -> nat -> set state -> list (nat * (nat -> nat) * nat * nat) -> set (set state) -> set (set state) :=
+    fix rec theta k initialStates DSList trace := 
       match k with 
         | 0 => trace
-        | S m => trace ++ [snd (step ca initialStates theta)]
+        | S m => trace ++ [snd(step ca initialStates theta DSList)]
                   |> rec
-                    (flat_map(derivativePortInvolved(fst((step ca initialStates theta)))) theta) m (snd (step ca initialStates theta))
+                    (flat_map(derivativePortInvolved(snd(fst(step ca initialStates theta DSList ))) theta) m (snd(step ca initialStates theta DSList)) (fst(fst(step ca initialStates theta DSList))))
       end.
 
     Definition run (ca:constraintAutomata) (theta: set tds) (k : nat) :=

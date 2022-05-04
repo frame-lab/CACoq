@@ -1,4 +1,4 @@
-DIGEST 58e1b714faa0ac7fcbf2c6d2c5ba15da
+DIGEST 2b4745cfea4263f567e0a100754726a1
 FCaMain
 R15:21 Coq.Lists.ListSet <> <> lib
 R39:42 Coq.Lists.List <> <> lib
@@ -1648,52 +1648,76 @@ R22947:22951 CaMain <> theta:217 var
 R22933:22937 CaMain <> theta:217 var
 R22931:22931 CaMain <> s:216 var
 R22928:22929 CaMain <> ca:215 var
-def 23594:23597 ConstraintAutomata run'
-R23603:23620 CaMain ConstraintAutomata constraintAutomata rec
-binder 23600:23601 <> ca:220
-R23638:23641 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R23631:23633 Coq.Lists.ListSet <> set def
-R23635:23637 CaMain ConstraintAutomata tds rec
-R23645:23648 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R23642:23644 Coq.Init.Datatypes <> nat ind
-R23658:23661 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R23649:23651 Coq.Lists.ListSet <> set def
-R23653:23657 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
-R23677:23680 Coq.Init.Logic <> ::type_scope:x_'->'_x not
-R23662:23664 Coq.Lists.ListSet <> set def
-R23667:23669 Coq.Lists.ListSet <> set def
-R23671:23675 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
-R23681:23683 Coq.Lists.ListSet <> set def
-R23686:23688 Coq.Lists.ListSet <> set def
-R23690:23694 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
-binder 23712:23716 <> theta:221
-binder 23718:23718 <> k:222
-binder 23720:23732 <> initialStates:223
-binder 23734:23738 <> trace:224
-R23756:23756 CaMain <> k:222 var
-R23779:23783 CaMain <> trace:224 var
-R23795:23795 Coq.Init.Datatypes <> S constr
-R23846:23867 CaMain ConstraintAutomata.ConstraintAutomata :::x_'|>'_x not
-R23807:23810 Coq.Init.Datatypes <> ::list_scope:x_'++'_x not
-R23802:23806 CaMain <> trace:224 var
-R23811:23811 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
-R23845:23845 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
-R23812:23814 Coq.Init.Datatypes <> snd def
-R23817:23820 CaMain ConstraintAutomata step def
-R23839:23843 CaMain <> theta:221 var
-R23825:23837 CaMain <> initialStates:223 var
-R23822:23823 CaMain <> ca:220 var
-R23868:23870 CaMain <> rec:225 var
-R23972:23974 Coq.Init.Datatypes <> snd def
-R23977:23980 CaMain ConstraintAutomata step def
-R23999:24003 CaMain <> theta:221 var
-R23985:23997 CaMain <> initialStates:223 var
-R23982:23983 CaMain <> ca:220 var
-R23893:23900 Coq.Lists.List <> flat_map def
-R23962:23966 CaMain <> theta:221 var
-R23902:23923 CaMain ConstraintAutomata derivativePortInvolved def
-R23925:23927 Coq.Init.Datatypes <> fst def
-R23930:23933 CaMain ConstraintAutomata step def
-R23952:23956 CaMain <> theta:221 var
-R23938:23950 CaMain <> initialStates:223 var
-R23935:23936 CaMain <> ca:220 var
+def 23646:23649 ConstraintAutomata run'
+R23655:23672 CaMain ConstraintAutomata constraintAutomata rec
+binder 23652:23653 <> ca:220
+R23690:23693 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R23683:23685 Coq.Lists.ListSet <> set def
+R23687:23689 CaMain ConstraintAutomata tds rec
+R23697:23700 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R23694:23696 Coq.Init.Datatypes <> nat ind
+R23710:23713 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R23701:23703 Coq.Lists.ListSet <> set def
+R23705:23709 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R23751:23754 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R23714:23717 Coq.Init.Datatypes <> list ind
+R23744:23746 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R23738:23740 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R23723:23726 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R23737:23737 Coq.Init.Datatypes <> ::type_scope:x_'*'_x not
+R23720:23722 Coq.Init.Datatypes <> nat ind
+R23730:23733 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R23727:23729 Coq.Init.Datatypes <> nat ind
+R23734:23736 Coq.Init.Datatypes <> nat ind
+R23741:23743 Coq.Init.Datatypes <> nat ind
+R23747:23749 Coq.Init.Datatypes <> nat ind
+R23770:23773 Coq.Init.Logic <> ::type_scope:x_'->'_x not
+R23755:23757 Coq.Lists.ListSet <> set def
+R23760:23762 Coq.Lists.ListSet <> set def
+R23764:23768 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+R23774:23776 Coq.Lists.ListSet <> set def
+R23779:23781 Coq.Lists.ListSet <> set def
+R23783:23787 CaMain <> ConstraintAutomata.ConstraintAutomata.state var
+binder 23805:23809 <> theta:221
+binder 23811:23811 <> k:222
+binder 23813:23825 <> initialStates:223
+binder 23827:23832 <> DSList:224
+binder 23834:23838 <> trace:225
+R23856:23856 CaMain <> k:222 var
+R23879:23883 CaMain <> trace:225 var
+R23895:23895 Coq.Init.Datatypes <> S constr
+R23952:23973 CaMain ConstraintAutomata.ConstraintAutomata :::x_'|>'_x not
+R23907:23910 Coq.Init.Datatypes <> ::list_scope:x_'++'_x not
+R23902:23906 CaMain <> trace:225 var
+R23911:23911 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23951:23951 Coq.Lists.List ListNotations ::list_scope:'['_x_']' not
+R23912:23914 Coq.Init.Datatypes <> snd def
+R23916:23919 CaMain ConstraintAutomata step def
+R23944:23949 CaMain <> DSList:224 var
+R23938:23942 CaMain <> theta:221 var
+R23924:23936 CaMain <> initialStates:223 var
+R23921:23922 CaMain <> ca:220 var
+R23974:23976 CaMain <> rec:226 var
+R23999:24006 Coq.Lists.List <> flat_map def
+R24088:24090 Coq.Init.Datatypes <> snd def
+R24092:24095 CaMain ConstraintAutomata step def
+R24120:24125 CaMain <> DSList:224 var
+R24114:24118 CaMain <> theta:221 var
+R24100:24112 CaMain <> initialStates:223 var
+R24097:24098 CaMain <> ca:220 var
+R24130:24132 Coq.Init.Datatypes <> fst def
+R24134:24136 Coq.Init.Datatypes <> fst def
+R24138:24141 CaMain ConstraintAutomata step def
+R24166:24171 CaMain <> DSList:224 var
+R24160:24164 CaMain <> theta:221 var
+R24146:24158 CaMain <> initialStates:223 var
+R24143:24144 CaMain <> ca:220 var
+R24008:24029 CaMain ConstraintAutomata derivativePortInvolved def
+R24078:24082 CaMain <> theta:221 var
+R24031:24033 Coq.Init.Datatypes <> snd def
+R24035:24037 Coq.Init.Datatypes <> fst def
+R24039:24042 CaMain ConstraintAutomata step def
+R24067:24072 CaMain <> DSList:224 var
+R24061:24065 CaMain <> theta:221 var
+R24047:24059 CaMain <> initialStates:223 var
+R24044:24045 CaMain <> ca:220 var
