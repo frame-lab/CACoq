@@ -571,17 +571,21 @@ Module ConstraintAutomata.
     (* run modificada *)
     (* Chamar run com lista de estados atualizada*)
     Definition run' (ca:constraintAutomata)  : 
-    set tds -> nat -> set state -> list (nat * (nat -> nat) * nat * nat) -> set (set state) -> set (set state) :=
-    fix rec theta k initialStates DSList trace := 
+    set tds -> nat -> set state -> list state -> list (nat * (nat -> nat) * nat * nat) -> set (set state) -> set (set state) :=
+    fix rec theta k initialStates statesList DSList trace := 
       match k with 
         | 0 => trace
-        | S m => trace ++ [snd(step ca initialStates theta DSList)]
+        | S m => trace ++ [snd(step ca initialStates theta statesList DSList)]
                   |> rec
-                    (flat_map(derivativePortInvolved(snd(fst(step ca initialStates theta DSList ))) theta) m (snd(step ca initialStates theta DSList)) (fst(fst(step ca initialStates theta DSList))))
+                    (flat_map(derivativePortInvolved(snd(fst(step ca initialStates theta statesList DSList)))) theta) m (snd(step ca initialStates theta statesList DSList)) statesList (fst(fst(step ca initialStates theta statesList DSList)))
       end.
+    
+    (* Criar Função para tornar transparente questão dos sistemas dinâmicos para a run *)
+    (* Definition run'' (ca:constraintAutomata) (statesList: list state) (DSList: list (nat * (nat -> nat) * nat * nat)) (theta: set tds) (k : nat) := *) 
 
-    Definition run (ca:constraintAutomata) (theta: set tds) (k : nat) :=
-      run' ca theta k (Q0 ca) [Q0 ca].
+
+    Definition run (ca:constraintAutomata) (theta: set tds) (k : nat) (statesList: list state) (DSList: list (nat * (nat -> nat) * nat * nat)) :=
+      run' ca theta k (Q0 ca) statesList DSList [Q0 ca].
 
   (* We define a function that returns the input theta post processed by the automaton. Intuitively, *)
   (* it is similar to run but instead of accumulating states, it returns theta's k-th derivative     *)
