@@ -406,15 +406,6 @@ Module ConstraintAutomata.
     + simpl. destruct nequiv_dec. apply IHportNames. repeat destruct H2. congruence. exists x. split; assumption.
       reflexivity. 
     Defined.
-  
-    (* Fixpoint step' (theta : set tds) (portNames: set name)
-     (transitions: set(set name * DC name data * state)) : set state :=
-     match transitions with
-     | [] => []
-     | a::t => if (set_eq (portNames)((fst(fst(a))))) 
-                   && (evalCompositeDc (theta) (snd(fst(a)))) then snd(a)::step' theta portNames t
-                   else step' theta portNames t
-     end. *)
      
     (* Tentativa de mudança HCA *)
     Inductive SCTypes :=
@@ -426,31 +417,18 @@ Module ConstraintAutomata.
       | condVal => if (condVal == val) then true else false
     end.
 
-    Record DynamicSystem : Type := DS {
-      I : nat;
-      FUNC : nat -> nat;
-      CurrentValue : nat;
-    }.
-
     (*Valores default para funções de manipulação de lista*)
     Definition defaultDSFUNC (n: nat) : nat := 0.
 
     Definition defaultDS := (0, defaultDSFUNC, 0, 1).
 
-    (* Definition d0DS := {|
-        I := 0;
-        FUNC := d0Function;
-        CurrentValue := 0;
-    |}.
-
-    Definition d1DS := {|
-        I := 5;
-        FUNC := d1Function;
-        CurrentValue := 5;
-    |}. *)
 
     (* DS functions *)
+
     (*
+      Record de sistemas dinâmicos foi substituido por uma tupla (nat * (nat -> nat) * nat * nat) "(ValorInicial * Função de Fluxo * ValorAtual * ValorConstraint)"
+      para facilitar manipulação
+
       Função para associar estados ao seus sistemas dinâmicos
       É necessário uma lista de estados e uma de sistemas dinâmicos com tamanhos iguais,
       assim um estado é associado a um SD com mesma posição que a sua
@@ -463,16 +441,19 @@ Module ConstraintAutomata.
 
     Definition DSBind (s: state) (statesList: list state) (DSList: list (nat * (nat -> nat) * nat * nat)) : (nat * (nat -> nat) * nat * nat) :=
       hd defaultDS (DSBind' s statesList statesList DSList 0).
-    
-    (*Simplismente aplicar função de fluxo na varíavel de valor atual de um SD*)
-    Definition updateDS (DS: (nat * (nat -> nat) * nat * nat)) : (nat * (nat -> nat) * nat * nat) :=
-      (fst(fst(fst(DS))), snd(fst(fst(DS))), (snd(fst(fst(DS))) (snd(fst(DS)))), snd(DS)).
 
-    (* Criar uma função para resetar o DS quando condição for atingida *)
+    
+    (*Função para resetar o DS quando condição for atingida*)
     
     (*Resetar valor do SD para valor Inicial*)
     Definition resetDS (DS: (nat * (nat -> nat) * nat * nat)) : (nat * (nat -> nat) * nat * nat) :=
       (fst(fst(fst(DS))), snd(fst(fst(DS))), fst(fst(fst(DS))), snd(DS)).
+    
+
+    (*Se valor atual da variavel não chegou a space constraint, simplismente aplicar função de fluxo na varíavel de valor atual de um SD*)
+    (*Se chegou, resetar sistema dinâmico*)
+    Definition updateDS (DS: (nat * (nat -> nat) * nat * nat)) : (nat * (nat -> nat) * nat * nat) :=
+      if snd(fst(DS)) == snd(DS) then ((fst(fst(fst(DS))), snd(fst(fst(DS))), (snd(fst(fst(DS))) (snd(fst(DS)))), snd(DS))) else resetDS DS.
     
     (*Atualizar lista de sistemas dinâmicos*)
     Fixpoint updateDSList (DSList: list (nat * (nat -> nat) * nat * nat)) : list (nat * (nat -> nat) * nat * nat) :=
@@ -480,6 +461,16 @@ Module ConstraintAutomata.
       | [] => []
       | h::t => (updateDS h) :: updateDSList t
       end.
+
+
+    (* Fixpoint step' (theta : set tds) (portNames: set name)
+     (transitions: set(set name * DC name data * state)) : set state :=
+     match transitions with
+     | [] => []
+     | a::t => if (set_eq (portNames)((fst(fst(a))))) 
+                   && (evalCompositeDc (theta) (snd(fst(a)))) then snd(a)::step' theta portNames t
+                   else step' theta portNames t
+     end. *)
     
     (* 
       Step' modificada,
@@ -490,11 +481,6 @@ Module ConstraintAutomata.
       para as próximas chamadas da função
 
       -A função DSBind que utilizará a lista de estados e a lista de sistemas dinâmicos para associa-los
-    *)
-
-    (*
-      Record de sistemas dinâmicos foi substituido por uma tupla (nat * (nat -> nat) * nat * nat) (ValorInicial * Função de Fluxo * ValorAtual * ValorConstraint)
-      para facilitar manipulação
     *)
 
     Fixpoint step' (theta : set tds) (portNames: set name)
@@ -541,6 +527,7 @@ Module ConstraintAutomata.
     
     (* stepa modficado *)
     (*Aqui será aplicada a função de update dos sistemas dinâmicos*)
+    (* Agora funções de step retornam nova lista de sistema dinâmico para ser utilizado na próxima chamada *)
     Definition stepa (ca:constraintAutomata) (s: set state) (theta:set tds) (portNames: set name)
     (statesList: list state) (DSList: list (nat * (nat -> nat) * nat * nat)) 
     : list (nat * (nat -> nat) * nat * nat) * set name * set state:=
@@ -590,17 +577,25 @@ Module ConstraintAutomata.
   (* We define a function that returns the input theta post processed by the automaton. Intuitively, *)
   (* it is similar to run but instead of accumulating states, it returns theta's k-th derivative     *)
 
-    Definition tdsDerivate (ca:constraintAutomata)  : 
+    (* Definition tdsDerivate (ca:constraintAutomata)  : 
       set tds -> nat -> set state -> set tds :=
       fix rec theta k initialStates := 
         match k with 
           | 0 => theta
           | S m => rec (flat_map (derivativePortInvolved(fst((step ca initialStates theta)))) theta) m (snd(step ca initialStates theta)) 
-        end.
+        end. *)
+
+    Definition tdsDerivate (ca:constraintAutomata)  : 
+    set tds -> nat -> set state -> list state -> list (nat * (nat -> nat) * nat * nat) -> set tds :=
+    fix rec theta k initialStates statesList DSList := 
+      match k with 
+        | 0 => theta
+        | S m => rec (flat_map(derivativePortInvolved(snd(fst(step ca initialStates theta statesList DSList)))) theta) m (snd(step ca initialStates theta statesList DSList)) statesList (fst(fst(step ca initialStates theta statesList DSList)))
+      end.
 
   (* And a version of a run which returns only the last state reached *)
-    Definition lastReachedStates (ca:constraintAutomata) (theta: set tds) (k : nat) : set state :=
-      last (run ca theta k) (ConstraintAutomata.Q0 ca).
+    Definition lastReachedStates (ca:constraintAutomata) (theta: set tds) (k : nat) (statesList: list state) (DSList: list (nat * (nat -> nat) * nat * nat)) : set state :=
+      last (run ca theta k statesList DSList) (ConstraintAutomata.Q0 ca).
 
   (* We define some functions to retrieve data from transitions, in order to prove *)
   (* properties about behavior of automata                                         *)
@@ -616,14 +611,14 @@ Module ConstraintAutomata.
 
   (* We define acceptance for infinite runs as Baier et al. propose *)
 
-  Definition rejecting (ca: constraintAutomata) (theta: set tds) : Prop :=
-    exists k, (lastReachedStates ca theta k) = [].
+  Definition rejecting (ca: constraintAutomata) (theta: set tds) (statesList: list state) (DSList: list (nat * (nat -> nat) * nat * nat)) : Prop :=
+    exists k, (lastReachedStates ca theta k statesList DSList) = [].
 
   Definition calcIndex (k: nat) (p : tds) := mktds (id p) (dataAssignment p) (timeStamp p)
         (tdsCond p) (k).
 
-  Definition accepting' (ca: constraintAutomata) (theta: set tds) :=
-    forall q,forall k, stepAux ca (map(calcIndex k) (theta)) (thetaN (map(calcIndex k) (theta))) q <> [].
+  Definition accepting' (ca: constraintAutomata) (theta: set tds) (statesList: list state) (DSList: list (nat * (nat -> nat) * nat * nat)):=
+    forall q,forall k, stepAux ca (map(calcIndex k) (theta)) (thetaN (map(calcIndex k) (theta))) statesList DSList q <> [] .
 
   (* Bisimulation as boolean verification *)
 

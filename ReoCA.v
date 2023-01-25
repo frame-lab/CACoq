@@ -105,7 +105,7 @@ End ReoCa.
 
   Definition paramSync := ReoCa.ReoCABinaryChannel E F [q0s] [q0s] syncCaBehavior.
 
-  Eval compute in ConstraintAutomata.run syncCA [portE;portF] 200.
+  (* Eval compute in ConstraintAutomata.run syncCA [portE;portF] 200. *)
 
   (* LossySync CA *)
   Inductive lossySyncStates := q0.
@@ -186,7 +186,7 @@ End ReoCa.
         ConstraintAutomata.tdsCond := timeStampTestHoldsLossyB;
         ConstraintAutomata.index := 0 |}.
 
-  Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10. (*does not accept the TDS composed by portA and portB because
+  (* Eval compute in ConstraintAutomata.run lossySyncCA [portA;portB] 10. (*does not accept the TDS composed by portA and portB because *)
                                                                          only B has data in theta.time(2), which is not comprised by the automaton's transitions *)
   Definition paramLossySync := ReoCa.ReoCABinaryChannel A B [q0] [q0] lossySyncCaBehavior.
   (* FIFO CA *)
@@ -304,7 +304,7 @@ End ReoCa.
   - intros. rewrite H. simpl. left. reflexivity.
   Defined.
 
-  Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 8.
+  (* Eval compute in ConstraintAutomata.run oneBoundedFIFOCA realports 8. *)
 
   (* SyncDrain CA *)
 
@@ -372,7 +372,7 @@ End ReoCa.
     ConstraintAutomata.Q0 := [q1D]
   |}.
 
-  Eval compute in ConstraintAutomata.run SyncDrainCA [portAD;portBD] 15.
+  (* Eval compute in ConstraintAutomata.run SyncDrainCA [portAD;portBD] 15. *)
 
   Definition paramSyncDrain := ReoCa.ReoCABinaryChannel AD BD [q1D] [q1D] syncDrainCaBehavior.
 
@@ -460,7 +460,7 @@ End ReoCa.
     ConstraintAutomata.Q0 := [q1A]
   |}.
 
-  Eval compute in ConstraintAutomata.run aSyncDrainCA  [portAA;portBA] 10.
+  (* Eval compute in ConstraintAutomata.run aSyncDrainCA  [portAA;portBA] 10. *)
 
   Definition paramAsyncDrain := ReoCa.ReoCABinaryChannel AA BA [q1A] [q1A] aSyncDrainCaBehavior.
 
@@ -546,7 +546,7 @@ End ReoCa.
     ConstraintAutomata.Q0 := [q1F]
   |}.
 
-  Eval compute in ConstraintAutomata.run filterCA [portC;portD] 3.
+  (* Eval compute in ConstraintAutomata.run filterCA [portC;portD] 3. *)
 
   Definition paramFilter := ReoCa.ReoCABinaryChannel C D [q1F] [q1F] filterCaBehavior.
 
@@ -645,7 +645,7 @@ End ReoCa.
     ConstraintAutomata.Q0 := [q1T]
   |}.
 
-  Eval compute in ConstraintAutomata.run transformCA [portAT;portBT] 10.
+  (* Eval compute in ConstraintAutomata.run transformCA [portAT;portBT] 10. *)
 
  Definition paramTransform := ReoCa.ReoCABinaryChannel AT BT [q1T] [q1T] transformCaBehavior.
 
@@ -753,7 +753,7 @@ End ReoCa.
     ConstraintAutomata.Q0 := [q1M]
   |}.
 
-  Eval compute in ConstraintAutomata.run mergerCA [portAM;portBM;portCM] 10.
+  (* Eval compute in ConstraintAutomata.run mergerCA [portAM;portBM;portCM] 10. *)
 
   Definition paramMerger := ReoCa.ReoCATernaryChannel AM BM CM [q1M] [q1M] mergerCaBehavior.
 
@@ -860,7 +860,7 @@ End ReoCa.
     ConstraintAutomata.Q0 := [q1R]
   |}.
 
-  Eval compute in ConstraintAutomata.run replicatorCA [portAR;portBR;portCR] 11.
+  (* Eval compute in ConstraintAutomata.run replicatorCA [portAR;portBR;portCR] 11. *)
 
   Definition paramReplicator := ReoCa.ReoCATernaryChannel AR BR CR [q1R] [q1R] replicatorCaBehavior.
 
@@ -956,65 +956,39 @@ End ReoCa.
           ConstraintAutomata.index := 0 |}.
   
     Definition realDelayPorts := [portDA;portDB].
-  
-    
-  
-    
-  
-    (*Eval compute in ConstraintAutomata.run delayCA realDelayPorts 8.*)
-
-    (*Implementação constraint automata*)
-    (*Atribuir um sistema dinâmico para cada estado do automato:*)
-
-    Record DinamicSystem : Type := DS {
-      I : nat;
-      FUNC : nat -> nat;
-      CurrentValue : nat;
-    }.
-
-      (* Definition delayCA:= {|
-      ConstraintAutomata.Q := [d0;d1];
-      ConstraintAutomata.N := [DA;DB];
-      ConstraintAutomata.T := delayRel;
-      ConstraintAutomata.Q0 := [d0]
-    |}. *)
-
-    Inductive delayStates : Type := d0 | d1.
-    Inductive delayPorts : Type := DA | DB.
-
-    Definition d0DS := {|
-        I := 0;
-        FUNC := d0Function;
-        CurrentValue := 0;
-    |}.
-
-    Definition d1DS := {|
-        I := 5;
-        FUNC := d1Function;
-        CurrentValue := 5;
-    |}.
-
-    Definition d0Function (n: nat) : nat :=
-        match n with
-        | O => 0
-        | S n => 0
-        end.
-
-    Definition d1Function (n: nat) : nat :=
-        match n with
-        | O => 0
-        | S n => n
-        end.
-
-    Definition timerSystemBind (s:delayStates) : DynamicSystem :=
-        match s with
-        | d0 => d0DS
-        | d1 => d1DS
-        end.
 
     Definition delayRel (s:delayStates) :
-    set (set delayPorts * ConstraintAutomata.DC delayPorts nat * nat * delayStates) :=
-        match s with
-        | d0 => [([DA], (ConstraintAutomata.dc DA 1), 0, d1)]
-        | d1 => [([DA], (ConstraintAutomata.dc DA 1), 0, 0)]
-        end.
+    set (set delayPorts * ConstraintAutomata.DC delayPorts nat * delayStates) :=
+      match s with
+      | d0 => [([DA], (ConstraintAutomata.dc DA 1), d1)]
+      | d1 => [([DA], (ConstraintAutomata.dc DA 1), d0)]
+    end.
+
+  Definition delayCA:= {|
+    ConstraintAutomata.Q := [d0;d1];
+    ConstraintAutomata.N := [DA;DB];
+    ConstraintAutomata.T := delayRel;
+    ConstraintAutomata.Q0 := [d0]
+  |}.
+
+  Definition delayStatesList := [d0;d1].
+
+  (* Definição de DS (ValorInicial * Função de Fluxo * ValorAtual * ValorConstraint) *)
+  Definition d0FlowFunction (n: nat) : nat := 0.
+
+  Fixpoint d1FlowFunction (n: nat) : nat :=
+    match n with
+    | 0 => 0
+    | S n => n
+    end.
+  
+  Definition DS := (nat, (nat -> nat), nat, nat).
+
+  Definition d0DS := (0, d0FlowFunction, 0, 0).
+  Definition d1DS := (5, d1FlowFunction, 5, 0).
+
+  Definition delayDSList := [d0DS; d1DS].
+
+  
+  Eval compute in ConstraintAutomata.run delayCA realDelayPorts 2 delayStatesList delayDSList.
+
