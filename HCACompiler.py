@@ -10,7 +10,7 @@ import ast
 
 def flowFunctionDefinition(stateName, DS):
     result = "Definition " + stateName + "FlowFunction (n: nat) : nat := \n  match n with \n"
-    result += "  | 0 => " + str(DS[0]) + "\n"
+    result += "  | 0 => 0 \n"
     result += "  | n => n " + DS[1][0] + " " + str(DS[1][1])  + "\n"
     result += "end."
 
@@ -243,13 +243,13 @@ relations = [[["DA", ["DA", 1], "d1"]], [["DA", ["DA", 1], "d0"]]]
 dynamicalSystems = [[5, ["-", 1], 0], [0, ["+", 0], 0]]
 
 #Input example:
-inputEx = "{'delay'} {['do', 'd1']} {'d0'} {['DA', 'DB']} {[[1, 1, 1, 1, 0, 1], [0, 0, 0, 0, 1, 0]]} {[[['DA', ['DA', 1], 'd1']], [['DA', ['DA', 1], 'd0']]]} {[[5, ['-', 1], 0], [0, ['+', 0], 0]]}"
+inputEx = "{'delay'} {['d0', 'd1']} {'d0'} {['DA', 'DB']} {[[1, 1, 1, 1, 0, 1], [0, 0, 0, 0, 1, 0]]} {[[['DA', ['DA', 1], 'd1']], [['DA', ['DA', 1], 'd0']]]} {[[5, ['-', 1], 0], [0, ['+', 0], 0]]}"
 connectorName, states, startState, ports, DA, relations, DS = translateString(inputEx)
 
 #translate(connectorName, states, startState, ports, DA, relations, DS)
 
 #Output example:
-# Inductive delayStates : Type := do | d1.
+# Inductive delayStates : Type := d0 | d1.
 
 # Inductive delayPorts : Type := DA | DB.
 
@@ -340,20 +340,20 @@ connectorName, states, startState, ports, DA, relations, DS = translateString(in
 # Definition delayRel (s: delayStates) :
 # set (set delayPorts * ConstraintAutomata.DC delayPorts nat * delayStates) :=
 #   match s with
-#   |  do => [([DA], (ConstraintAutomata.DC DA 1 ), d1)]
+#   |  d0 => [([DA], (ConstraintAutomata.DC DA 1 ), d1)]
 #   |  d1 => [([DA], (ConstraintAutomata.DC DA 1 ), d0)]
 # end.
 
 # Definition delayCA := {|
 #   ConstraintAutomata.Q := [DA;DB];
-#   ConstraintAutomata.N := [do;d1];
+#   ConstraintAutomata.N := [d0;d1];
 #   ConstraintAutomata.T := delayRel;
 #   ConstraintAutomata.Q0 := [d0]
 # |}
 
-# Definition delayStatesList := [do;d1].
+# Definition delayStatesList := [d0;d1].
 
-# Definition doFlowFunction (n: nat) : nat :=
+# Definition d0FlowFunction (n: nat) : nat :=
 #   match n with
 #   | 0 => 5
 #   | n => n - 1
@@ -367,8 +367,8 @@ connectorName, states, startState, ports, DA, relations, DS = translateString(in
 
 
 
-# Definition doDS := (5, doFlowFunction, 5, 0).
+# Definition d0DS := (5, d0FlowFunction, 5, 0).
 # Definition d1DS := (0, d1FlowFunction, 0, 0).
 
 
-# Definition delayDSList := [doDS; d1DS].
+# Definition delayDSList := [d0DS; d1DS].
